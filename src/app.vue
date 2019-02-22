@@ -1,6 +1,6 @@
 <template>
     <section>
-        <!--<h1>main block test</h1>-->
+        <h1>main block test</h1>
         <!--<test/>-->
         <router-view></router-view>
     </section>
@@ -15,6 +15,7 @@ export default({
 })
 </script>
 <style lang="scss">
+
 ul,li,ol{
     list-style: none;
     text-decoration: none;

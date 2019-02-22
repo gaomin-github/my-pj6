@@ -1,6 +1,5 @@
 <template>
     <section>
-        <h1>main block test</h1>
         <!--<test/>-->
         <router-view></router-view>
     </section>

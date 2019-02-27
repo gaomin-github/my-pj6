@@ -39,8 +39,8 @@
       <file leaf-file-name="TabPanel.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/panel/TabPanel.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="4" column="6" lean-forward="false" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
+            <state relative-caret-position="171">
+              <caret line="5" column="4" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -221,12 +221,12 @@
       <workItem from="1550796210249" duration="17925000" />
       <workItem from="1550988297509" duration="2031000" />
       <workItem from="1550991750911" duration="27644000" />
-      <workItem from="1551142325694" duration="31805000" />
+      <workItem from="1551142325694" duration="31948000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="136727000" />
+    <option name="totallyTimeSpent" value="136870000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="672" y="0" width="702" height="735" extended-state="0" />
@@ -620,8 +620,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/panel/TabPanel.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="4" column="6" lean-forward="false" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
+        <state relative-caret-position="171">
+          <caret line="5" column="4" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
           <folding />
         </state>
       </provider>

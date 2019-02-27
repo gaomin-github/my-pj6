@@ -2,7 +2,7 @@
 1)typescript组件vue-class-component,vue-property-decorator;decorator的内容取自component<br/>
 2)vue的provide/inject功能，不能实现动态响应<br/>
 *3)父子组件间的数据共享+动态响应实现方法：*<br/>
-    >3.1)vuex<br/>
+    >>3.1)vuex<br/>
     >3.2)利用eventbus原理，新创建vue实例，在新实例上监听响应事件；组件中共同引入新实例，在组件方法里触发新实例的事件<br/>
     >3.3)利用vue this.$parent，在dom渲染有上下级关系的的组件中使用，也可以利用当前vue实例传递事件(类似3.2)<br/>
 *4)滚动条相关*<br/>

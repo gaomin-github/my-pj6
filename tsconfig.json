@@ -8,7 +8,9 @@
     "target": "es2017",
     "experimentalDecorators": true,
     "allowJs": true,
-    "strictPropertyInitialization":false
+    "strictPropertyInitialization":false,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators":true
   },
   "include": [
     "./src/**/*"

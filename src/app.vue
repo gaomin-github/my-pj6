@@ -14,7 +14,6 @@ export default({
 })
 </script>
 <style lang="scss">
-
 ul,li,ol{
     list-style: none;
     text-decoration: none;

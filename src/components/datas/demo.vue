@@ -3,6 +3,7 @@
         <h1>11111111111</h1>
         <h3>自动完成输入</h3>
         <button @click="crudDataSource">修改自动完成数据源</button>
+        <button @click="getComValue">获取组件值</button>
         <section  class="auto_con">
             <auto-complete :dataSource="autoDataSource"></auto-complete>
         </section>
@@ -25,6 +26,10 @@
             this.autoDataSource.push('12390')
             console.log('this.autoDataSource')
             console.log(this.autoDataSource)
+        }
+        getComValue(){
+            console.log('输出自动输入组件值')
+            console.log(AutoComplete)
         }
     }
 </script>

@@ -96,7 +96,7 @@
     cursor: pointer;
     height:90%;
     margin-left: 5px;
-    border-let:1px rgb(180,180,180) solid;
+    border-left:1px rgb(180,180,180) solid;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -107,6 +107,7 @@
     display: block;
     width:100%;
     margin-top:5px;
+    overflow-y: hidden;
     background-color: rgb(255,255,255);
     li{
         padding:0px 5px;
@@ -124,6 +125,6 @@
     max-height: 1000px;
 }
 .drop_animate-enter-active,.drop_animate-leave-active{
-    transition:all 1s;
+    transition:all .5s;
 }
 </style>

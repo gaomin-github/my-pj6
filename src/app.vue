@@ -18,8 +18,9 @@ ul,li,ol{
     list-style: none;
     text-decoration: none;
 }
-ul,li,ol,section,p{
+ul,li,ol,section,p,input{
     margin:0px;
     padding:0px;
+    font-size: inherit;
 }
 </style>

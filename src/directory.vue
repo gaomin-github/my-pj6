@@ -2,6 +2,7 @@
     <section>
         <section class="demo_title" @click="enterCon('drop-down-demo')">下拉组件</section>
         <section class="demo_title" @click="enterCon('panelDemo')">面板组件</section>
+        <section class="demo_title" @click="enterCon('dataDemo')">输入组件</section>
     </section>
 </template>
 <script lang="ts">

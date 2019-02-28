@@ -2,6 +2,7 @@
     <section>
         <h1>11111111111</h1>
         <h3>自动完成输入</h3>
+        <button @click="crudDataSource">修改自动完成数据源</button>
         <section  class="auto_con">
             <auto-complete :dataSource="autoDataSource"></auto-complete>
         </section>
@@ -20,11 +21,16 @@
         mounted(){
             console.log('进入datain页面')
         }
+        crudDataSource(){
+            this.autoDataSource.push('12390')
+            console.log('this.autoDataSource')
+            console.log(this.autoDataSource)
+        }
     }
 </script>
 <style lang="scss" scoped>
     .auto_con{
-        margin-left:10px;
+        margin:10px;
         font-size: 14px;
     }
 </style>

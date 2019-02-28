@@ -22,5 +22,6 @@ ul,li,ol,section,p,input{
     margin:0px;
     padding:0px;
     font-size: inherit;
+    box-sizing: border-box;
 }
 </style>

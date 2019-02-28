@@ -24,12 +24,9 @@
         }
         crudDataSource(){
             this.autoDataSource.push('12390')
-            console.log('this.autoDataSource')
-            console.log(this.autoDataSource)
         }
         getComValue(){
             console.log('输出自动输入组件值')
-            console.log(AutoComplete)
         }
     }
 </script>

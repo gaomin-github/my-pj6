@@ -24,8 +24,6 @@
         @Prop({default:[]}) dataSource!:Array<string>
 //        展示数据源列表
         get showDataSource(){
-            console.log('dataSource')
-            console.log(this.dataSource)
             if(this.inValue==null||this.inValue.length<=0) return []
             let result=this.dataSource.filter(o=>{
                 let reg=new RegExp("\^"+this.inValue+".+",'i')

@@ -1,24 +1,34 @@
 <template>
     <section>
-        <h1>11111111111</h1>
         <h3>自动完成输入</h3>
         <button @click="crudDataSource">修改自动完成数据源</button>
         <button @click="getComValue">获取组件值</button>
-        <section  class="auto_con">
-            <auto-complete :dataSource="autoDataSource" v-model="autoValue"></auto-complete>
+        <section class="auto_con">
+            <auto-complete :dataSource="autoDataSource" v-model="autoValue" placeHolder="请输入用户名" leftLabel="用户名" rightLabel="ok"></auto-complete>
+        </section>
+        <section class="input_con">
+            <Input/>
+        </section>
+        <section class="area_con">
+            <area-cascade></area-cascade>
         </section>
     </section>
 </template>
 <script lang="ts">
     import {Vue,Component,Prop} from 'vue-property-decorator';
-    import AutoComplete from './AutoComplete.vue'
+    import AutoComplete from './AutoComplete.vue';
+    import Input from './Input.vue';
+    import AreaCascade from './AreaCascader.vue';
+
     @Component({
         components:{
-            AutoComplete
+            AutoComplete,
+            Input,
+            AreaCascade
         }
     })
     export default class DataIn extends Vue{
-        autoDataSource:Array<string>=['123456','abcde','abccc']
+        autoDataSource:Array<string>=['12357','12378','12345611111111111','abcde','abccc']
         autoValue:string=''
         mounted(){
             console.log('进入datain页面')
@@ -36,5 +46,14 @@
     .auto_con{
         margin:10px;
         font-size: 14px;
+        width:360px;
+        height:20px;
+    }
+    .input_con{
+        margin-top:20px;
+        margin-left:10px;
+    }
+    .area_con{
+        margin-top:10px;
     }
 </style>

@@ -1,16 +1,24 @@
 <template>
-    <section class="container">
-        <section class="in_container" @click="focusInput" @focus="showDataSource">
-            <input type="text" class="auto" ref="input" v-model="inValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue"/>
+    <section class="container" @click="focusInput" @blur="blurInput">
+        <section class="left_container">{{leftLabel}}</section>
+        <section class="in_container">
+            <section class="auto">
+                <input type="text" v-if="allowEdit" ref="input" v-model="inValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue" @focus="showRefer=true" @blur="selectItemIndex=-1;showRefer=false"/>
+                <input type="text" v-else ref="input" v-model="inValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue" @focus="showRefer=true" @blur="selectItemIndex=-1;showRefer=false" disabled/>
+            </section>
             <section class="clear" @click="clearInValue">清除</section>
+            <transition name="drop_animate">
+                <ul class="refer_contaienr" v-if="referDataSource&&referDataSource.length>0&&showRefer">
+                    <li v-for="(item,key) in referDataSource" @click="completeInput(key)" :class="selectItemIndex==key?'refer_item-active':''">
+                        {{item}}
+                    </li>
+                </ul>
+            </transition>
         </section>
-        <transition name="drop_animate">
-            <ul class="refer_contaienr" v-if="showDataSource&&showDataSource.length>0">
-                <li v-for="(item,key) in showDataSource" @click="completeInput(key)" :class="selectItemIndex==key?'refer_item-active':''">
-                    {{item}}
-                </li>
-            </ul>
-        </transition>
+        <section class="right_container">
+            {{rightLabel}}
+        </section>
+
     </section>
 
 </template>
@@ -19,33 +27,43 @@
     import {Vue,Component,Prop} from 'vue-property-decorator';
     @Component
     export default class AutoComplete extends Vue{
+//        数据源
         @Prop({default:[]}) dataSource!:Array<string>
+//        占位文字
         @Prop({default:''}) placeHolder!:string
+        @Prop({default:''}) leftLabel!:string
+        @Prop({default:''}) rightLabel!:string
+        @Prop({default:true}) allowEdit!:boolean
         inValue:string=''            //文本框输入值
         selectItemIndex:number=-1    //在参照列表选中的条目索引
-
-//        展示数据源列表
-        get showDataSource(){
-            if(this.inValue==null||this.inValue.length<=0) return []
+        showRefer:boolean=false      //控制是否显示参照列表
+//        过滤数据源
+        get referDataSource(){
+//            if(this.inValue==null||this.inValue.length<=0) return []
             let result=this.dataSource.filter(o=>{
                 let reg=new RegExp("\^"+this.inValue+".+",'i')
                 return reg.test(o)
             })
             return result
         }
-//        输入框聚焦
+//        组件聚焦,
         focusInput(){
             let inputEle:any=this.$refs['input']
             inputEle.focus()
+            this.$emit('focus')
         }
-//        选择要用于补充的参照条目
+        blurInput(){
+            let inputEle:any=this.$refs['input']
+            inputEle.blur()
+            this.$emit('blur')
+        }
+//        选择要参照条目
         selectReferItem(event:any){
-            if(this.showDataSource==null||this.showDataSource.length<=0) return
+            if(this.referDataSource==null||this.referDataSource.length<=0) return
             if(event.keyCode==38&&this.selectItemIndex>=0) this.selectItemIndex--
-            else if(event.keyCode==40&&this.selectItemIndex<this.showDataSource.length) this.selectItemIndex++
-//            38向上 40向下
+            else if(event.keyCode==40&&this.selectItemIndex<this.referDataSource.length) this.selectItemIndex++
         }
-//        清空记录的选中的参照条目
+//        清空记录的选中参照条目索引值
         clearSelectItem(event:any){
             if(event.keyCode==13&&this.selectItemIndex>=0){
                 this.completeInput(this.selectItemIndex)
@@ -55,8 +73,9 @@
         }
 //        补全剩余内容
         completeInput(key:number){
-            this.inValue=this.showDataSource[key]
+            this.inValue=this.referDataSource[key]
             this.updateValue()
+            this.$emit('complete-input')
         }
 //        清空输入内容
         clearInValue(){
@@ -65,58 +84,74 @@
         }
 //        更新组件值
         updateValue(){
-
             this.$emit('input',this.inValue)
         }
     }
 </script>
 <style lang="scss" scoped>
+    input{
+        min-width: 0px;
+    }
 .container{
     width:260px;
     height:30px;
-    position:relative;
-    border:1px rgb(180,180,180) solid;
-}
-.container:active,.container:hover{
-     border:1px rgb(40,180,220) solid;
- }
-.in_container{
+    /*position:relative;*/
     display: flex;
-    flex-direction: row;
+    align-items: center;
+}
+/*左边标签模块*/
+.left_container{
+    margin-right: 5px;
+}
+.right_container{
+    margin-left:5px;
+}
+.in_container{
+    flex:1;
+    display: flex;
     align-items: center;
     padding-left: 5px;
     padding-right:5px;
-    width:100%;
     height:100%;
+    border:1px rgb(180,180,180) solid;
+    position: relative;
+}
+.in_container:active,.in_container:hover{
+    border:1px rgb(40,180,220) solid;
 }
 .auto{
     flex:1;
     height:90%;
-    border:none;
-    display: block;
-}
-.auto:active,.auto:focus{
-    outline:none;
-    border:none;
+    input{
+        width:100%;
+        height:100%;
+        border:none;
+    }
+    input:active,input:focus{
+        outline:none;
+        border:none;
+    }
 }
 .clear{
-    display: block;
+    display: flex;
     cursor: pointer;
     height:90%;
     margin-left: 5px;
     border-left:1px rgb(180,180,180) solid;
-    display: flex;
     align-items: center;
-    justify-content: center;
 }
 .refer_contaienr{
     border:1px rgb(180,180,180) solid;
+    background-color: rgb(255,255,255);
     position: absolute;
     display: block;
     width:100%;
+    max-height: 200px;
+    top:100%;
+    left: 0px;
     margin-top:5px;
-    overflow-y: hidden;
-    background-color: rgb(255,255,255);
+    overflow: scroll;
+    z-index:9;
     li{
         padding:0px 5px;
         line-height: 24px;
@@ -126,11 +161,21 @@
         background-color: rgb(230,230,230);
     }
 }
+    .refer_contaienr::-webkit-scrollbar{
+        width:4px;
+        height:4px;
+    }
+    .refer_contaienr::-webkit-scrollbar-track{
+        background: rgb(235,235,235);
+    }
+    .refer_contaienr::-webkit-scrollbar-thumb{
+        background:rgb(150,150,150);
+    }
 .drop_animate-enter,.drop_animate-leave-to{
     max-height: 0px;
 }
 .drop_animate-enter-to,.drop_animate-leave{
-    max-height: 1000px;
+    max-height: 200px;
 }
 .drop_animate-enter-active,.drop_animate-leave-active{
     transition:all .5s;

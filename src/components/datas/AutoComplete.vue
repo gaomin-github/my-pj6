@@ -1,7 +1,7 @@
 <template>
     <section class="container">
         <section class="in_container" @click="focusInput" @focus="showDataSource">
-            <input type="text" class="auto" ref="input" v-model="inValue" @keydown="selectReferItem" @keypress="clearSelectItem"/>
+            <input type="text" class="auto" ref="input" v-model="inValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue"/>
             <section class="clear" @click="clearInValue">清除</section>
         </section>
         <transition name="drop_animate">
@@ -19,9 +19,11 @@
     import {Vue,Component,Prop} from 'vue-property-decorator';
     @Component
     export default class AutoComplete extends Vue{
-        inValue:string=''       //文本框输入值
-        selectItemIndex:number=-1    //在参照列表选中的条目索引
         @Prop({default:[]}) dataSource!:Array<string>
+        @Prop({default:''}) placeHolder!:string
+        inValue:string=''            //文本框输入值
+        selectItemIndex:number=-1    //在参照列表选中的条目索引
+
 //        展示数据源列表
         get showDataSource(){
             if(this.inValue==null||this.inValue.length<=0) return []
@@ -54,9 +56,17 @@
 //        补全剩余内容
         completeInput(key:number){
             this.inValue=this.showDataSource[key]
+            this.updateValue()
         }
+//        清空输入内容
         clearInValue(){
             this.inValue=''
+            this.updateValue()
+        }
+//        更新组件值
+        updateValue(){
+
+            this.$emit('input',this.inValue)
         }
     }
 </script>

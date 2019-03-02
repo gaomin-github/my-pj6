@@ -1,6 +1,6 @@
 <template>
     <section class="container" @click="focusInput" @blur="blurInput">
-        <section class="left_container">{{leftLabel}}</section>
+        <section class="left_container" v-if="leftLabel!==null&&leftLabel.length>0">{{leftLabel}}</section>
         <section class="in_container">
             <section class="auto">
                 <input type="text" ref="input" :value="value" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue" @focus="showRefer=true" @blur="selectItemIndex=-1;showRefer=false"/>
@@ -15,7 +15,7 @@
                 </ul>
             </transition>
         </section>
-        <section class="right_container">
+        <section class="right_container" v-if="rightLabel!==null&&rightLabel.length>0">
             {{rightLabel}}
         </section>
 
@@ -50,7 +50,7 @@
         focusInput(){
             let inputEle:any=this.$refs['input']
             inputEle.focus()
-            this.$emit('focus')
+            this.$emit('click')
         }
         blurInput(){
             let inputEle:any=this.$refs['input']

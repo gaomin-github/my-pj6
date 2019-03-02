@@ -1,65 +1,55 @@
 <template>
     <section class="container">
-        <!--<section class="prov">-->
-            <auto-complete class="prov" :dataSource="provinceList" v-model="curProvince" allowEdit="false" @complete-input="surProvValue"></auto-complete>
-        <!--</section>-->
-        <!--<section class="city">-->
-            <auto-complete class="city" :dataSource="cityList" v-model="curCity"></auto-complete>
-        <!--</section>-->
+            <auto-complete class="prov" :dataSource="provinceList" v-model="curProvinceName" allowEdit="false" @complete-input="surProvValue"></auto-complete>
+            <auto-complete class="city" :dataSource="cityList" v-model="curCityName"></auto-complete>
     </section>
 </template>
 <script lang="ts">
 //地区联动控制
-import defaultProvinceList from './jsons/province.json';
-import defaultCityList from './jsons/city.json';
+import defaultAreaList from './jsons/city.json';
 import {Vue,Component,Prop} from 'vue-property-decorator';
 import AutoComplete from './AutoComplete'
-
+interface areaInfo{
+    name:string,
+    index:number
+}
 @Component({
     components:{
         AutoComplete
     }
 })
 export default class AreaCascader extends Vue{
-    @Prop({default:defaultProvinceList}) provinceData!:Array<any>
-    @Prop({default:defaultCityList}) cityData!:Array<any>
-    curProvince:string=''
-    curCity:string=''
-    mounted(){
-        console.log('this.defaultProvinceData')
-//        console.log(defaultProvinceData)
-    }
+    @Prop({default:defaultAreaList}) areaData!:Array<any>
+    curProvinceName:string=''
+    curProvinceIndex:number=-1
+    curCityName:string=''
+    curCityIndex:number=-1
     get provinceList(){
-        let p_list=this.provinceData.map((o:any):string=>{
+        let p_list=this.areaData.map((o:any):string=>{
             return o.name
         })
         return p_list
     }
     get cityList(){
-        let obj=this
-        let c_data:any=this.cityData.filter((o:any):boolean=>{
-            return o.name==obj.curProvince
-        })
-
-        console.log('c_data')
-        console.log(c_data)
-        if(c_data) return []
-//        console.log('p1')
-        let c_list:Array<any>=c_data.map((o:any):string=>{
+        if(this.curProvinceIndex<0){
+            return []
+        }
+        return this.areaData[this.curProvinceIndex].city.map((o:any)=>{
             return o.name
         })
-//        console.log('p2')
-//        console.log(p2)
-//        let c_list:Array<string>=p2.map((o:any):string=>{
-//            return o.name
-//        })
-        return c_list
-    };
-    surProvValue(){
-        console.log('cityData')
-        let city_data=this.cityData.filter((o:any)=>{
-
-        })
+    }
+    surProvValue(param:number){
+        let obj=this
+        obj.curProvinceIndex=param
+        console.log('修改省级地址')
+        this.curCityIndex=-1
+        this.curCityName=''
+        console.log('this.curCityName')
+        console.log(this.curCityName)
+    }
+    surCityValue(param:number){
+        let obj=this
+        obj.curCityIndex=param
     }
 }
 </script>

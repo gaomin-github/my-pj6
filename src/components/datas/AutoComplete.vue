@@ -3,10 +3,10 @@
         <section class="left_container">{{leftLabel}}</section>
         <section class="in_container">
             <section class="auto">
-                <input type="text" v-if="allowEdit" ref="input" v-model="inValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue" @focus="showRefer=true" @blur="selectItemIndex=-1;showRefer=false"/>
-                <input type="text" v-else ref="input" v-model="inValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue" @focus="showRefer=true" @blur="selectItemIndex=-1;showRefer=false" disabled/>
+                <input type="text" ref="input" :value="value" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue" @focus="showRefer=true" @blur="selectItemIndex=-1;showRefer=false"/>
+                <!--<input type="text" v-else ref="input" v-model="inValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue" @focus="showRefer=true" @blur="selectItemIndex=-1;showRefer=false" disabled/>-->
             </section>
-            <section class="clear" @click="clearInValue">清除</section>
+            <section class="clear" @click="clearValue">清除</section>
             <transition name="drop_animate">
                 <ul class="refer_contaienr" v-if="referDataSource&&referDataSource.length>0&&showRefer">
                     <li v-for="(item,key) in referDataSource" @click="completeInput(key)" :class="selectItemIndex==key?'refer_item-active':''">
@@ -27,6 +27,7 @@
     import {Vue,Component,Prop} from 'vue-property-decorator';
     @Component
     export default class AutoComplete extends Vue{
+        @Prop({default:''}) value!:string
 //        数据源
         @Prop({default:[]}) dataSource!:Array<string>
 //        占位文字
@@ -34,14 +35,13 @@
         @Prop({default:''}) leftLabel!:string
         @Prop({default:''}) rightLabel!:string
         @Prop({default:true}) allowEdit!:boolean
-        inValue:string=''            //文本框输入值
         selectItemIndex:number=-1    //在参照列表选中的条目索引
         showRefer:boolean=false      //控制是否显示参照列表
+
 //        过滤数据源
         get referDataSource(){
-//            if(this.inValue==null||this.inValue.length<=0) return []
             let result=this.dataSource.filter(o=>{
-                let reg=new RegExp("\^"+this.inValue+".+",'i')
+                let reg=new RegExp("\^"+this.value+".+",'i')
                 return reg.test(o)
             })
             return result
@@ -71,20 +71,18 @@
             }
             this.selectItemIndex=-1
         }
-//        补全剩余内容
+//        通过参照补全剩余内容
         completeInput(key:number){
-            this.inValue=this.referDataSource[key]
-            this.updateValue()
-            this.$emit('complete-input')
+            this.$emit('input',this.referDataSource[key])
+            this.$emit('complete-input',key)
         }
 //        清空输入内容
-        clearInValue(){
-            this.inValue=''
-            this.updateValue()
+        clearValue(){
+            this.$emit('input','')
         }
 //        更新组件值
-        updateValue(){
-            this.$emit('input',this.inValue)
+        updateValue(e:any){
+            this.$emit('input',e.target.value)
         }
     }
 </script>

@@ -3,7 +3,7 @@
         <section class="left_container" v-if="leftLabel!==null&&leftLabel.length>0">{{leftLabel}}</section>
         <section class="in_container">
             <section class="auto">
-                <input type="text" ref="input" :value="value" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue" @focus="showRefer=true" @blur="selectItemIndex=-1;showRefer=false"/>
+                <input type="text" ref="input" :value="value" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue" @focus="showRefer=true" @blur="selectItemIndex=-1;showRefer=false" disabled/>
                 <!--<input type="text" v-else ref="input" v-model="inValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue" @focus="showRefer=true" @blur="selectItemIndex=-1;showRefer=false" disabled/>-->
             </section>
             <section class="clear" @click="clearValue">清除</section>

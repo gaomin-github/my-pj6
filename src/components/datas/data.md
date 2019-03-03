@@ -11,6 +11,10 @@
 2.js相关
     2.1）keypress只能响应数字+英文+enter+符号键,keydown可以响应所有键盘按钮活动<br/>
     2.2）键盘识别借助event.keyCode 上箭头38,下箭头40,enter13<br/>
+    2.3）正则校验使用
+        2.3.1）判断字符串是否符合标准，使用RegExp.test(string)
+        2.3.2）返回符合标准的所有字符串，使用string.match(RegExp)
+        2.3.4）返回符合标准字符串子串的索引，使用string.search(RegExp)
 3.vue相关
     3.1）v-model是<section :value="modelValue" :input="(newValue)=>{modelValue=event.targetElement.value}">的语法糖，因此在组件中通过this.$emit('input',newValue)就可以修改组件modelValue值<br/>
 4.typescript相关

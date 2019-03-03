@@ -12,7 +12,7 @@
         <section class="input_con">
             <basic-input>
                 <section slot="left">
-                    左标签
+                    电话号码
                 </section>
                 <section slot="right">
                     右标签

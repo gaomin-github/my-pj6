@@ -6,9 +6,10 @@
         <section class="content">
             <section class="in">
                 <!--123-->
-                <input type="text" :value="basicValue" @input="updateValue" ref="in" @blur="blur" disabled/>
+                <input type="text" :value="basicValue" ref="in" @input="updateValue" @blur="blur"/>
+                <!--<input type="text" v-else :value="basicValue" @input="updateValue" ref="in" @blur="blur" disabled/>-->
             </section>
-            <section class="in_icon" @click="clearValue">
+            <section class="in_icon">
                 清空
             </section>
         </section>
@@ -28,16 +29,14 @@
     @Component
     export default class Input extends Vue {
         @Prop({default:''}) basicValue!:string      //输入值
-        @Prop({default:InputStatus.init}) statusCode!:InputStatus      //是否允许空
+        @Prop({default:InputStatus.init}) statusCode!:InputStatus      //组件状态
+        @Prop({default:true}) allowEdit!:boolean    //是否允许编辑
         focusInput(){
             let inputEle:any=this.$refs['in']
-//            inputEle.focus()
+            inputEle.focus()
         }
         updateValue(event:any){
             this.$emit('input',event.target.value)
-        }
-        input(){
-            this.$emit('input','')
         }
         blur(){
             this.$emit('blur',this.basicValue)
@@ -63,12 +62,14 @@
     .in{
         flex:1;
         min-height:5px;
-        margin-left:5px;
+        pading-left:5px;
+        height:100%;
         input{
             width:100%;
             height:100%;
-            border:none;
             outline:none;
+            border:none;
+            background: none;
         }
         input:hover,input:active,input:focus{
             border:none;
@@ -76,7 +77,6 @@
         }
     }
     border:1px rgb(180,180,180) solid;
-
     .in_icon{
         display: flex;
         align-items: center;

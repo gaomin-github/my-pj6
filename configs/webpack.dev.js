@@ -52,6 +52,7 @@ module.exports={
           }
       ]
     },
+    devtool:'inline-source-map',
     plugins:[
         new CleanWebpackPlugin(['built'],{
             root:path.resolve(__dirname,'..'),

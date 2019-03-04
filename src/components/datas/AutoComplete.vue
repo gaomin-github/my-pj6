@@ -1,10 +1,10 @@
 <template>
-    <section class="container" @click="focusInput" @blur="blurInput">
+    <section class="container">
         <section class="left_container" v-if="leftLabel!==null&&leftLabel.length>0">{{leftLabel}}</section>
         <section class="in_container">
             <section class="auto">
-                <input type="text" ref="input" :value="value" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue" @focus="showRefer=true" @blur="selectItemIndex=-1;showRefer=false" disabled/>
-                <!--<input type="text" v-else ref="input" v-model="inValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" @input="updateValue" @focus="showRefer=true" @blur="selectItemIndex=-1;showRefer=false" disabled/>-->
+                <input type="text" v-if="allowEdit" ref="input" :value="value" @click="focusInput" @blur="blurInput" @input="updateValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder"/>
+                <input type="text" v-else ref="input" :value="value" @click="focusInput" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" readonly/>
             </section>
             <section class="clear" @click="clearValue">清除</section>
             <transition name="drop_animate">
@@ -18,9 +18,7 @@
         <section class="right_container" v-if="rightLabel!==null&&rightLabel.length>0">
             {{rightLabel}}
         </section>
-
     </section>
-
 </template>
 <script lang="ts">
 //根据设置的数据源自动录入
@@ -40,21 +38,28 @@
 
 //        过滤数据源
         get referDataSource(){
+//            console.log('get start')
             let result=this.dataSource.filter(o=>{
                 let reg=new RegExp("\^"+this.value+".+",'i')
                 return reg.test(o)
             })
+//            console.log('get end')
             return result
         }
 //        组件聚焦,
         focusInput(){
+//            console.log('focus start')
+            this.showRefer=!this.showRefer
+//            console.log('focus')
             let inputEle:any=this.$refs['input']
             inputEle.focus()
-            this.$emit('click')
+            this.$emit('focus')
         }
         blurInput(){
             let inputEle:any=this.$refs['input']
             inputEle.blur()
+            this.showRefer=false
+            this.selectItemIndex=-1
             this.$emit('blur')
         }
 //        选择要参照条目
@@ -62,6 +67,7 @@
             if(this.referDataSource==null||this.referDataSource.length<=0) return
             if(event.keyCode==38&&this.selectItemIndex>=0) this.selectItemIndex--
             else if(event.keyCode==40&&this.selectItemIndex<this.referDataSource.length) this.selectItemIndex++
+            this.$emit('select')
         }
 //        清空记录的选中参照条目索引值
         clearSelectItem(event:any){
@@ -74,7 +80,6 @@
 //        通过参照补全剩余内容
         completeInput(key:number){
             this.$emit('input',this.referDataSource[key])
-            this.$emit('complete-input',key)
         }
 //        清空输入内容
         clearValue(){
@@ -124,6 +129,8 @@
         width:100%;
         height:100%;
         border:none;
+        outline:none;
+        background: none;
     }
     input:active,input:focus{
         outline:none;

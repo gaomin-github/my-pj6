@@ -4,10 +4,10 @@
             <slot name="left"></slot>
         </section>
         <section class="content">
-            <section class="in">
+            <section class="in" :class="statusCode=='error'?'in_error':''">
                 <!--123-->
-                <input type="text" :value="basicValue" ref="in" @input="updateValue" @blur="blur"/>
-                <!--<input type="text" v-else :value="basicValue" @input="updateValue" ref="in" @blur="blur" disabled/>-->
+                <input type="text" v-if="allowEdit" :value="basicValue" ref="in" @input="updateValue" @blur="blur"/>
+                <input type="text" v-else :value="basicValue" @input="updateValue" ref="in" @blur="blur" readonly/>
             </section>
             <section class="in_icon">
                 清空
@@ -26,6 +26,7 @@
         error='error',    //校验失败
         init='init'
     }
+    let e='error'
     @Component
     export default class Input extends Vue {
         @Prop({default:''}) basicValue!:string      //输入值
@@ -70,11 +71,15 @@
             outline:none;
             border:none;
             background: none;
+            padding:0px 5px;
         }
         input:hover,input:active,input:focus{
             border:none;
             outline:none;
         }
+    }
+    .in_error{
+        border-bottom:1px red solid;
     }
     border:1px rgb(180,180,180) solid;
     .in_icon{

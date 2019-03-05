@@ -11,7 +11,7 @@
         </section>
         <h3>基本输入组件</h3>
         <section class="input_con">
-            <basic-input v-model="basicValue">
+            <basic-input v-model="basicValue" statusCode="error">
                 <section slot="left">
                     电话号码
                 </section>
@@ -24,6 +24,9 @@
         <section class="area_con">
             <area-cascade class="area"></area-cascade>
         </section>
+        <h3>日期选择</h3>
+
+        <data-picker ></data-picker>
     </section>
 </template>
 <script lang="ts">
@@ -31,16 +34,17 @@
     import AutoComplete from './AutoComplete.vue';
     import BasicInput from './BasicInput.vue';
     import AreaCascade from './AreaCascader.vue';
-
+    import DatePicker from './DatePicker.vue';
     @Component({
         components:{
             AutoComplete,
             BasicInput,
-            AreaCascade
+            AreaCascade,
+            DatePicker
         }
     })
     export default class DataIn extends Vue{
-        autoDataSource:Array<string>=['12357','12378','12345611111111111','abcde','abccc']
+        autoDataSource:Array<string>=['12357','12378','12345611111111111','abcde','abccc','张三','张三树','知否']
         autoValue:string='123'
         basicValue:string='111'
         param3:string='11111'

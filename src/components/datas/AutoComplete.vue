@@ -23,6 +23,19 @@
 <script lang="ts">
 //根据设置的数据源自动录入
     import {Vue,Component,Prop} from 'vue-property-decorator';
+//    防抖
+    const Debounce=(function(){
+        let lastTime:number=(new Date()).getTime()
+        return function(fn:any,interval:number){
+            let curTime:number=(new Date()).getTime();
+            if(curTime-lastTime>=interval){
+                lastTime=(new Date()).getTime();
+                fn.apply(arguments)
+            }else{
+                lastTime=curTime
+            }
+        }
+    })()
     @Component
     export default class AutoComplete extends Vue{
         @Prop({default:''}) value!:string
@@ -38,19 +51,16 @@
 
 //        过滤数据源
         get referDataSource(){
-//            console.log('get start')
+//            console.log('过滤数据源')
+            if(this.value==null||this.value.length<=0) return []
             let result=this.dataSource.filter(o=>{
-                let reg=new RegExp("\^"+this.value+".+",'i')
+                let reg=new RegExp("\^"+this.value+".*",'i')
                 return reg.test(o)
             })
-//            console.log('get end')
             return result
         }
 //        组件聚焦,
         focusInput(){
-//            console.log('focus start')
-            this.showRefer=!this.showRefer
-//            console.log('focus')
             let inputEle:any=this.$refs['input']
             inputEle.focus()
             this.$emit('focus')
@@ -80,6 +90,8 @@
 //        通过参照补全剩余内容
         completeInput(key:number){
             this.$emit('input',this.referDataSource[key])
+            this.$emit('complete-input',key)
+            this.showRefer=false
         }
 //        清空输入内容
         clearValue(){
@@ -87,7 +99,11 @@
         }
 //        更新组件值
         updateValue(e:any){
-            this.$emit('input',e.target.value)
+            this.showRefer=true
+            let obj:any=this
+            Debounce(()=>{
+                this.$emit('input',e.target.value)
+            },300)
         }
     }
 </script>

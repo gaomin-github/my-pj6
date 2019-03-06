@@ -12,6 +12,17 @@
             <section class="in_icon">
                 清空
             </section>
+            <!--<section v-if="showPop" class="pull_top">-->
+                <slot name="top">
+
+                </slot>
+            <!--</section>-->
+
+            <section v-if="showPop" class="pull_down">
+                <slot name="down">
+
+                </slot>
+            </section>
         </section>
         <section class="right">
             <slot name="right"></slot>
@@ -32,9 +43,11 @@
         @Prop({default:''}) basicValue!:string      //输入值
         @Prop({default:InputStatus.init}) statusCode!:InputStatus      //组件状态
         @Prop({default:true}) allowEdit!:boolean    //是否允许编辑
+        @Prop({default:false}) showPop!:boolean   //是否展示弹出模块
         focusInput(){
             let inputEle:any=this.$refs['in']
             inputEle.focus()
+            this.showPop=!this.showPop
         }
         updateValue(event:any){
             this.$emit('input',event.target.value)
@@ -60,6 +73,8 @@
     display: flex;
     flex: 1;
     align-items: center;
+    border:1px rgb(180,180,180) solid;
+    position: relative;
     .in{
         flex:1;
         min-height:5px;
@@ -81,12 +96,18 @@
     .in_error{
         border-bottom:1px red solid;
     }
-    border:1px rgb(180,180,180) solid;
     .in_icon{
         display: flex;
         align-items: center;
         height: 100%;
         border-left:1px rgb(180,180,180) solid;
+    }
+    .pull_down{
+        background-color: rgb(255,255,255);
+        position: absolute;
+        top:100%;
+        width:100%;
+        margin-top:5px;
     }
 }
 .content:hover,.content:active,.content:focus{

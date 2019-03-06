@@ -1,15 +1,15 @@
 <template>
     <section @click="conClick">
-        <h3>自动完成输入</h3>
+        <h4>自动完成输入</h4>
         <!--<button @click="crudDataSource">修改自动完成数据源</button>-->
         <!--<button @click="getComValue">获取组件值</button>-->
         <!--<button @click="updateComValue">修改组件值</button>-->
-        <h3>自动填充组件</h3>
+        <h4>自动填充组件</h4>
         <section class="auto_con">
             <auto-complete :dataSource="autoDataSource" v-model="autoValue" placeHolder="请输入用户名" leftLabel="用户名" rightLabel="ok" :allowEdit="false"></auto-complete>
             <auto-complete :dataSource="autoDataSource" v-model="basicValue" placeHolder="请输入邮箱" leftLabel="用户名" rightLabel="ok"></auto-complete>
         </section>
-        <h3>基本输入组件</h3>
+        <h4>基本输入组件</h4>
         <section class="input_con">
             <basic-input v-model="basicValue" statusCode="error">
                 <section slot="left">
@@ -18,15 +18,20 @@
                 <section slot="right">
                     右标签
                 </section>
+                <section slot="top">
+
+                </section>
+                <section slot="down">
+                    下方弹出内容
+                </section>
             </basic-input>
         </section>
-        <h3>省市联动组件</h3>
+        <h4>省市联动组件</h4>
         <section class="area_con">
             <area-cascade class="area"></area-cascade>
         </section>
-        <h3>日期选择</h3>
-
-        <data-picker ></data-picker>
+        <h4>日期选择1</h4>
+        <date-picker ></date-picker>
     </section>
 </template>
 <script lang="ts">
@@ -34,13 +39,13 @@
     import AutoComplete from './AutoComplete.vue';
     import BasicInput from './BasicInput.vue';
     import AreaCascade from './AreaCascader.vue';
-    import DatePicker from './DatePicker.vue';
+    import datePicker from './DatePicker.vue';
     @Component({
         components:{
             AutoComplete,
             BasicInput,
             AreaCascade,
-            DatePicker
+            datePicker,
         }
     })
     export default class DataIn extends Vue{
@@ -86,7 +91,7 @@
     .area_con{
         margin-top:10px;
         .area{
-            width:200px;
+            width:120px;
         }
     }
 </style>

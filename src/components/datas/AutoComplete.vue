@@ -4,7 +4,7 @@
         <section class="in_container">
             <section class="auto">
                 <input type="text" v-if="allowEdit" ref="input" :value="value" @click="focusInput" @blur="blurInput" @input="updateValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder"/>
-                <input type="text" v-else ref="input" :value="value" @click="focusInput" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" readonly/>
+                <input type="text" v-else ref="input" :value="value" @click="focusInput" @blur="blurInput" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" readonly/>
             </section>
             <section class="clear" @click="clearValue">清除</section>
             <transition name="drop_animate">
@@ -52,7 +52,7 @@
 //        过滤数据源
         get referDataSource(){
 //            console.log('过滤数据源')
-            if(this.value==null||this.value.length<=0) return []
+//            if(this.value==null||this.value.length<=0) return []
             let result=this.dataSource.filter(o=>{
                 let reg=new RegExp("\^"+this.value+".*",'i')
                 return reg.test(o)
@@ -64,6 +64,7 @@
             let inputEle:any=this.$refs['input']
             inputEle.focus()
             this.$emit('focus')
+            this.showRefer=true
         }
         blurInput(){
             let inputEle:any=this.$refs['input']

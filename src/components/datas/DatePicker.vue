@@ -4,11 +4,11 @@
         <basic-input :showPop="true">
             <section slot="down" class="down">
                 <section class="header">
-                    <section class="y_prev">&laquo;</section>
-                    <section class="m_prev" @click="curMonth--">&langle;</section>
-                    <section class="header_label">{{curYear}}-{{curMonth}}-{{curDay}},{{MonthIndexs[curMonth]}},{{monthWeek}}</section>
-                    <section class="m_next">&rangle;</section>
-                    <section class="y_next">&raquo;</section>
+                    <section class="y_prev" @click="preYear--">&laquo;</section>
+                    <section class="m_prev" @click="prevMonth">&langle;</section>
+                    <section class="header_label">{{curYear}}-{{curMonth+1}}-{{curDay}}</section>
+                    <section class="m_next" @click="nextMonth">&rangle;</section>
+                    <section class="y_next" @click="preYear++">&raquo;</section>
                 </section>
                 <ul class="header_week">
                     <li v-for="weekItem in WeekStrs">
@@ -100,7 +100,15 @@
             }
             return result
         }
-
+        prevMonth(){
+            this.curYear=this.curMonth>0?this.curYear:this.curYear-1
+            this.curMonth=this.curMonth>0?this.curMonth-1:11
+        }
+        nextMonth(){
+            this.curMonth++
+            this.curYear=this.curMonth%12==0?this.curYear+1:this.curYear
+            this.curMonth=this.curMonth%12
+        }
         mounted(){
             console.log('curYear:'+this.curYear)
             console.log('curMonth:'+this.curMonth)

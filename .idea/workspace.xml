@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a6fc2dd-faac-4c3f-b715-966f9fd75c43" name="默认的" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/datas/AutoComplete.vue" afterPath="$PROJECT_DIR$/src/components/datas/AutoComplete.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/datas/BasicInput.vue" afterPath="$PROJECT_DIR$/src/components/datas/BasicInput.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/datas/DatePicker.vue" afterPath="$PROJECT_DIR$/src/components/datas/DatePicker.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/datas/demo.vue" afterPath="$PROJECT_DIR$/src/components/datas/demo.vue" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -47,14 +43,14 @@
       <file leaf-file-name="DatePicker.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/datas/DatePicker.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="73" column="23" lean-forward="false" selection-start-line="73" selection-start-column="23" selection-end-line="73" selection-end-column="23" />
+            <state relative-caret-position="152">
+              <caret line="8" column="35" lean-forward="false" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
               <folding>
-                <element signature="e#221#228#1" expanded="true" />
-                <element signature="e#303#311#1" expanded="true" />
-                <element signature="e#502#510#1" expanded="true" />
-                <element signature="e#565#572#1" expanded="true" />
-                <element signature="e#1467#1525#0" expanded="true" />
+                <element signature="e#240#247#1" expanded="true" />
+                <element signature="e#321#329#1" expanded="true" />
+                <element signature="e#501#509#1" expanded="true" />
+                <element signature="e#583#590#1" expanded="true" />
+                <element signature="e#1485#1543#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -86,7 +82,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>in_icon</find>
       <find>allowEdit</find>
       <find>input_con</find>
       <find>showRefer</find>
@@ -116,6 +111,7 @@
       <find>day_item-active</find>
       <find>dayList</find>
       <find>initYear</find>
+      <find>prevMonth</find>
     </findStrings>
     <replaceStrings>
       <replace>referDataSource</replace>
@@ -281,12 +277,12 @@
       <workItem from="1551443526210" duration="26618000" />
       <workItem from="1551680893466" duration="10194000" />
       <workItem from="1551747731115" duration="40164000" />
-      <workItem from="1551856095008" duration="8527000" />
+      <workItem from="1551856095008" duration="10369000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="266273000" />
+    <option name="totallyTimeSpent" value="268115000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="369" y="0" width="1004" height="728" extended-state="0" />
@@ -676,14 +672,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/datas/DatePicker.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="73" column="23" lean-forward="false" selection-start-line="73" selection-start-column="23" selection-end-line="73" selection-end-column="23" />
+        <state relative-caret-position="152">
+          <caret line="8" column="35" lean-forward="false" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
           <folding>
-            <element signature="e#221#228#1" expanded="true" />
-            <element signature="e#303#311#1" expanded="true" />
-            <element signature="e#502#510#1" expanded="true" />
-            <element signature="e#565#572#1" expanded="true" />
-            <element signature="e#1467#1525#0" expanded="true" />
+            <element signature="e#240#247#1" expanded="true" />
+            <element signature="e#321#329#1" expanded="true" />
+            <element signature="e#501#509#1" expanded="true" />
+            <element signature="e#583#590#1" expanded="true" />
+            <element signature="e#1485#1543#0" expanded="true" />
           </folding>
         </state>
       </provider>

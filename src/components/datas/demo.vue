@@ -31,7 +31,7 @@
             <area-cascade class="area"></area-cascade>
         </section>
         <h4>日期选择1</h4>
-        <date-picker ></date-picker>
+        <date-picker class="date_con"></date-picker>
     </section>
 </template>
 <script lang="ts">
@@ -93,5 +93,8 @@
         .area{
             width:120px;
         }
+    }
+    .date_con{
+        margin-left: 10px;
     }
 </style>

@@ -1,13 +1,13 @@
 <template>
-    <section class="container" @click="focusInput">
+    <section class="container" @blur="blur">
         <section class="left">
             <slot name="left"></slot>
         </section>
         <section class="content">
             <section class="in" :class="statusCode=='error'?'in_error':''">
                 <!--123-->
-                <input type="text" v-if="allowEdit" :value="basicValue" ref="in" @input="updateValue" @blur="blur"/>
-                <input type="text" v-else :value="basicValue" @input="updateValue" ref="in" @blur="blur" readonly/>
+                <input type="text" v-if="allowEdit" :value="value" ref="in"  @click="focusInput" @input="updateValue"/>
+                <input type="text" v-else :value="value" @click="focusInput"  @input="updateValue" ref="in" readonly/>
             </section>
             <section class="in_icon">
                 清空
@@ -40,20 +40,23 @@
     let e='error'
     @Component
     export default class Input extends Vue {
-        @Prop({default:''}) basicValue!:string      //输入值
+        @Prop({default:''}) value!:string      //输入值
         @Prop({default:InputStatus.init}) statusCode!:InputStatus      //组件状态
         @Prop({default:true}) allowEdit!:boolean    //是否允许编辑
         @Prop({default:false}) showPop!:boolean   //是否展示弹出模块
         focusInput(){
-            let inputEle:any=this.$refs['in']
-            inputEle.focus()
+//            let inputEle:any=this.$refs['in']
+//            inputEle.focus()
             this.showPop=!this.showPop
+            console.log('basic focus input')
+            this.$emit('click')
         }
         updateValue(event:any){
             this.$emit('input',event.target.value)
         }
         blur(){
-            this.$emit('blur',this.basicValue)
+            this.showPop=false
+            this.$emit('blur',this.value)
         }
     }
 </script>
@@ -67,7 +70,6 @@
     height:100%;
     display: flex;
     align-items: center;
-    margin-right:5px;
 }
 .content{
     display: flex;
@@ -78,7 +80,6 @@
     .in{
         flex:1;
         min-height:5px;
-        pading-left:5px;
         height:100%;
         input{
             width:100%;
@@ -120,6 +121,5 @@
     height:100%;
     display: flex;
     align-items: center;
-    margin-left:5px;
 }
 </style>

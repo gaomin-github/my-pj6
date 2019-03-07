@@ -1,8 +1,9 @@
 <template>
-    <section>
+    <section class="date_container" @input="handlerInput">
         <h3>{{test}}</h3>
-        <basic-input :showPop="true">
-            <section slot="down" class="down">
+        <basic-input :showPop="true" v-model="initDate" @click="handlerClick"></basic-input>
+        <transition name="date">
+            <section class="down" v-if="showPop">
                 <section class="header">
                     <section class="y_prev" @click="preYear--">&laquo;</section>
                     <section class="m_prev" @click="prevMonth">&langle;</section>
@@ -16,44 +17,37 @@
                     </li>
                 </ul>
                 <ul class="con_day">
-                    <li v-for="dayItem in dayList" :class="[dayItem.month==curMonth?'':'not_cur_month',dayItem.day==curDay&&dayItem.month==curMonth?'day_item-active':'']">
-                        <!--:class="dayItem.month==curMonth?'not_cur_month':'',dayItem.day==curDay?'day_item-active':''"-->
-                        <!--<section</section>-->
-                        <!--{{dayItem.month}},-->
-                        <!--{{curMonth}},-->
+                    <li v-for="dayItem in dayList" :class="[dayItem.month==curMonth?dayItem.year==curYear&&dayItem.day==curDay?'cur_day':'':'not_cur_month',dayItem.year+'-'+(dayItem.month+1)+'-'+dayItem.day==nowDate?'init_day':'']" @click="handlerChoose(dayItem)">
                         {{dayItem.day}}
                     </li>
                 </ul>
             </section>
-        </basic-input>
+        </transition>
+
     </section>
 </template>
 <script lang="ts">
     //电话号码格式校验
     import {Vue,Component,Prop} from 'vue-property-decorator';
     import BasicInput from './BasicInput';
-//    const WeekStrs=['Sun','Mon','Tues','Wed','Thur','Fri','Sat']
-    enum Week{
-        Sun=0,
-        Mon,
-        Tues,
-        Wed,
-        Thur,
-        Fri,
-        Sat
-    }
     @Component({
         components:{
             BasicInput
         }
     })
     export default class DatePicker extends Vue{
+        @Prop({default:(new Date()).getFullYear()+'-'+((new Date()).getMonth()+1)+'-'+(new Date()).getDate()}) value!:string        //传入组件值
+        nowDate:string=(new Date()).getFullYear()+'-'+((new Date()).getMonth()+1)+'-'+(new Date()).getDate()        //当前系统时间
         WeekStrs:Array<string>=['Mon','Tues','Wed','Thur','Fri','Sat','Sun']
         MonthIndexs:Array<number>=[31,28,31,30,31,30,31,31,30,31,30,31]
-        curYear:number=(new Date()).getFullYear()
-        curMonth:number=(new Date()).getMonth()
-        curDay:number=(new Date()).getDate()
-        initWeek:number=(new Date()).getDay()
+        initDate:string=this.value                  //组件选中值
+        curYear:number=parseInt((this.value.split('-'))[0])     //选中年份
+        curMonth:number=parseInt((this.value.split('-'))[1])-1    //选中月份
+        curDay:number=parseInt((this.value.split('-'))[2])      //选中日期值
+        showPop:boolean=false
+        get curWeek(){
+            return (new Date(this.curYear,this.curMonth,this.curDay)).getDay()
+        }
 //        获取当前月天数
         get monthDay(){
             if(this.curMonth==2) return 28
@@ -109,25 +103,45 @@
             this.curYear=this.curMonth%12==0?this.curYear+1:this.curYear
             this.curMonth=this.curMonth%12
         }
-        mounted(){
-            console.log('curYear:'+this.curYear)
-            console.log('curMonth:'+this.curMonth)
-            console.log('curDay:'+this.curDay)
-            console.log('initWeek:'+this.initWeek)
+//        点击输入框
+        handlerClick(){
+            console.log('handler click')
+            this.showPop=!this.showPop
+            this.$emit('click')
+        }
+        handlerChoose(dayItem:any){
+            this.curYear=dayItem.year
+            this.curMonth=dayItem.month
+            this.curDay=dayItem.day
+            this.initDate=this.curYear+'-'+(this.curMonth+1)+'-'+this.curDay
+            this.showPop=false
+            this.$emit('select')
+        }
+        handlerInput(){
+            this.curYear=parseInt((this.initDate.split('-'))[0])
+            this.curMonth=parseInt((this.initDate.split('-'))[1])-1
+            this.curDay=parseInt((this.initDate.split('-'))[2])
+            this.$emit('input',this.initDate)
         }
     }
 </script>
 <style lang="scss" scoped>
+.date_container{
+    position: relative;
+}
 .down{
-    height:200px;
-    display: flex;
+    position: absolute;
+    left:0px;
+    margin-top: 5px;
+    width:240px;
+    height:120px;
     flex-direction: column;
     cursor: pointer;
 }
 .header{
+    height:30px;
     display:flex;
     border: 1px rgb(180,180,180) solid;
-    height:30px;
     .y_prev,.y_next,.m_prev,.m_next{
         width:20px;
         height:20px;
@@ -142,10 +156,10 @@
     }
 }
 .header_week{
-    display: grid;
     height:26px;
+    display: grid;
     grid-template-columns:14% 14% 14% 14% 14% 14% 14%;
-    border:1px rgb(180,180,180) solid;
+    border:1px red solid;
     font-size: 12px;
     /*justify-content: space-between;*/
     align-items: center;
@@ -154,24 +168,49 @@
     }
 }
 .con_day{
-    flex:1;
     display: grid;
+    height:160px;
     border:1px rgb(180,180,180) solid;
     grid-template-rows:auto;
     align-items: center;
     justify-content: center;
     grid-template-columns:14% 14% 14% 14% 14% 14% 14%;
     li{
-        display: block;
-        /*border:1px black solid;*/
-        text-align: center;
         font-size: 12px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        margin:0px 2px;
+    }
+    li:hover{
+        background-color: rgba(154,200,240,0.5);
     }
     .not_cur_month{
         color:rgb(150,150,150);
     }
-    .day_item-active{
-        background-color: rgb(24,150,220);
+    .cur_day,.cur_day:hover{
+        background-color: rgb(50,150,200);
+        font-weight: 600;
+        color:rgb(255,255,255);
+    }
+    .init_day{
+        border:1px rgb(50,150,200) solid;
+        border-radius: 2px;
     }
 }
+    .date-enter,.date-leave-to{
+        max-height: 0px;
+        overflow-y: hidden;
+    }
+    .date-enter-to,.date-leave{
+        max-height:300px;
+        overflow-y: hidden;
+    }
+    .date-enter-active,.date-leave-active{
+        transition:all 6s;
+        overflow-y: hidden;
+    }
+
 </style>

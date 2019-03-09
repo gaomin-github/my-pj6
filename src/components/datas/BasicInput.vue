@@ -1,5 +1,5 @@
 <template>
-    <section class="container" @blur="blur">
+    <section class="container" @blur="blur" contenteditable="true" tabindex="0">
         <section class="left">
             <slot name="left"></slot>
         </section>
@@ -9,19 +9,8 @@
                 <input type="text" v-if="allowEdit" :value="value" ref="in"  @click="focusInput" @input="updateValue"/>
                 <input type="text" v-else :value="value" @click="focusInput"  @input="updateValue" ref="in" readonly/>
             </section>
-            <section class="in_icon">
+            <section class="in_icon" @click="clearInput">
                 清空
-            </section>
-            <!--<section v-if="showPop" class="pull_top">-->
-                <slot name="top">
-
-                </slot>
-            <!--</section>-->
-
-            <section v-if="showPop" class="pull_down">
-                <slot name="down">
-
-                </slot>
             </section>
         </section>
         <section class="right">
@@ -43,19 +32,21 @@
         @Prop({default:''}) value!:string      //输入值
         @Prop({default:InputStatus.init}) statusCode!:InputStatus      //组件状态
         @Prop({default:true}) allowEdit!:boolean    //是否允许编辑
-        @Prop({default:false}) showPop!:boolean   //是否展示弹出模块
+//        获得焦点
         focusInput(){
-//            let inputEle:any=this.$refs['in']
-//            inputEle.focus()
-            this.showPop=!this.showPop
-            console.log('basic focus input')
             this.$emit('click')
         }
+//        清空输入值
+        clearInput(){
+            this.$emit('input','')
+            this.$emit('clear')
+        }
+//        输入
         updateValue(event:any){
             this.$emit('input',event.target.value)
         }
+//        失焦
         blur(){
-            this.showPop=false
             this.$emit('blur',this.value)
         }
     }
@@ -63,7 +54,7 @@
 <style lang="scss" scoped>
 .container{
     display: flex;
-    width:300px;
+    width:200px;
     height:30px;
 }
 .left{

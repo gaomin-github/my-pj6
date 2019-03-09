@@ -30,8 +30,9 @@
         <section class="area_con">
             <area-cascade class="area"></area-cascade>
         </section>
-        <h4>日期选择1</h4>
+        <h4>日期选择</h4>
         <date-picker class="date_con"></date-picker>
+        <h4>双日期选择</h4>
     </section>
 </template>
 <script lang="ts">

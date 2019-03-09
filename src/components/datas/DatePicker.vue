@@ -1,7 +1,7 @@
 <template>
     <section class="date_container" @input="handlerInput">
-        <h3>{{test}}</h3>
-        <basic-input :showPop="true" v-model="initDate" @click="handlerClick"></basic-input>
+        <basic-input :showPop="true" v-model="initDate" @click="handlerClick">
+        </basic-input>
         <transition name="date">
             <section class="down" v-if="showPop">
                 <section class="header">
@@ -23,7 +23,6 @@
                 </ul>
             </section>
         </transition>
-
     </section>
 </template>
 <script lang="ts">
@@ -85,7 +84,14 @@
             }
 //            本月月末周数
             let monthLastWeek=(new Date(this.curYear,this.curMonth,this.MonthIndexs[this.curMonth])).getDay()
-            for(let i=1;i<=7-monthLastWeek;i++){
+//            for(let i=1;i<=7-monthLastWeek;i++){
+//                result.push({
+//                    day:i,
+//                    month:(this.curMonth+1)%12,
+//                    year:this.curMonth==11?this.curYear+1:this.curYear
+//                })
+//            }
+            for(let i=1;result.length<42;i++){
                 result.push({
                     day:i,
                     month:(this.curMonth+1)%12,
@@ -118,10 +124,11 @@
             this.$emit('select')
         }
         handlerInput(){
-            this.curYear=parseInt((this.initDate.split('-'))[0])
-            this.curMonth=parseInt((this.initDate.split('-'))[1])-1
-            this.curDay=parseInt((this.initDate.split('-'))[2])
-            this.$emit('input',this.initDate)
+            console.log('datepicker input')
+//            this.curYear=parseInt((this.initDate.split('-'))[0])
+//            this.curMonth=parseInt((this.initDate.split('-'))[1])-1
+//            this.curDay=parseInt((this.initDate.split('-'))[2])
+//            this.$emit('input',this.initDate)
         }
     }
 </script>
@@ -133,20 +140,21 @@
     position: absolute;
     left:0px;
     margin-top: 5px;
-    width:240px;
-    height:120px;
+    width:200px;
     flex-direction: column;
     cursor: pointer;
+    overflow-y: hidden;
+    border:1px rgb(180,180,180) solid;
+    background-color: rgb(255,255,255);
 }
 .header{
     height:30px;
     display:flex;
-    border: 1px rgb(180,180,180) solid;
+    border-bottom: 1px rgb(180,180,180) solid;
     .y_prev,.y_next,.m_prev,.m_next{
         width:20px;
         height:20px;
         line-height: 20px;
-        border:1px black solid;
     }
     .header_label{
         flex: 1;
@@ -159,25 +167,22 @@
     height:26px;
     display: grid;
     grid-template-columns:14% 14% 14% 14% 14% 14% 14%;
-    border:1px red solid;
     font-size: 12px;
-    /*justify-content: space-between;*/
     align-items: center;
+    border-bottom:1px rgb(180,180,180) solid;
     li{
         text-align: center;
     }
 }
 .con_day{
     display: grid;
-    height:160px;
-    border:1px rgb(180,180,180) solid;
     grid-template-rows:auto;
     align-items: center;
     justify-content: center;
     grid-template-columns:14% 14% 14% 14% 14% 14% 14%;
     li{
         font-size: 12px;
-        height: 100%;
+        line-height: 26px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -202,15 +207,13 @@
 }
     .date-enter,.date-leave-to{
         max-height: 0px;
-        overflow-y: hidden;
+
     }
     .date-enter-to,.date-leave{
         max-height:300px;
-        overflow-y: hidden;
     }
     .date-enter-active,.date-leave-active{
-        transition:all 6s;
-        overflow-y: hidden;
+        transition:all .3s;
     }
 
 </style>

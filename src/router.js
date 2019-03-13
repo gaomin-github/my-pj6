@@ -3,6 +3,7 @@ import directory from './directory.vue';
 import dropDownDemo from './components/drop-down/demo';
 import panelDemo from './components/panel/demo';
 import dataDemo from './components/datas/demo';
+import httpDemo from './components/reqs/MyAjax.vue';
 let routes=new VueRouter({
     mode:'history',
     routes:[
@@ -18,6 +19,9 @@ let routes=new VueRouter({
         },{
             path:'/dataDemo',
             component:dataDemo
+        },{
+            path:'/httpDemo',
+            component:httpDemo
         }
     ]
 

@@ -1,7 +1,7 @@
 <template>
     <section class="container">
-            <auto-complete class="prov" :dataSource="provinceList" v-model="curProvinceName" allowEdit="false" @complete-input="surProvValue"></auto-complete>
-            <auto-complete class="city" :dataSource="cityList" v-model="curCityName" @complete-input="surCityValue" @click="curCityName=''"></auto-complete>
+            <auto-complete class="prov" :dataSource="provinceList" :value="curProvinceName" @input="surProvValue" allowEdit="false" @complete-input="surProvValue"></auto-complete>
+            <auto-complete class="city" :dataSource="cityList" :value="curCityName" @complete-input="surCityValue"></auto-complete>
     </section>
 </template>
 <script lang="ts">
@@ -20,10 +20,16 @@ interface areaInfo{
 })
 export default class AreaCascader extends Vue{
     @Prop({default:defaultAreaList}) areaData!:Array<any>
-    @Prop({default:''}) curProvinceName!:string
-    @Prop({default:''}) curCityName!:string
+    @Prop({default:''}) value!:string
     curProvinceIndex:number=-1
     curCityIndex:number=-1
+    get curProvinceName(){
+        console.log()
+        return this.value.match(/[\u4e00-\u9fa5]+(?=-)/g)
+    }
+    get curCityName(){
+        return ''
+    }
     get provinceList(){
         let p_list=this.areaData.map((o:any):string=>{
             return o.name
@@ -42,7 +48,7 @@ export default class AreaCascader extends Vue{
         let obj=this
         obj.curProvinceIndex=param
         this.curCityIndex=-1
-        this.curCityName=''
+
     }
     surCityValue(param:number){
         let obj=this
@@ -52,7 +58,7 @@ export default class AreaCascader extends Vue{
 </script>
 <style lang="scss" scoped>
     .container{
-        width:300px;
+        width:400px;
         height:30px;
         display: flex;
     }

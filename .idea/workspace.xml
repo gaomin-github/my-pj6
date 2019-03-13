@@ -2,11 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a6fc2dd-faac-4c3f-b715-966f9fd75c43" name="默认的" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/datas/DoubleDatePicker.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/datas/AreaCascader.vue" afterPath="$PROJECT_DIR$/src/components/datas/AreaCascader.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/datas/AutoComplete.vue" afterPath="$PROJECT_DIR$/src/components/datas/AutoComplete.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/datas/BasicInput.vue" afterPath="$PROJECT_DIR$/src/components/datas/BasicInput.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/datas/DatePicker.vue" afterPath="$PROJECT_DIR$/src/components/datas/DatePicker.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/datas/demo.vue" afterPath="$PROJECT_DIR$/src/components/datas/demo.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/directory.vue" afterPath="$PROJECT_DIR$/src/directory.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/router.js" afterPath="$PROJECT_DIR$/src/router.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -23,52 +26,34 @@
       <file leaf-file-name="demo.vue" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/datas/demo.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="703">
-              <caret line="34" column="17" lean-forward="false" selection-start-line="34" selection-start-column="17" selection-end-line="34" selection-end-column="17" />
+            <state relative-caret-position="391">
+              <caret line="96" column="24" lean-forward="false" selection-start-line="96" selection-start-column="24" selection-end-line="96" selection-end-column="24" />
               <folding>
-                <element signature="n#script#0;n#!!top" expanded="false" />
-                <element signature="e#1433#1491#0" expanded="true" />
+                <element signature="e#1647#1705#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BasicInput.vue" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/components/datas/BasicInput.vue">
+      <file leaf-file-name="AreaCascader.vue" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/components/datas/AreaCascader.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="50" column="9" lean-forward="true" selection-start-line="50" selection-start-column="9" selection-end-line="50" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DoubleDatePicker.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/datas/DoubleDatePicker.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DatePicker.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/datas/DatePicker.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="135" column="16" lean-forward="true" selection-start-line="135" selection-start-column="16" selection-end-line="135" selection-end-column="16" />
+            <state relative-caret-position="135">
+              <caret line="22" column="37" lean-forward="true" selection-start-line="22" selection-start-column="37" selection-end-line="22" selection-end-column="37" />
               <folding>
-                <element signature="e#359#366#1" expanded="true" />
-                <element signature="e#440#448#1" expanded="true" />
-                <element signature="e#620#628#1" expanded="true" />
-                <element signature="e#702#709#1" expanded="true" />
-                <element signature="e#1427#1485#0" expanded="true" />
-                <element signature="e#2740#2905#0" expanded="false" />
-                <element signature="e#2927#4424#0" expanded="false" />
-                <element signature="e#4444#4585#0" expanded="false" />
-                <element signature="e#4605#4760#0" expanded="false" />
+                <element signature="e#410#458#0" expanded="true" />
+                <element signature="e#627#674#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AutoComplete.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/datas/AutoComplete.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="892">
+              <caret line="79" column="26" lean-forward="true" selection-start-line="79" selection-start-column="26" selection-end-line="79" selection-end-column="26" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -77,10 +62,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>content</find>
-      <find>conClick</find>
-      <find>h3</find>
-      <find>pull_down</find>
       <find>monthDay</find>
       <find>day_item-active</find>
       <find>dayList</find>
@@ -90,7 +71,6 @@
       <find>blur</find>
       <find>chooseDate</find>
       <find>(new Date())</find>
-      <find>curProvinceName</find>
       <find>v-model</find>
       <find>curWeek</find>
       <find>date_container</find>
@@ -105,8 +85,13 @@
       <find>con_day</find>
       <find>down</find>
       <find>showPop</find>
+      <find>area_con</find>
       <find>initDate</find>
       <find>handlerInput</find>
+      <find>initData</find>
+      <find>surProvValue</find>
+      <find>curProvinceName</find>
+      <find>curCityName</find>
     </findStrings>
     <replaceStrings>
       <replace>referDataSource</replace>
@@ -150,7 +135,6 @@
         <option value="$PROJECT_DIR$/src/components/datas/jsons/city.json" />
         <option value="$PROJECT_DIR$/tsconfig.json" />
         <option value="$PROJECT_DIR$/vue.d.ts" />
-        <option value="$PROJECT_DIR$/src/components/datas/AreaCascader.vue" />
         <option value="$PROJECT_DIR$/src/components/datas/TelphoneCheck.vue" />
         <option value="$PROJECT_DIR$/src/components/datas/Input.vue" />
         <option value="$PROJECT_DIR$/src/components/datas/Switch.vue" />
@@ -160,11 +144,12 @@
         <option value="$PROJECT_DIR$/src/components/plugins/RequestLimit.ts" />
         <option value="$PROJECT_DIR$/src/components/datas/AutoComplete.zh.md" />
         <option value="$PROJECT_DIR$/configs/webpack.dev.js" />
-        <option value="$PROJECT_DIR$/src/components/datas/AutoComplete.vue" />
         <option value="$PROJECT_DIR$/src/components/datas/data.md" />
-        <option value="$PROJECT_DIR$/src/components/datas/demo.vue" />
         <option value="$PROJECT_DIR$/src/components/datas/BasicInput.vue" />
         <option value="$PROJECT_DIR$/src/components/datas/DatePicker.vue" />
+        <option value="$PROJECT_DIR$/src/components/datas/AutoComplete.vue" />
+        <option value="$PROJECT_DIR$/src/components/datas/AreaCascader.vue" />
+        <option value="$PROJECT_DIR$/src/components/datas/demo.vue" />
       </list>
     </option>
   </component>
@@ -180,8 +165,8 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="330" />
-    <option name="width" value="1043" />
+    <option name="x" value="319" />
+    <option name="width" value="1054" />
     <option name="height" value="735" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -200,8 +185,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -266,11 +249,13 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path" value="E:/software/NodeJs/node" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
   </component>
@@ -309,17 +294,18 @@
       <workItem from="1551747731115" duration="40164000" />
       <workItem from="1551856095008" duration="33925000" />
       <workItem from="1552010393838" duration="7834000" />
+      <workItem from="1552487211382" duration="4493000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="299505000" />
+    <option name="totallyTimeSpent" value="303998000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="330" y="0" width="1043" height="735" extended-state="0" />
+    <frame x="319" y="0" width="1054" height="735" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17412935" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25098425" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="调试" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -349,7 +335,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="4" />
+      <option name="time" value="5" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -468,14 +454,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/panel/PopPanel.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="37" column="7" lean-forward="false" selection-start-line="37" selection-start-column="6" selection-end-line="37" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -649,14 +627,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/datas/AreaCascader.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="2" column="91" lean-forward="false" selection-start-line="2" selection-start-column="76" selection-end-line="2" selection-end-column="91" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/datas/data.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
@@ -671,16 +641,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/datas/AutoComplete.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3211">
-          <caret line="174" column="12" lean-forward="false" selection-start-line="174" selection-start-column="4" selection-end-line="174" selection-end-column="12" />
-          <folding>
-            <element signature="e#3107#3427#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/datas/DoubleDatePicker.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -689,40 +649,66 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/datas/demo.vue">
+    <entry file="file://$PROJECT_DIR$/src/components/panel/PopPanel.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="703">
-          <caret line="34" column="17" lean-forward="false" selection-start-line="34" selection-start-column="17" selection-end-line="34" selection-end-column="17" />
-          <folding>
-            <element signature="n#script#0;n#!!top" expanded="false" />
-            <element signature="e#1433#1491#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/datas/DatePicker.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="135" column="16" lean-forward="true" selection-start-line="135" selection-start-column="16" selection-end-line="135" selection-end-column="16" />
-          <folding>
-            <element signature="e#359#366#1" expanded="true" />
-            <element signature="e#440#448#1" expanded="true" />
-            <element signature="e#620#628#1" expanded="true" />
-            <element signature="e#702#709#1" expanded="true" />
-            <element signature="e#1427#1485#0" expanded="true" />
-            <element signature="e#2740#2905#0" expanded="false" />
-            <element signature="e#2927#4424#0" expanded="false" />
-            <element signature="e#4444#4585#0" expanded="false" />
-            <element signature="e#4605#4760#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="594">
+          <caret line="37" column="7" lean-forward="false" selection-start-line="37" selection-start-column="6" selection-end-line="37" selection-end-column="7" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/datas/BasicInput.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="50" column="9" lean-forward="true" selection-start-line="50" selection-start-column="9" selection-end-line="50" selection-end-column="9" />
+        <state relative-caret-position="342">
+          <caret line="46" column="56" lean-forward="false" selection-start-line="46" selection-start-column="56" selection-end-line="46" selection-end-column="56" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/datas/DatePicker.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="43" column="72" lean-forward="true" selection-start-line="43" selection-start-column="72" selection-end-line="43" selection-end-column="72" />
+          <folding>
+            <element signature="e#364#371#1" expanded="true" />
+            <element signature="e#445#453#1" expanded="true" />
+            <element signature="e#625#633#1" expanded="true" />
+            <element signature="e#707#714#1" expanded="true" />
+            <element signature="e#1432#1490#0" expanded="true" />
+            <element signature="e#2916#3081#0" expanded="false" />
+            <element signature="e#3103#4600#0" expanded="false" />
+            <element signature="e#4620#4761#0" expanded="false" />
+            <element signature="e#4781#4936#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/datas/AutoComplete.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="892">
+          <caret line="79" column="26" lean-forward="true" selection-start-line="79" selection-start-column="26" selection-end-line="79" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/datas/demo.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="96" column="24" lean-forward="false" selection-start-line="96" selection-start-column="24" selection-end-line="96" selection-end-column="24" />
+          <folding>
+            <element signature="e#1647#1705#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/datas/AreaCascader.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="22" column="37" lean-forward="true" selection-start-line="22" selection-start-column="37" selection-end-line="22" selection-end-column="37" />
+          <folding>
+            <element signature="e#410#458#0" expanded="true" />
+            <element signature="e#627#674#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

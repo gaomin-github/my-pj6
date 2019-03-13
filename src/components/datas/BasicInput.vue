@@ -44,6 +44,7 @@
 //        输入
         updateValue(event:any){
             this.$emit('input',event.target.value)
+            this.$emit('changeValue',event.target.value)
         }
 //        失焦
         blur(){

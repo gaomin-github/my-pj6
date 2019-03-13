@@ -1,6 +1,6 @@
 <template>
-    <section class="date_container" @input="handlerInput">
-        <basic-input :showPop="true" v-model="initDate" @click="handlerClick">
+    <section class="date_container">
+        <basic-input :showPop="true" v-model="initDate" @click="handlerClick" @changeValue="changeValue">
         </basic-input>
         <transition name="date">
             <section class="down" v-if="showPop">
@@ -44,6 +44,11 @@
         curMonth:number=parseInt((this.value.split('-'))[1])-1    //选中月份
         curDay:number=parseInt((this.value.split('-'))[2])      //选中日期值
         showPop:boolean=false
+        mounted(){
+            console.log('mounted---------')
+           this.initDate=this.value
+           this.curYear= parseInt((this.value.split('-'))[0])
+        }
         get curWeek(){
             return (new Date(this.curYear,this.curMonth,this.curDay)).getDay()
         }
@@ -116,19 +121,23 @@
             this.$emit('click')
         }
         handlerChoose(dayItem:any){
-            this.curYear=dayItem.year
-            this.curMonth=dayItem.month
-            this.curDay=dayItem.day
-            this.initDate=this.curYear+'-'+(this.curMonth+1)+'-'+this.curDay
             this.showPop=false
+//            this.curYear=dayItem.year
+//            this.curMonth=dayItem.month
+//            this.curDay=dayItem.day
+//            this.initDate=thdayItemis.curYear+'-'+(this.curMonth+1)+'-'+this.curDay
+            console.log('触发input')
+            this.$emit('input',dayItem.year+'-'+dayItem.month+'-'+dayItem.day)
             this.$emit('select')
         }
-        handlerInput(){
-            console.log('datepicker input')
+//        手动输入日期触发
+        changeValue(value:string){
+            console.log('changeValue')
+            this.initDate=value
 //            this.curYear=parseInt((this.initDate.split('-'))[0])
 //            this.curMonth=parseInt((this.initDate.split('-'))[1])-1
 //            this.curDay=parseInt((this.initDate.split('-'))[2])
-//            this.$emit('input',this.initDate)
+            this.$emit('input',this.initDate)
         }
     }
 </script>

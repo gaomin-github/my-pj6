@@ -3,7 +3,7 @@
         <section class="left_container" v-if="leftLabel!==null&&leftLabel.length>0">{{leftLabel}}</section>
         <section class="in_container">
             <section class="auto">
-                <input type="text" v-if="allowEdit" ref="input" :value="value" @click="focusInput" @blur="blurInput" @input="updateValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder"/>
+                <input type="text" v-if="allowEdit" ref="input" :value="currentValue" @click="focusInput" @blur="blurInput" @input="updateValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder"/>
                 <input type="text" v-else ref="input" :value="value" @click="focusInput" @blur="blurInput" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" readonly/>
             </section>
             <section class="clear" @click="clearValue">清除</section>
@@ -48,11 +48,11 @@
         @Prop({default:true}) allowEdit!:boolean
         selectItemIndex:number=-1    //在参照列表选中的条目索引
         showRefer:boolean=false      //控制是否显示参照列表
-
+        get currentValue(){
+            return this.value
+        }
 //        过滤数据源
         get referDataSource(){
-//            console.log('过滤数据源')
-//            if(this.value==null||this.value.length<=0) return []
             let result=this.dataSource.filter(o=>{
                 let reg=new RegExp("\^"+this.value+".*",'i')
                 return reg.test(o)
@@ -97,6 +97,7 @@
 //        清空输入内容
         clearValue(){
             this.$emit('input','')
+            this.$emit('clear')
         }
 //        更新组件值
         updateValue(e:any){

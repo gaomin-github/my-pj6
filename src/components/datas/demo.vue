@@ -4,11 +4,11 @@
         <!--<button @click="crudDataSource">修改自动完成数据源</button>-->
         <!--<button @click="getComValue">获取组件值</button>-->
         <!--<button @click="updateComValue">修改组件值</button>-->
-        <!--<h4>自动填充组件</h4>-->
-        <!--<section class="auto_con">-->
-            <!--<auto-complete :dataSource="autoDataSource" v-model="autoValue" placeHolder="请输入用户名" leftLabel="用户名" rightLabel="ok" :allowEdit="false"></auto-complete>-->
-            <!--<auto-complete :dataSource="autoDataSource" v-model="basicValue" placeHolder="请输入邮箱" leftLabel="用户名" rightLabel="ok"></auto-complete>-->
-        <!--</section>-->
+        <h4>自动填充组件</h4>
+        <section class="auto_con">
+            <auto-complete :dataSource="autoDataSource" v-model="autoValue" placeHolder="请输入用户名" leftLabel="用户名" rightLabel="ok" :allowEdit="false"></auto-complete>
+            <auto-complete :dataSource="autoDataSource" v-model="basicValue" placeHolder="请输入邮箱" leftLabel="用户名" rightLabel="ok"></auto-complete>
+        </section>
         <!--<h4>基本输入组件</h4>-->
         <!--<section class="input_con">-->
             <!--<basic-input v-model="basicValue" statusCode="error">-->
@@ -28,7 +28,7 @@
         <!--</section>-->
         <h4>省市联动组件</h4>
         <section class="area_con">
-            <area-cascade class="area" :value="areaValue"></area-cascade>
+            <area-cascade class="area" v-model="areaValue"></area-cascade>
         </section>
         <!--<h4>日期选择</h4>-->
         <!--<date-picker class="date_con" v-model="datePickerValue" ></date-picker>-->
@@ -51,10 +51,10 @@
     })
     export default class DataIn extends Vue{
         autoDataSource:Array<string>=['12357','12378','12345611111111111','abcde','abccc','张三','张三树','知否']
-        autoValue:string='123'
-        basicValue:string='111'
+        autoValue:string='2'
+        basicValue:string='1'
         param3:string='11111'
-        areaValue='陕西省-西安市'
+        areaValue='陕西-西安市'
         datePickerValue='2019-03-15'
         mounted(){
             console.log('进入datain页面')

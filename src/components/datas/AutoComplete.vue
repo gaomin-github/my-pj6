@@ -3,13 +3,13 @@
         <section class="left_container" v-if="leftLabel!==null&&leftLabel.length>0">{{leftLabel}}</section>
         <section class="in_container">
             <section class="auto">
-                <input type="text" v-if="allowEdit" ref="input" :value="currentValue" @click="focusInput" @blur="blurInput" @input="updateValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder"/>
-                <input type="text" v-else ref="input" :value="value" @click="focusInput" @blur="blurInput" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" readonly/>
+                <input type="text" v-if="allowEdit" ref="input" :value="currentValue" @click="handleFocus" @blur="handleBlur" @input="updateValue" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder"/>
+                <input type="text" v-else ref="input" :value="value" @click="handleFocus" @blur="handleBlur" @keydown="selectReferItem" @keypress="clearSelectItem" :placeholder="placeHolder" readonly/>
             </section>
             <section class="clear" @click="clearValue">清除</section>
             <transition name="drop_animate">
-                <ul class="refer_contaienr" v-if="referDataSource&&referDataSource.length>0&&showRefer">
-                    <li v-for="(item,key) in referDataSource" @click="completeInput(key)" :class="selectItemIndex==key?'refer_item-active':''">
+                <ul class="refer_contaienr" v-if="dataSource&&dataSource.length>0&&showRefer" ref="ref_con" @click="completeInput">
+                    <li v-for="(item,key) in dataSource"  :ref="'refer_item_'+key" :key="key"  :class="selectItemIndex==key?'refer_item-active':''" :index="key">
                         {{item}}
                     </li>
                 </ul>
@@ -38,6 +38,7 @@
     })()
     @Component
     export default class AutoComplete extends Vue{
+//        初始化值
         @Prop({default:''}) value!:string
 //        数据源
         @Prop({default:[]}) dataSource!:Array<string>
@@ -49,24 +50,28 @@
         selectItemIndex:number=-1    //在参照列表选中的条目索引
         showRefer:boolean=false      //控制是否显示参照列表
         get currentValue(){
+//            console.log('computed----------')
             return this.value
         }
-//        过滤数据源
-        get referDataSource(){
-            let result=this.dataSource.filter(o=>{
-                let reg=new RegExp("\^"+this.value+".*",'i')
-                return reg.test(o)
+        mounted(){
+            if(this.currentValue!=''&&this.currentValue.length<=0){
+                this.selectItemIndex=-1
+                return
+            }
+            this.selectItemIndex=this.dataSource.findIndex((value:string):boolean=>{
+                let regStr=new RegExp('^'+this.currentValue+'+','g')
+                return regStr.test(value)
             })
-            return result
+            this.$emit('init',this.selectItemIndex)
         }
 //        组件聚焦,
-        focusInput(){
+        handleFocus(){
             let inputEle:any=this.$refs['input']
             inputEle.focus()
+            this.showRefer=!this.showRefer
             this.$emit('focus')
-            this.showRefer=true
         }
-        blurInput(){
+        handleBlur(){
             let inputEle:any=this.$refs['input']
             inputEle.blur()
             this.showRefer=false
@@ -75,36 +80,61 @@
         }
 //        选择要参照条目
         selectReferItem(event:any){
-            if(this.referDataSource==null||this.referDataSource.length<=0) return
-            if(event.keyCode==38&&this.selectItemIndex>=0) this.selectItemIndex--
-            else if(event.keyCode==40&&this.selectItemIndex<this.referDataSource.length) this.selectItemIndex++
+            if(this.dataSource==null||this.dataSource.length<=0) return
+            if(event.keyCode==38&&this.selectItemIndex>0) this.selectItemIndex--
+            else if(event.keyCode==40&&this.selectItemIndex<this.dataSource.length-1) this.selectItemIndex++
+//            下拉滚动条滚动到选中位置
+            let refContainer:any=this.$refs['ref_con']
+            let selectItem:any=this.$refs['refer_item_'+this.selectItemIndex]
+            if(selectItem[0].offsetTop-refContainer.offsetHeight>=0){
+                console.log('item被隐藏，需滑动参照容器')
+                refContainer.scrollTop=selectItem[0].offsetTop-refContainer.offsetHeight+selectItem[0].offsetHeight+10
+            }else{
+                refContainer.scrollTop=0
+            }
             this.$emit('select')
         }
-//        清空记录的选中参照条目索引值
+//        在参照下拉使用enter
         clearSelectItem(event:any){
+            console.log('clear select item')
             if(event.keyCode==13&&this.selectItemIndex>=0){
-                this.completeInput(this.selectItemIndex)
-                return
+                this.completeInput(null)
             }
-            this.selectItemIndex=-1
         }
-//        通过参照补全剩余内容
-        completeInput(key:number){
-            this.$emit('input',this.referDataSource[key])
-            this.$emit('complete-input',key)
+//        点击参照条目补全剩余内容
+        completeInput(e:any){
+            if(e!=null){
+                this.selectItemIndex=e.target.getAttribute('index')
+            }
+//            console.log('index:'+)
+//            console.log('auto select')
+//            this.selectItemIndex=key
             this.showRefer=false
+            this.$emit('input',this.dataSource[this.selectItemIndex])
+            this.$emit('complete-input',this.selectItemIndex)
         }
 //        清空输入内容
         clearValue(){
+            this.selectItemIndex=-1
             this.$emit('input','')
             this.$emit('clear')
+            this.$emit('complete-input',this.selectItemIndex)
         }
 //        更新组件值
         updateValue(e:any){
-            this.showRefer=true
             let obj:any=this
             Debounce(()=>{
+                if(e.target.value==null||e.target.value.length<=0){
+                    this.selectItemIndex=-1
+                }else{
+                    let regMatch=new RegExp('^'+e.target.value+'+','g');
+                    let index=this.dataSource.findIndex((value:string,index:number):boolean=>{
+                        return regMatch.test(value)
+                    })
+                    this.selectItemIndex=index
+                }
                 this.$emit('input',e.target.value)
+                this.$emit('complete-input',this.selectItemIndex)
             },300)
         }
     }
@@ -169,7 +199,7 @@
     position: absolute;
     display: block;
     width:100%;
-    max-height: 200px;
+    height: 200px;
     top:100%;
     left: 0px;
     margin-top:5px;
@@ -179,6 +209,10 @@
         padding:0px 5px;
         line-height: 24px;
         margin:3px 0px;
+        cursor: pointer;
+    }
+    li:hover{
+        background-color: rgb(230,230,230);
     }
     .refer_item-active{
         background-color: rgb(230,230,230);
@@ -198,7 +232,7 @@
     max-height: 0px;
 }
 .drop_animate-enter-to,.drop_animate-leave{
-    max-height: 200px;
+    max-height: 300px;
 }
 .drop_animate-enter-active,.drop_animate-leave-active{
     transition:all .5s;

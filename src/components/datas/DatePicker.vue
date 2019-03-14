@@ -16,8 +16,8 @@
                         {{weekItem}}
                     </li>
                 </ul>
-                <ul class="con_day">
-                    <li v-for="dayItem in dayList" :class="[dayItem.month==curMonth?dayItem.year==curYear&&dayItem.day==curDay?'cur_day':'':'not_cur_month',dayItem.year+'-'+(dayItem.month+1)+'-'+dayItem.day==nowDate?'init_day':'']" @click="handlerChoose(dayItem)">
+                <ul class="con_day" @click="handlerChoose">
+                    <li v-for="(dayItem,index) in dayList" :index="index" :class="[dayItem.month==curMonth?dayItem.year==curYear&&dayItem.day==curDay?'cur_day':'':'not_cur_month',dayItem.year+'-'+(dayItem.month+1)+'-'+dayItem.day==nowDate?'init_day':'']" >
                         {{dayItem.day}}
                     </li>
                 </ul>
@@ -120,14 +120,15 @@
             this.showPop=!this.showPop
             this.$emit('click')
         }
-        handlerChoose(dayItem:any){
+        handlerChoose(e:any){
             this.showPop=false
 //            this.curYear=dayItem.year
 //            this.curMonth=dayItem.month
 //            this.curDay=dayItem.day
 //            this.initDate=thdayItemis.curYear+'-'+(this.curMonth+1)+'-'+this.curDay
             console.log('触发input')
-            this.$emit('input',dayItem.year+'-'+dayItem.month+'-'+dayItem.day)
+            let itemIndex=e.target.value
+            this.$emit('input',this.dayList[itemIndex].year+'-'+this.dayList[itemIndex].month+'-'+this.dayList[itemIndex].day)
             this.$emit('select')
         }
 //        手动输入日期触发

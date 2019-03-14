@@ -9,30 +9,30 @@
             <auto-complete :dataSource="autoDataSource" v-model="autoValue" placeHolder="请输入用户名" leftLabel="用户名" rightLabel="ok" :allowEdit="false"></auto-complete>
             <auto-complete :dataSource="autoDataSource" v-model="basicValue" placeHolder="请输入邮箱" leftLabel="用户名" rightLabel="ok"></auto-complete>
         </section>
-        <!--<h4>基本输入组件</h4>-->
-        <!--<section class="input_con">-->
-            <!--<basic-input v-model="basicValue" statusCode="error">-->
-                <!--<section slot="left">-->
-                    <!--电话号码-->
-                <!--</section>-->
-                <!--<section slot="right">-->
-                    <!--右标签-->
-                <!--</section>-->
-                <!--<section slot="top">-->
 
-                <!--</section>-->
-                <!--<section slot="down">-->
-                    <!--下方弹出内容-->
-                <!--</section>-->
-            <!--</basic-input>-->
-        <!--</section>-->
         <h4>省市联动组件</h4>
         <section class="area_con">
-            <area-cascade class="area" v-model="areaValue"></area-cascade>
+            <area-cascade class="area" v-model="areaValue" @complete-input="areaInputEnd"></area-cascade>
         </section>
-        <!--<h4>日期选择</h4>-->
-        <!--<date-picker class="date_con" v-model="datePickerValue" ></date-picker>-->
-        <!--<h4>双日期选择</h4>-->
+        <h4>基本输入组件</h4>
+        <basic-input class="input_con" v-model="basicValue" statusCode="error">
+            <section slot="left">
+                电话号码
+            </section>
+            <section slot="right">
+                右标签
+            </section>
+            <section slot="top">
+
+            </section>
+            <section slot="down">
+                下方弹出内容
+            </section>
+        </basic-input>
+
+        <h4>日期选择</h4>
+        <date-picker class="date_con" v-model="datePickerValue"  @select="handleDateSelect"></date-picker>
+        <h4>双日期选择</h4>
     </section>
 </template>
 <script lang="ts">
@@ -77,6 +77,12 @@
         basicClick(){
             console.log('basic click')
         }
+        areaInputEnd(){
+            console.log('this.areaValue：'+this.areaValue)
+        }
+        handleDateSelect(){
+            console.log('date picker:'+this.datePickerValue)
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -87,6 +93,7 @@
         height:40px;
     }
     .input_con{
+        width:240px;
         margin-top:20px;
         margin-left:10px;
         font-size: 14px;

@@ -47,11 +47,9 @@ export default class AreaCascader extends Vue{
         return p_list
     }
     get cityList(){
-        console.log('init city list')
         if(this.curProvinceIndex<0){
             return []
         }
-        console.log('this.curProvinceIndex:'+this.curProvinceIndex)
         return this.areaData[this.curProvinceIndex].city.map((o:any)=>{
             return o.name
         })
@@ -65,7 +63,7 @@ export default class AreaCascader extends Vue{
     }
     handleCityCompleteInput(cityIndex:number){
         this.curCityIndex=cityIndex
-        this.$emit('complete-input')
+        this.$emit('complete-input',this.curCityIndex)
     }
     handleCityInput(cityValue:string){
         this.$emit('input',this.curProvinceName+'-'+cityValue)

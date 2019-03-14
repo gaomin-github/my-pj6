@@ -50,7 +50,6 @@
         selectItemIndex:number=-1    //在参照列表选中的条目索引
         showRefer:boolean=false      //控制是否显示参照列表
         get currentValue(){
-//            console.log('computed----------')
             return this.value
         }
         mounted(){
@@ -87,7 +86,6 @@
             let refContainer:any=this.$refs['ref_con']
             let selectItem:any=this.$refs['refer_item_'+this.selectItemIndex]
             if(selectItem[0].offsetTop-refContainer.offsetHeight>=0){
-                console.log('item被隐藏，需滑动参照容器')
                 refContainer.scrollTop=selectItem[0].offsetTop-refContainer.offsetHeight+selectItem[0].offsetHeight+10
             }else{
                 refContainer.scrollTop=0
@@ -96,7 +94,6 @@
         }
 //        在参照下拉使用enter
         clearSelectItem(event:any){
-            console.log('clear select item')
             if(event.keyCode==13&&this.selectItemIndex>=0){
                 this.completeInput(null)
             }
@@ -106,9 +103,6 @@
             if(e!=null){
                 this.selectItemIndex=e.target.getAttribute('index')
             }
-//            console.log('index:'+)
-//            console.log('auto select')
-//            this.selectItemIndex=key
             this.showRefer=false
             this.$emit('input',this.dataSource[this.selectItemIndex])
             this.$emit('complete-input',this.selectItemIndex)
@@ -146,7 +140,6 @@
 .container{
     width:260px;
     height:30px;
-    /*position:relative;*/
     display: flex;
     align-items: center;
 }

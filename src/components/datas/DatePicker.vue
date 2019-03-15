@@ -1,6 +1,6 @@
 <template>
     <section class="date_container">
-        <basic-input :showPop="true" v-model="initDate" @click="handlerClick" @changeValue="changeValue">
+        <basic-input :showPop="true" v-model="initDate" @click="handlerClick" @handlerInput="handlerInput">
         </basic-input>
         <transition name="date">
             <section class="down" v-if="showPop">
@@ -17,7 +17,7 @@
                     </li>
                 </ul>
                 <ul class="con_day" @click="handlerChoose">
-                    <li v-for="(dayItem,index) in dayList" :index="index" :class="[dayItem.month==curMonth?dayItem.year==curYear&&dayItem.day==curDay?'cur_day':'':'not_cur_month',dayItem.year+'-'+(dayItem.month+1)+'-'+dayItem.day==nowDate?'init_day':'']" >
+                    <li v-for="(dayItem,index) in dayList" :index="dayItem.year+'-'+(dayItem.month+1)+'-'+dayItem.day" :class="[dayItem.month==curMonth?dayItem.year==curYear&&dayItem.day==curDay?'cur_day':'':'not_cur_month',dayItem.year+'-'+(dayItem.month+1)+'-'+dayItem.day==nowDate?'init_day':'']" >
                         {{dayItem.day}}
                     </li>
                 </ul>
@@ -44,11 +44,6 @@
         curMonth:number=parseInt((this.value.split('-'))[1])-1    //选中月份
         curDay:number=parseInt((this.value.split('-'))[2])      //选中日期值
         showPop:boolean=false
-        mounted(){
-            console.log('mounted---------')
-           this.initDate=this.value
-           this.curYear= parseInt((this.value.split('-'))[0])
-        }
         get curWeek(){
             return (new Date(this.curYear,this.curMonth,this.curDay)).getDay()
         }
@@ -89,13 +84,6 @@
             }
 //            本月月末周数
             let monthLastWeek=(new Date(this.curYear,this.curMonth,this.MonthIndexs[this.curMonth])).getDay()
-//            for(let i=1;i<=7-monthLastWeek;i++){
-//                result.push({
-//                    day:i,
-//                    month:(this.curMonth+1)%12,
-//                    year:this.curMonth==11?this.curYear+1:this.curYear
-//                })
-//            }
             for(let i=1;result.length<42;i++){
                 result.push({
                     day:i,
@@ -122,23 +110,24 @@
         }
         handlerChoose(e:any){
             this.showPop=false
-//            this.curYear=dayItem.year
-//            this.curMonth=dayItem.month
-//            this.curDay=dayItem.day
-//            this.initDate=thdayItemis.curYear+'-'+(this.curMonth+1)+'-'+this.curDay
-            console.log('触发input')
-            let itemIndex=e.target.value
-            this.$emit('input',this.dayList[itemIndex].year+'-'+this.dayList[itemIndex].month+'-'+this.dayList[itemIndex].day)
-            this.$emit('select')
+            let curDate=e.target.getAttribute('index')
+            curDate=curDate.replace(/-((?=[1-9]-))/g,'-0')
+            curDate=curDate.replace(/-(?=[1-9]$)/g,'-0')
+            this.initDate=curDate
+            this.curYear=parseInt((this.initDate.split('-'))[0])
+            this.curMonth=parseInt((this.initDate.split('-'))[1])-1
+            this.curDay=parseInt((this.initDate.split('-'))[2])
+            this.$emit('input',this.initDate)
+            this.$emit('complete-input',this.initDate)
         }
 //        手动输入日期触发
-        changeValue(value:string){
-            console.log('changeValue')
+        handlerInput(value:string){
             this.initDate=value
-//            this.curYear=parseInt((this.initDate.split('-'))[0])
-//            this.curMonth=parseInt((this.initDate.split('-'))[1])-1
-//            this.curDay=parseInt((this.initDate.split('-'))[2])
+            this.curYear=parseInt((this.initDate.split('-'))[0])
+            this.curMonth=parseInt((this.initDate.split('-'))[1])-1
+            this.curDay=parseInt((this.initDate.split('-'))[2])
             this.$emit('input',this.initDate)
+            this.$emit('complete-input',this.initDate)
         }
     }
 </script>

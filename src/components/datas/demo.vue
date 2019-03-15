@@ -33,7 +33,6 @@
         <h4>日期选择</h4>
         <date-picker class="date_con" v-model="datePickerValue"  @select="handleDateSelect"></date-picker>
         <h4>双日期选择</h4>
-        <double-date-picker></double-date-picker>
     </section>
 </template>
 <script lang="ts">
@@ -42,14 +41,13 @@
     import BasicInput from './BasicInput.vue';
     import AreaCascade from './AreaCascader.vue';
     import datePicker from './DatePicker.vue';
-    import DoubleDatePicker from './DoubleDatePicker.vue';
+
     @Component({
         components:{
             AutoComplete,
             BasicInput,
             AreaCascade,
             datePicker,
-            DoubleDatePicker
         }
     })
     export default class DataIn extends Vue{

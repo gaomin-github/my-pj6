@@ -11,18 +11,35 @@ enum MethodOption{
 }
 enum ModeOption{
     cors='cors',                //支持跨域
-    no-cors:'no-cors',          //支持跨域请求，不支持跨域返回
-
+    no_cors='no-cors',          //支持跨域请求，不支持跨域返回
+    same_origin='*same-origin'  //只支持同源
+}
+enum CacheOptioin{
+    no_cache='no-cache',                //不支持缓存
+    reload='reload',
+    force_cache='force-cache',
+    onlyIfCache='only-if-cached'
+}
+enum credentialOption{
+    include='include',                  //发送凭据
+    same_origin='same-origin',          //同源时发送凭据
+    omit='*omit'                        //可发送凭据，不能接收
 }
 interface optionConfig{
-    method?:MethodOption,       //请求方式
+    method:MethodOption,       //请求方式
     headers?:Object,            //请求头参数
-    body?:string,               //请求体数据
-    mode?:string,               //是否支持跨域
-    cache?:string,
+    body?:string,               //请求体数据 string,formdata
+    mode?:ModeOption,               //是否支持跨域
+    cache?:string,                  //是否支持缓存
     credentials?:string,
     redirect?:string,
     referer?:string
+}
+enum ContentTypeOption{
+    json='application/json',            //json类型
+    txt='text/plain',                   //文本格式
+    urlencoded='application/x-www-form-urlencoded',     //url串，值被encoded
+    formdata='multipart/form-data'      //字节流
 }
 export class SingleRequest{
     url:string

@@ -20,7 +20,7 @@ enum CacheOptioin{
     force_cache='force-cache',
     onlyIfCache='only-if-cached'
 }
-enum credentialOption{
+enum CredentialOption{
     include='include',                  //发送凭据
     same_origin='same-origin',          //同源时发送凭据
     omit='*omit'                        //可发送凭据，不能接收
@@ -28,10 +28,10 @@ enum credentialOption{
 interface optionConfig{
     method:MethodOption,       //请求方式
     headers?:Object,            //请求头参数
-    body?:string,               //请求体数据 string,formdata
+    body?:any,               //请求体数据 string,formdata
     mode?:ModeOption,               //是否支持跨域
-    cache?:string,                  //是否支持缓存
-    credentials?:string,
+    cache?:CacheOptioin,                  //是否支持缓存
+    credentials?:CredentialOption,
     redirect?:string,
     referer?:string
 }
@@ -47,6 +47,7 @@ export class SingleRequest{
     constructor(url:string,option:optionConfig){
         this.url=url
         this.option=option
+        console.log('SingleRequest construct')
         this.initConfig()
     }
     initConfig(){
@@ -54,9 +55,11 @@ export class SingleRequest{
         if(this.url.search(/\?/g)>=0){
             this.url=this.url+'&time='+new Date()
         }else{
-
             this.url=this.url+'?time='+new Date()
         }
+        let currentUrl=window.location.href
+        console.log('currentUrl：'+currentUrl)
+
     }
     execute(){
         fetch(this.url,{

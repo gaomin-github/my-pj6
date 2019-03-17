@@ -10,6 +10,7 @@ declare module 'vue/types/vue' {
         $route:routes
     }
 }
+
 // declare module '*.json'{
 //     const value:any;
 //     export default value;

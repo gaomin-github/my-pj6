@@ -1,4 +1,3 @@
-// 单次请求
 const protocal='http';
 const domain='localhost';
 const port='9000';
@@ -44,14 +43,22 @@ interface optionConfig{
     cache?:CacheOptioin,                  //是否支持缓存
     credentials?:CredentialOption,
     redirect?:RedirectOption,
-    referer?:string
+    referer?:string,
+    signal?:AbortSignal
 }
 export default class SingleRequest{
     url:string
     option:optionConfig
-    constructor(url:string,option:optionConfig){
+    timeOut:number
+    exeTime:number
+    controller:AbortController
+    // 使用abort controller撤回请求
+
+    constructor(url:string,option:optionConfig,timeOut?:number,){
         this.url=url
         this.option=option
+        this.timeOut=timeOut||3000
+        this.controller=new AbortController()
         this.initConfig()
     }
     initConfig(){
@@ -88,26 +95,45 @@ export default class SingleRequest{
         }
         this.url=dest_url+this.url
         console.log('this.url:'+this.url)
+        this.option.signal=this.controller.signal
     }
     public execute(){
-        console.log('this.url:'+this.url)
-        return fetch(this.url,this.option).then(response=>{
-            // console.log('this.option.headers:'+this.option.headers)
-            // console.log(this.option.headers)
-            // console.log('this.option.headers.content-type:')
-            if(response.ok&&this.option.headers&&this.option.headers.get('content-type')){
-                if((new RegExp(ContentTypeOption.formdata,'g')).test(this.option.headers.get('content-type')||'')){
-                    console.log('blob')
-                    return response.blob()
-                }else if((new RegExp(ContentTypeOption.json,'g')).test(this.option.headers.get('content-type')||'')){
-                    console.log('json')
-                    return response.json()
-                }else{
-                    return response.text()
-                }
+        this.exeTime=(new Date()).getTime();
+        let obj=this;
+        let watchTask=setInterval(function(){
+            if((new Date()).getTime()-obj.exeTime>=obj.timeOut){
+                obj.controller.abort()
             }
-        }).catch(response=>{
-            console.log(response.error)
+        },1000)
+        console.log('request.url:'+this.url)
+        return fetch(this.url,this.option).then(response=>{
+            clearInterval(watchTask);
+            this.exeTime=0;
+            console.log(response)
+            if(response.ok){
+                if(this.option.headers&&this.option.headers.get('content-type')){
+                    if((new RegExp(ContentTypeOption.formdata,'g')).test(this.option.headers.get('content-type')||'')){
+                        return response.blob()
+                    }else if((new RegExp(ContentTypeOption.json,'g')).test(this.option.headers.get('content-type')||'')){
+                        return response.json()
+                    }else{
+                        return response.text()
+                    }
+                }
+            }else{
+                Promise.reject(response)
+            }
+        },(response=>{
+            clearInterval(watchTask);
+            this.exeTime=0;
+            if((new Date()).getTime()-this.exeTime>this.timeOut){
+                throw new Error('请求超时')
+            }
+            console.log(response)
+            return 'error'
+        })).catch(error=>{
+            console.log(error)
+            return 'error'
         })
     }
 

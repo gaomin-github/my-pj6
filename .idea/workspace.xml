@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a6fc2dd-faac-4c3f-b715-966f9fd75c43" name="默认的" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.babelrc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/plugins/BatchRequest.ts" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/plugins/SimgleRequest.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/configs/webpack.dev.js" afterPath="$PROJECT_DIR$/configs/webpack.dev.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package-lock.json" afterPath="$PROJECT_DIR$/package-lock.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/plugins/SingleRequest.ts" afterPath="$PROJECT_DIR$/src/components/plugins/SingleRequest.ts" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/reqs/MyAjax.vue" afterPath="$PROJECT_DIR$/src/components/reqs/MyAjax.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/template.html" afterPath="$PROJECT_DIR$/template.html" />
@@ -28,8 +22,8 @@
       <file leaf-file-name="SingleRequest.ts" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/plugins/SingleRequest.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="93" column="10" lean-forward="true" selection-start-line="93" selection-start-column="10" selection-end-line="93" selection-end-column="10" />
+            <state relative-caret-position="848">
+              <caret line="103" column="62" lean-forward="false" selection-start-line="103" selection-start-column="62" selection-end-line="103" selection-end-column="62" />
               <folding />
             </state>
           </provider>
@@ -49,7 +43,7 @@
         <entry file="file://$PROJECT_DIR$/src/components/reqs/MyAjax.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="323">
-              <caret line="20" column="62" lean-forward="true" selection-start-line="20" selection-start-column="62" selection-end-line="20" selection-end-column="62" />
+              <caret line="22" column="23" lean-forward="true" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -171,8 +165,8 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="461" />
-    <option name="width" value="912" />
+    <option name="x" value="580" />
+    <option name="width" value="793" />
     <option name="height" value="735" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -238,7 +232,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../my-server2" />
     <property name="nodejs_interpreter_path" value="E:/software/NodeJs/node" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
   </component>
@@ -279,19 +273,19 @@
       <workItem from="1552010393838" duration="7834000" />
       <workItem from="1552487211382" duration="19084000" />
       <workItem from="1552797041941" duration="13262000" />
-      <workItem from="1553311869072" duration="16823000" />
+      <workItem from="1553311869072" duration="18773000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="348674000" />
+    <option name="totallyTimeSpent" value="350624000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="461" y="0" width="912" height="735" extended-state="0" />
+    <frame x="580" y="0" width="793" height="735" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18421052" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21324503" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="调试" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -594,6 +588,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="53" column="23" lean-forward="false" selection-start-line="53" selection-start-column="23" selection-end-line="53" selection-end-column="23" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -667,15 +662,15 @@
     <entry file="file://$PROJECT_DIR$/src/components/reqs/MyAjax.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
-          <caret line="20" column="62" lean-forward="true" selection-start-line="20" selection-start-column="62" selection-end-line="20" selection-end-column="62" />
+          <caret line="22" column="23" lean-forward="true" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/plugins/SingleRequest.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="93" column="10" lean-forward="true" selection-start-line="93" selection-start-column="10" selection-end-line="93" selection-end-column="10" />
+        <state relative-caret-position="848">
+          <caret line="103" column="62" lean-forward="false" selection-start-line="103" selection-start-column="62" selection-end-line="103" selection-end-column="62" />
           <folding />
         </state>
       </provider>

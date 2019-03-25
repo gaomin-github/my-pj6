@@ -8,12 +8,13 @@ enum MethodOption{
     PUT="PUT",
     DELETE="DELETE"
 }
+// MethodOption='GET'|'POST'
 enum ModeOption{
     cors='cors',                //支持跨域
     no_cors='no-cors',          //支持跨域请求，不支持跨域返回
     same_origin='same-origin'  //只支持同源
 }
-enum CacheOptioin{
+enum CacheOption{
     no_cache='no-cache',                //不支持缓存
     reload='reload',
     force_cache='force-cache'
@@ -23,7 +24,6 @@ enum CredentialOption{
     same_origin='same-origin',          //同源时发送凭据
     omit='omit'                        //可发送凭据，不能接收
 }
-
 enum ContentTypeOption{
     json='application/json',            //json类型
     txt='text/plain',                   //文本格式
@@ -35,13 +35,13 @@ enum RedirectOption{
     manual='manual',
     error='error'
 }
-interface optionConfig{
+export interface optionConfig{
     method:string,       //请求方式
     headers?:Headers,            //请求头参数
-    body?:any,               //请求体数据 string,formdata
+    body?:null|string|FormData,               //请求体数据 string,formdata
     mode?:ModeOption,               //是否支持跨域
-    cache?:CacheOptioin,                  //是否支持缓存
-    credentials?:CredentialOption,
+    cache?:CacheOption,                  //是否支持缓存
+    credentials?:undefined|CredentialOption,        //是否支持发送cookie
     redirect?:RedirectOption,
     referer?:string,
     signal?:AbortSignal
@@ -68,8 +68,9 @@ export default class SingleRequest{
         let service_url:any=((window.location.href).toLocaleUpperCase()).match(regExp)
         if(this.url.toLocaleUpperCase()!=service_url){
             console.log('跨域请求')
-            this.option.mode=ModeOption.cors
-            // this.option.credentials=CredentialOption.include
+            this.option.mode=this.option.mode||ModeOption.cors
+
+            // this.option.credentials=this.option.credentials||CredentialOption.include
         }
         // 默认请求数据类型
         let myHeaders=new Headers();
@@ -77,6 +78,9 @@ export default class SingleRequest{
         this.option.headers=this.option.headers?this.option.headers:myHeaders
         if(this.option.method.toLocaleUpperCase()=='GET'){
             this.option.body=null
+            // get请求时，默认强制缓存
+            this.option.cache=this.option.cache||CacheOption.force_cache;
+            
         }
         let param_value_reg:RegExp=/=[0-9a-zA-Z\u4e00-\u9fa5_\-]*/g
         let param_name_reg:RegExp=/(&|\?)[0-9a-zA-Z_\-]*=/g
@@ -88,11 +92,11 @@ export default class SingleRequest{
             }
         }
         // 防止缓存
-        if(this.url.search(/\?/g)>=0){
-            this.url=this.url+'&time='+new Date()
-        }else{
-            this.url=this.url+'?time='+new Date()
-        }
+        // if(this.url.search(/\?/g)>=0){
+        //     this.url=this.url+'&time='+new Date()
+        // }else{
+        //     this.url=this.url+'?time='+new Date()
+        // }
         this.url=dest_url+this.url
         console.log('this.url:'+this.url)
         this.option.signal=this.controller.signal

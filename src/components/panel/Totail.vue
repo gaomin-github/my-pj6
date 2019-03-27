@@ -1,9 +1,9 @@
 <template>
     <section class="totail">
-        <section class="t_title">
+        <section class="t_title" @click="handleClose">
             close
         </section>
-        <h4>1{{message}}</h4>
+        <section class="t_content"><p>{{message}}</p></section>
     </section>
 </template>
 <script lang="ts">
@@ -14,26 +14,43 @@
     })
     export default class Totail extends Vue{
         message:string='totail';
-        ifShow:boolean=false;
-//        init(){
-//            console.log('message：'+this.message)
-//        }
+        handleClose(){
+            console.log('vue');
+            let curEl=this.$el;
+            let parentEl=curEl.parentNode;
+            if(parentEl){
+                parentEl.removeChild(this.$el);
+            }else{
+                document.body.removeChild(this.$el);
+            }
+        }
     }
 </script>
 <style lang="scss">
     .totail{
         display: block;
-        height:100px;
-        width:200px;
-        position: relative;
+        position: absolute;
         z-index: 999;
         border:1px black solid;
+        left:50%;
+        transform: translateX(-50%);
+        max-width:200px;
     }
     .t_title{
-        height:20px;
+        display:block;
+        height:24px;
         background-color: rgb(180,180,180);
         text-align: right;
         padding-right: 10px;
         cursor: pointer;
     }
+    .t_content{
+        font-size: 14px;
+        padding:5px;
+        border:1px red solid;
+        p{
+            white-space: pre-wrap;
+        }
+    }
+
 </style>

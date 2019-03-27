@@ -1,7 +1,6 @@
 import myTotail from './Totail.vue';
 import Vue from 'vue';
 export default class Tot extends myTotail{
-    // message:string;
     id:number;
     vmIns:Vue;
     node:Node;
@@ -13,15 +12,15 @@ export default class Tot extends myTotail{
     init(){
         this.vmIns=this.$mount()
         this.node=this.vmIns.$el;
-        document.body.appendChild(this.node);
-        // console.log('node');
-        // console.log(node);
-
+        this.show();
     }
     public show(){
-
+        document.body.appendChild(this.node);
     }
     public hide(){
         document.body.removeChild(this.node);
+    }
+    handleClose(){
+        console.log('ts');
     }
 }

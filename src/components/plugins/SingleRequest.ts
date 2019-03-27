@@ -1,44 +1,12 @@
 const protocal='http';
 const domain='localhost';
 const port='9000';
-enum MethodOption{
-    GET="GET",
-    POST="POST",
-    OPTIONS="OPTIONS",
-    PUT="PUT",
-    DELETE="DELETE"
-}
-// MethodOption='GET'|'POST'
-enum ModeOption{
-    cors='cors',                //支持跨域
-    no_cors='no-cors',          //支持跨域请求，不支持跨域返回
-    same_origin='same-origin'  //只支持同源
-}
-enum CacheOption{
-    no_cache='no-cache',                //不支持缓存
-    reload='reload',
-    force_cache='force-cache'
-}
-enum CredentialOption{
-    include='include',                  //发送凭据
-    same_origin='same-origin',          //同源时发送凭据
-    omit='omit'                        //可发送凭据，不能接收
-}
-enum ContentTypeOption{
-    json='application/json',            //json类型
-    txt='text/plain',                   //文本格式
-    urlencoded='application/x-www-form-urlencoded',     //url串，值被encoded
-    formdata='multipart/form-data'      //字节流
-}
-enum RedirectOption{
-    follow='follow',
-    manual='manual',
-    error='error'
-}
+import {ModeOption,CacheOption,CredentialOption,RedirectOption,ContentTypeOption} from "./requestParam";
+
 export interface optionConfig{
     method:string,       //请求方式
-    headers?:Headers,            //请求头参数
-    body?:null|string|FormData,               //请求体数据 string,formdata
+    headers?:any,            //请求头参数
+    body?:any,               //请求体数据 string,formdata
     mode?:ModeOption,               //是否支持跨域
     cache?:CacheOption,                  //是否支持缓存
     credentials?:undefined|CredentialOption,        //是否支持发送cookie
@@ -72,16 +40,16 @@ export default class SingleRequest{
 
             // this.option.credentials=this.option.credentials||CredentialOption.include
         }
-        // 默认请求数据类型
+        // 请求头设置
         let myHeaders=new Headers();
         myHeaders.append("content-type",ContentTypeOption.urlencoded+';charset=utf-8');
-        this.option.headers=this.option.headers?this.option.headers:myHeaders
+        this.option.headers=this.option.headers?this.option.headers:myHeaders;
+        // 请求方式设置
         if(this.option.method.toLocaleUpperCase()=='GET'){
             this.option.body=null
-            // get请求时，默认强制缓存
-            this.option.cache=this.option.cache||CacheOption.force_cache;
-            
         }
+
+        // url中查询参数重新处理
         let param_value_reg:RegExp=/=[0-9a-zA-Z\u4e00-\u9fa5_\-]*/g
         let param_name_reg:RegExp=/(&|\?)[0-9a-zA-Z_\-]*=/g
         let urlParams=this.url.match(param_name_reg)
@@ -92,11 +60,11 @@ export default class SingleRequest{
             }
         }
         // 防止缓存
-        // if(this.url.search(/\?/g)>=0){
-        //     this.url=this.url+'&time='+new Date()
-        // }else{
-        //     this.url=this.url+'?time='+new Date()
-        // }
+        if(this.url.search(/\?/g)>=0){
+            this.url=this.url+'&time='+new Date()
+        }else{
+            this.url=this.url+'?time='+new Date()
+        }
         this.url=dest_url+this.url
         console.log('this.url:'+this.url)
         this.option.signal=this.controller.signal

@@ -18,9 +18,19 @@
         ajaxText(){
             console.log('ajaxTest obj');
 //            /graphQuery/test?id=123&first_name=张三&age=&last_name=anny'
+//            let myFetch=new SingleRequest('/graphQuery/test',{
+//                method:'get',
+//                body:''
+//            },2000);
             let myFetch=new SingleRequest('/graphQuery/test',{
-                method:'get',
-                body:''
+                headers:{
+                    contentTtype:'application/json'
+                },
+                method:'post',
+                body:JSON.stringify({
+                    id:'222',
+                    name:'网二'
+                })
             },2000);
             myFetch.execute().then((response:any)=>{
                 console.log(response)

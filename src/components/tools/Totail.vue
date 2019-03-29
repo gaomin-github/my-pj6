@@ -31,15 +31,17 @@
         display: block;
         position: absolute;
         z-index: 999;
-        border:1px black solid;
+        border:1px rgb(200,200,200) solid;
+        border-radius: 5px;
         left:50%;
+        top:60%;
         transform: translateX(-50%);
-        max-width:200px;
+        max-width:300px;
     }
     .t_title{
         display:block;
         height:24px;
-        background-color: rgb(180,180,180);
+        background-color: rgb(200,200,200);
         text-align: right;
         padding-right: 10px;
         cursor: pointer;
@@ -47,9 +49,11 @@
     .t_content{
         font-size: 14px;
         padding:5px;
-        border:1px red solid;
         p{
-            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-all;
+            color:rgb(50,50,50);
+            line-height: 20px;
         }
     }
 

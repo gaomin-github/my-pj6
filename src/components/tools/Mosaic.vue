@@ -5,7 +5,11 @@
         </section>
         <section class="canvas_mosaic">
             <!--<img src=""/>-->
-            <canvas id="cvs1" width="500" height="300" @mousemove="handleHover">
+
+            <button @click="addMosiac">增加马赛克</button>
+            <button @click="clearMosiac">清除马赛克</button>
+            <br/>
+            <canvas id="cvs1" width="500" height="300">
 
             </canvas>
         </section>
@@ -19,7 +23,8 @@
         }
     })
     export default class Mosaic extends Vue{
-        myCtx:CanvasRenderingContext2D;
+        myCtx:CanvasRenderingContext2D; //canvas可渲染区域
+        vagueWidth:number=10;
         mounted(){
 
             let cvs1:HTMLCanvasElement=document.getElementById('cvs1') as HTMLCanvasElement;
@@ -32,14 +37,17 @@
                     myImg.onload=function(){
                         ctx.drawImage(myImg,0,0);
                         obj.myCtx=ctx;
-                        obj.handleHover();
                     }
                 }
             }
         }
-        handleHover(){
-            for(let x=0;x<50;x++){
-                let imgData=this.myCtx.getImageData(120+x,120+x,5,5);
+        addMosiac(){
+            let cvs1:HTMLCanvasElement=document.getElementById('cvs1') as HTMLCanvasElement;
+            let row=cvs1.width/this.vagueWidth;
+            let column=cvs1.height/this.vagueWidth;
+            console.log('row:'+row+',column:'+column);
+            for(let x=0;x<row*column;x++){
+                let imgData=this.myCtx.getImageData((x%row)*this.vagueWidth,(x/row)*this.vagueWidth,this.vagueWidth,this.vagueWidth);
                 let datas=imgData.data;
                 let r:number=0,g:number=0,b:number=0;
                 for(let i=0;i<datas.length;i+=4){
@@ -48,13 +56,16 @@
                     b=b+datas[i+2];
                 }
                 this.myCtx.beginPath();
-                this.myCtx.rect(120+x,120+x,5,5);
+                this.myCtx.rect((x%row)*this.vagueWidth,(x/row)*this.vagueWidth,this.vagueWidth,this.vagueWidth);
                 this.myCtx.fillStyle='rgb('+Math.round(r/(datas.length/4))+','+Math.round(g/(datas.length/4))+','+Math.round(b/(datas.length/4))+')';
                 this.myCtx.lineWidth=2;
                 this.myCtx.strokeStyle='rgb('+Math.round(r/(datas.length/4))+','+Math.round(g/(datas.length/4))+','+Math.round(b/(datas.length/4))+')';
                 this.myCtx.fill();
                 this.myCtx.stroke();
             }
+        }
+        clearMosiac(){
+
         }
     }
 </script>

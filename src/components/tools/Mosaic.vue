@@ -17,29 +17,40 @@
     </section>
 </template>
 <script lang="ts">
-    import {Vue,Component} from 'vue-property-decorator';
+    import {Vue,Component,Prop} from 'vue-property-decorator';
     @Component({
         components:{
         }
     })
     export default class Mosaic extends Vue{
+        @Prop({default:''})imgUrl!:string;
+        @Prop({default:0}) posX!:number;
+        @Prop({default:0}) posY!:number;
+        @Prop({default:0}) posW!:number;
+        @Prop({default:0}) posH!:number;
+        myCvs:HTMLCanvasElement;
         myCtx:CanvasRenderingContext2D; //canvas可渲染区域
         vagueWidth:number=10;
+        pixDatas:Array<Object>;     //图像的像素值列表
         mounted(){
-
-            let cvs1:HTMLCanvasElement=document.getElementById('cvs1') as HTMLCanvasElement;
-            if(cvs1.getContext('2d')!=null){
-                let  ctx:CanvasRenderingContext2D=cvs1.getContext('2d')||(new CanvasRenderingContext2D());
-                if(ctx!=null){
+            this.myCvs=document.getElementById('cvs1') as HTMLCanvasElement
+            if(this.myCvs){
+                this.myCtx=this.myCvs.getContext('2d')||new CanvasRenderingContext2D();
+                if(this.myCtx){
                     let myImg:HTMLImageElement=new Image();
                     myImg.src='/static/2.jpeg';
                     let obj=this;
                     myImg.onload=function(){
-                        ctx.drawImage(myImg,0,0);
-                        obj.myCtx=ctx;
+                        obj.myCtx.drawImage(myImg,0,0);
                     }
                 }
             }
+        }
+        get posRow(){
+            return Math.round(this.myCvs.height/this.vagueWidth);
+        }
+        get posColumn(){
+            return Math.round(this.myCvs.width/this.vagueWidth);
         }
         addMosiac(){
             let cvs1:HTMLCanvasElement=document.getElementById('cvs1') as HTMLCanvasElement;

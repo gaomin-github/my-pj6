@@ -31,7 +31,7 @@
         myCvs:HTMLCanvasElement;
         myCtx:CanvasRenderingContext2D; //canvas可渲染区域
         vagueWidth:number=10;
-        pixDatas:Array<Object>;     //图像的像素值列表
+        pixDatas:Array<Object>=[{}];     //图像的像素值列表
         mounted(){
             this.myCvs=document.getElementById('cvs1') as HTMLCanvasElement
             if(this.myCvs){
@@ -42,6 +42,22 @@
                     let obj=this;
                     myImg.onload=function(){
                         obj.myCtx.drawImage(myImg,0,0);
+                        for(let i=0;i<obj.posRow*obj.posColumn;i++){
+                            let data=obj.myCtx.getImageData((i%obj.posColumn)*obj.vagueWidth,(i/obj.posColumn)*obj.vagueWidth,obj.vagueWidth,obj.vagueWidth).data;
+                            let r=0,g=0,b=0;
+                            for(let j=0;j<data.length;j+=4){
+                                r=data[j];
+                                g=data[j+1];
+                                b=data[j+2];
+                            }
+                            obj.pixDatas.push({
+                                x:i%obj.posColumn,
+                                y:i/obj.posColumn,
+                                r:r,
+                                g:g,
+                                b:b
+                            });
+                        }
                     }
                 }
             }

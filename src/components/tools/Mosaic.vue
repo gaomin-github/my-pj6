@@ -6,7 +6,7 @@
         <section class="canvas_mosaic">
             <!--<img src=""/>-->
 
-            <button @click="addMosiac">增加马赛克</button>
+            <button @click="createMosiac">增加马赛克</button>
             <button @click="clearMosiac">清除马赛克</button>
             <br/>
             <canvas id="cvs1" width="500" height="300">
@@ -18,6 +18,13 @@
 </template>
 <script lang="ts">
     import {Vue,Component,Prop} from 'vue-property-decorator';
+    interface PixData{
+        x:number,
+        y:number,
+        r:number,
+        g:number,
+        b:number
+    }
     @Component({
         components:{
         }
@@ -26,12 +33,13 @@
         @Prop({default:''})imgUrl!:string;
         @Prop({default:0}) posX!:number;
         @Prop({default:0}) posY!:number;
-        @Prop({default:0}) posW!:number;
-        @Prop({default:0}) posH!:number;
+        @Prop({default:200}) posW!:number;
+        @Prop({default:200}) posH!:number;
         myCvs:HTMLCanvasElement;
         myCtx:CanvasRenderingContext2D; //canvas可渲染区域
         vagueWidth:number=10;
-        pixDatas:Array<Object>=[{}];     //图像的像素值列表
+        pixDatas:Array<PixData>=new Array();     //图像的像素值列表
+        mosaicData:Array<PixData>=new Array();      //马赛克的数据
         mounted(){
             this.myCvs=document.getElementById('cvs1') as HTMLCanvasElement
             if(this.myCvs){
@@ -46,53 +54,52 @@
                             let data=obj.myCtx.getImageData((i%obj.posColumn)*obj.vagueWidth,(i/obj.posColumn)*obj.vagueWidth,obj.vagueWidth,obj.vagueWidth).data;
                             let r=0,g=0,b=0;
                             for(let j=0;j<data.length;j+=4){
-                                r=data[j];
-                                g=data[j+1];
-                                b=data[j+2];
+                                r=r+data[j];
+                                g=g+data[j+1];
+                                b=b+data[j+2];
                             }
-                            obj.pixDatas.push({
+                            obj.pixDatas=[...obj.pixDatas,{
                                 x:i%obj.posColumn,
                                 y:i/obj.posColumn,
-                                r:r,
-                                g:g,
-                                b:b
-                            });
+                                r:Math.ceil(r/(data.length/4)),
+                                g:Math.ceil(g/(data.length/4)),
+                                b:Math.ceil(b/(data.length/4))
+                            }];
                         }
                     }
                 }
             }
         }
         get posRow(){
-            return Math.round(this.myCvs.height/this.vagueWidth);
+            return Math.ceil(this.myCvs.height/this.vagueWidth);
         }
         get posColumn(){
-            return Math.round(this.myCvs.width/this.vagueWidth);
+            return Math.ceil(this.myCvs.width/this.vagueWidth);
         }
-        addMosiac(){
-            let cvs1:HTMLCanvasElement=document.getElementById('cvs1') as HTMLCanvasElement;
-            let row=cvs1.width/this.vagueWidth;
-            let column=cvs1.height/this.vagueWidth;
-            console.log('row:'+row+',column:'+column);
-            for(let x=0;x<row*column;x++){
-                let imgData=this.myCtx.getImageData((x%row)*this.vagueWidth,(x/row)*this.vagueWidth,this.vagueWidth,this.vagueWidth);
-                let datas=imgData.data;
-                let r:number=0,g:number=0,b:number=0;
-                for(let i=0;i<datas.length;i+=4){
-                    r=r+datas[i];
-                    g=g+datas[i+1];
-                    b=b+datas[i+2];
+        createMosiac(){
+            let posStartX=Math.ceil((this.posX+1)/this.vagueWidth);
+            let posStartY=Math.ceil((this.posY+1)/this.vagueWidth);
+            let posEndX=Math.ceil((this.posX+this.posW)/this.vagueWidth);
+            let posEndY=Math.ceil((this.posY+this.posH)/this.vagueWidth);
+            for(let i=posStartX;i<posEndX;i++){
+                for(let j=posStartY;j<posEndY;j++){
+                    this.myCtx.beginPath();
+                    this.myCtx.rect((i-1)*this.vagueWidth,(j-1)*this.vagueWidth,this.vagueWidth,this.vagueWidth);
+                    let data:PixData=this.pixDatas.slice(i+this.posColumn*(j-1)-1,i+this.posColumn*(j-1))[0];
+                    this.mosaicData=[...this.mosaicData,data];
+                    this.myCtx.fillStyle='rgb('+data.r+','+data.g+','+data.b+')';
+                    this.myCtx.lineWidth=2;
+                    this.myCtx.strokeStyle='rgb('+data.r+','+data.g+','+data.b+')';
+                    this.myCtx.fill();
+                    this.myCtx.stroke();
                 }
-                this.myCtx.beginPath();
-                this.myCtx.rect((x%row)*this.vagueWidth,(x/row)*this.vagueWidth,this.vagueWidth,this.vagueWidth);
-                this.myCtx.fillStyle='rgb('+Math.round(r/(datas.length/4))+','+Math.round(g/(datas.length/4))+','+Math.round(b/(datas.length/4))+')';
-                this.myCtx.lineWidth=2;
-                this.myCtx.strokeStyle='rgb('+Math.round(r/(datas.length/4))+','+Math.round(g/(datas.length/4))+','+Math.round(b/(datas.length/4))+')';
-                this.myCtx.fill();
-                this.myCtx.stroke();
             }
         }
         clearMosiac(){
+            for(let key in this.mosaicData){
+                this.myCtx.clearRect(this.mosaicData[key].x*this.vagueWidth,this.mosaicData[key].y*this.vagueWidth,this.vagueWidth,this.vagueWidth);
 
+            }
         }
     }
 </script>

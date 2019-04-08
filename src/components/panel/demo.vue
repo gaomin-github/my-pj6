@@ -77,10 +77,10 @@
 </template>
 <script lang="ts">
     import Vue from 'vue';
-    import popPanel from './PopPanel.vue';
     import tabPanel from './TabPanel.vue';
+    import popPanel from './PopPanel.vue';
     import tabItem from './TabItem.vue';
-    import Totail from './Totail.ts';
+    import Totail from '../tools/Totail.ts';
     export default Vue.extend({
         data:function():{
             showPopPanel:boolean,    //是否展示弹出面板
@@ -95,8 +95,8 @@
             tabItem,
         },
         mounted(){
-            let myTotail=new Totail("弹出框1");
-            let myTotail2=new Totail('弹出框2');
+            let myTotail=new Totail("弹出框11111111111111111111111111111111111111");
+
         },
         methods:{
             switchPopPanel:function(){

@@ -5,3 +5,4 @@
 4.使用AbortController实现fetch请求撤回
 
 5.fetch超时设定
+typescript联合类型和交叉类型

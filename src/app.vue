@@ -1,6 +1,6 @@
 <template>
     <section>
-        <!--<test/>-->
+        <test/>
         <router-view></router-view>
     </section>
 </template>

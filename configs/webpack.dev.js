@@ -74,7 +74,7 @@ module.exports={
               ]
           },
           {
-              test:/\.(jpg|png)$/,
+              test:/\.(jpg|png|jpeg)$/,
               use:['url-loader'],
               include:[
                   path.resolve(__dirname,'../src'),

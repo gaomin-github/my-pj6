@@ -4,6 +4,7 @@ import dropDownDemo from './components/drop-down/demo';
 import panelDemo from './components/panel/demo';
 import dataDemo from './components/datas/demo';
 import httpDemo from './components/reqs/MyAjax.vue';
+import toolDemo from './components/tools/demo.vue';
 let routes=new VueRouter({
     mode:'history',
     routes:[
@@ -22,6 +23,9 @@ let routes=new VueRouter({
         },{
             path:'/httpDemo',
             component:httpDemo
+        },{
+            path:'/toolDemo',
+            component:toolDemo
         }
     ]
 

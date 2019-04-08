@@ -11,9 +11,9 @@
         </section>
 
         <h4>省市联动组件</h4>
-        <section class="area_con">
-            <area-cascade class="area" v-model="areaValue" @complete-input="areaInputEnd"></area-cascade>
-        </section>
+        <!--<section class="area_con">-->
+            <!--<area-cascade class="area" v-model="areaValue" @complete-input="areaInputEnd"></area-cascade>-->
+        <!--</section>-->
         <h4>基本输入组件</h4>
         <basic-input class="input_con" v-model="basicValue" statusCode="error">
             <section slot="left">
@@ -33,7 +33,7 @@
         <h4>日期选择</h4>
         <date-picker class="date_con" v-model="datePickerValue"  @select="handleDateSelect"></date-picker>
         <h4>开关切换</h4>
-        <switch/>
+        <switch-btn ifRun="true"/>
     </section>
 </template>
 <script lang="ts">
@@ -42,14 +42,14 @@
     import BasicInput from './BasicInput.vue';
     import AreaCascade from './AreaCascader.vue';
     import datePicker from './DatePicker.vue';
-    import Switch from './Switch.vue';
+    import SwitchBtn from './SwitchBtn.vue';
     @Component({
         components:{
             AutoComplete,
             BasicInput,
             AreaCascade,
             datePicker,
-            Switch
+            SwitchBtn
         }
     })
     export default class DataIn extends Vue{

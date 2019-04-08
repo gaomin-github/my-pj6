@@ -7,8 +7,8 @@
 </template>
 <script lang="ts">
     import Totail from '../tools/Totail.ts';
-    import {Vue,Component} from 'vue-property-decorator';
     import Mosaic from '../tools/Mosaic.vue';
+    import {Vue,Component} from 'vue-property-decorator';
     @Component({
         components:{
             Mosaic
@@ -16,7 +16,7 @@
     })
     export default class ToolDemo extends Vue{
         mounted(){
-            let myTotail=new Totail("弹出框anny tony 12345中文表演节目传统相声");
+//            let myTotail=new Totail("弹出框anny tony 12345中文表演节目传统相声");
         }
     }
 </script>

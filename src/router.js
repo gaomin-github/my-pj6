@@ -5,6 +5,7 @@ import panelDemo from './components/panel/demo';
 import dataDemo from './components/datas/demo';
 import httpDemo from './components/reqs/MyAjax.vue';
 import toolDemo from './components/tools/demo.vue';
+import navDemo from './components/nav/demo.vue';
 let routes=new VueRouter({
     mode:'history',
     routes:[
@@ -26,6 +27,9 @@ let routes=new VueRouter({
         },{
             path:'/toolDemo',
             component:toolDemo
+        },{
+            path:'/navDemo',
+            component:navDemo
         }
     ]
 

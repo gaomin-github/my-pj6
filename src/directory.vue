@@ -5,6 +5,7 @@
         <section class="demo_title" @click="enterCon('dataDemo')">输入组件</section>
         <section class="demo_title" @click="enterCon('httpDemo')">请求组件</section>
         <section class="demo_title" @click="enterCon('toolDemo')">工具组件</section>
+        <section class="demo_title" @click="enterCon('navDemo')">导航组件</section>
     </section>
 </template>
 <script lang="ts">

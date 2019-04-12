@@ -1,7 +1,8 @@
 <template>
     <section>
         <h1>my ajax demo</h1>
-        <button @click="ajaxText">ajax测试</button>
+        <button @click="singleReq">单次请求</button>
+        <button @click="batchReq">单次请求</button>
     </section>
 </template>
 <script lang="ts"}>
@@ -15,18 +16,18 @@
     export default class MyAjax extends Vue {
         created(){
         }
-        ajaxText(){
-            console.log('ajaxTest obj');
+        singleReq(){
 //            /graphQuery/test?id=123&first_name=张三&age=&last_name=anny'
 //            let myFetch=new SingleRequest('/graphQuery/test',{
 //                method:'get',
 //                body:''
 //            },2000);
-            let myFetch=new SingleRequest('/graphQuery/test',{
+//            let myFetch=new SingleRequest('/graphQuery/test',{
+                let myFetch=new SingleRequest('/AESGet',{
                 headers:{
                     contentTtype:'application/json'
                 },
-                method:'post',
+                method:'get',
                 body:JSON.stringify({
                     id:'222',
                     name:'网二'
@@ -34,11 +35,7 @@
             },2000);
             myFetch.execute().then((response:any)=>{
                 console.log(response)
-                if(response=='error'){
-                    console.log('请求回复异常')
-                }else{
-                    console.log('请求回复正常')
-                }
+
             });
 //                var xhr=new XMLHttpRequest()
 //                xhr.open('POST','http://localhost:9000/ajaxPostTest?time='+new Date(),true)
@@ -53,6 +50,29 @@
 //                }
 //                xhr.setRequestHeader('Content-Type','application/json')
 //                xhr.send(JSON.stringify(postParam))
+        }
+        batchReq(){
+            let reqStrs:Array<Object>=[
+                {
+                    url:'http://localhost:8080/AESGet',
+                    option:{
+                        method:'get',
+                        data:null
+                    }
+                },{
+                    url:'http://localhost:8080/AESPost',
+                    option:{
+                        method:'post',
+                        data:null
+                    }
+                },{
+                    url:'http://localhost:8080/AESGet',
+                    option:{
+                        method:'get',
+                        data:null
+                    }
+                }
+            ]
         }
     }
 </script>

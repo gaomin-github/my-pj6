@@ -21,10 +21,10 @@ export enum CredentialOption{
     omit='omit'                        //可发送凭据，不能接收
 }
 export enum ContentTypeOption{
-    json='application/json',            //json类型
-    txt='text/plain',                   //文本格式
-    urlencoded='application/x-www-form-urlencoded',     //url串，值被encoded
-    formdata='multipart/form-data'      //字节流
+    json='application/json;charset=UTF-8',            //json类型
+    txt='text/plain;charset=UTF-8',                   //文本格式
+    urlencoded='application/x-www-form-urlencoded;charset=UTF-8',     //url串，值被encoded
+    formdata='multipart/form-data;charset=UTF-8'      //字节流
 }
 export enum RedirectOption{
     follow='follow',

@@ -1,6 +1,6 @@
 const protocal='http';
 const domain='localhost';
-const port='9000';
+const port='8080';
 import {ModeOption,CacheOption,CredentialOption,RedirectOption,ContentTypeOption} from "./requestParam";
 
 export interface optionConfig{
@@ -36,8 +36,6 @@ export default class SingleRequest{
         let service_url:any=((window.location.href).toLocaleUpperCase()).match(regExp)
         if(this.url.toLocaleUpperCase()!=service_url){
             console.log('跨域请求')
-            this.option.mode=this.option.mode||ModeOption.cors
-
             // this.option.credentials=this.option.credentials||CredentialOption.include
         }
         // 请求头设置
@@ -48,25 +46,22 @@ export default class SingleRequest{
         if(this.option.method.toLocaleUpperCase()=='GET'){
             this.option.body=null
         }
-
         // url中查询参数重新处理
-        let param_value_reg:RegExp=/=[0-9a-zA-Z\u4e00-\u9fa5_\-]*/g
-        let param_name_reg:RegExp=/(&|\?)[0-9a-zA-Z_\-]*=/g
-        let urlParams=this.url.match(param_name_reg)
-        let urlValues=this.url.match(param_value_reg)
+        let urlParams=this.url.match(/(&|\?)[0-9a-zA-Z_\-]*=/g)
+        let urlValues=this.url.match(/=[0-9a-zA-Z\u4e00-\u9fa5_\-]*/g)
         if(urlParams!=null&&urlValues!=null){
             for(let i:number=0;i<urlParams.length;i++){
                 this.url=this.url.replace(urlParams[i]+urlValues[i].slice(1,urlValues[i].length),urlParams[i]+encodeURI(urlValues[i].slice(1,urlValues[i].length)))
             }
         }
         // 防止缓存
-        if(this.url.search(/\?/g)>=0){
-            this.url=this.url+'&time='+new Date()
-        }else{
-            this.url=this.url+'?time='+new Date()
-        }
+        // if(this.url.search(/\?/g)>=0){
+        //     this.url=this.url+'&time='+new Date()
+        // }else{
+        //     this.url=this.url+'?time='+new Date()
+        // }
+        // this.option.cache=CacheOption.force_cache;
         this.url=dest_url+this.url
-        console.log('this.url:'+this.url)
         this.option.signal=this.controller.signal
     }
     public execute(){
@@ -77,35 +72,25 @@ export default class SingleRequest{
                 obj.controller.abort()
             }
         },1000)
-        console.log('request.url:'+this.url)
         return fetch(this.url,this.option).then(response=>{
             clearInterval(watchTask);
             this.exeTime=0;
-            console.log(response)
             if(response.ok){
-                if(this.option.headers&&this.option.headers.get('content-type')){
-                    if((new RegExp(ContentTypeOption.formdata,'g')).test(this.option.headers.get('content-type')||'')){
-                        return response.blob()
-                    }else if((new RegExp(ContentTypeOption.json,'g')).test(this.option.headers.get('content-type')||'')){
-                        return response.json()
-                    }else{
-                        return response.text()
-                    }
+                switch(response.headers.get('content-type')){
+                    case ContentTypeOption.txt:return response.text()
+                    case ContentTypeOption.json:return response.json()
+                    case ContentTypeOption.formdata:return response.blob()
+                    default: return response.blob()
                 }
             }else{
-                Promise.reject(response)
+                throw new Error('error statusCode：'+response.status);
             }
         },(response=>{
-            clearInterval(watchTask);
-            this.exeTime=0;
-            if((new Date()).getTime()-this.exeTime>this.timeOut){
-                throw new Error('请求超时')
-            }
-            console.log(response)
-            return 'error'
+            throw new Error('error statusCode：'+response.status);
         })).catch(error=>{
-            console.log(error)
-            return 'error'
+            return error;
+        }).then(resText=>{
+            return resText;
         })
     }
 

@@ -2,11 +2,12 @@
     <section>
         <h1>my ajax demo</h1>
         <button @click="singleReq">单次请求</button>
-        <button @click="batchReq">单次请求</button>
+        <button @click="batchReq">批量请求</button>
     </section>
 </template>
 <script lang="ts"}>
     import SingleRequest from '../plugins/SingleRequest.ts';
+    import BatchRequest from '../plugins/BatchRequest.ts';
     import {Vue,Component,Prop} from 'vue-property-decorator';
     @Component({
         components:{
@@ -66,13 +67,22 @@
                         data:null
                     }
                 },{
-                    url:'http://localhost:8080/AESGet',
+                    url:'http://localhost:8080/AESGet1',
+                    option:{
+                        method:'get',
+                        data:null
+                    }
+                },{
+                    url:'http://localhost:8080/AESGet2',
                     option:{
                         method:'get',
                         data:null
                     }
                 }
-            ]
+            ];
+            let o=new BatchRequest(reqStrs,2);
         }
+
+
     }
 </script>

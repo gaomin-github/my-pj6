@@ -3,33 +3,53 @@
 // 并发多次请求，并且可以识别相应返回
 // 并发请求次数可控
 export default class BatchRequest{
-    fetchParams:Array<Object>;
+    fetchParams:Array<any>;
     batchNum:number;
-    constructor(fetchParams:Array<Object>,batchNum?:number){
-        // this.fetchParams=fetchParams.map((o,oi)=>{
-        //     o.index=oi;
-        //     return o;
-        // })
+    constructor(fetchParams:Array<any>,batchNum?:number){
+        this.fetchParams=fetchParams.map((o,oi)=>{
+
+            o=Object.assign(o,{
+                status:'init'
+            })
+            return o;
+        })
         this.fetchParams=fetchParams;
         this.batchNum=batchNum||3;
+        this.execute();
     }
     execute(){
-        let curOrder=0
-        if(this.fetchParams.length>0){
-            this.fetchParam[curOrder].order=curOrder;
-            fetch(this.fetchParam[curOrder].url,this.fetchParams[curOrder].option).then(res=>{
-                console.log('index:$(curOrder)');
-                if(res.ok){
-                    this.fetchParams.splice(this.fetchParams.findIndex(o=>{
-                        return o.order==curOrder
-                    })-1,1);
-                }else{
-                    this.fetchParam[curOrder].status='error';
-                    // throw newError()
-                }
+        let curNum=0
+        while(this.fetchParams.filter(o=>o.status=='init').length>0){
+            debugger;
+            if(curNum<this.batchNum){
+                curNum++;
+                let curFetchParam=this.fetchParams.filter(o=>o.status=='init')[0];
+                curFetchParam.status='sending';
+                console.log('sendIndex:'+curNum+',send url:'+curFetchParam.url);
+                (function(curFetchParam,curNum){
+                    fetch(curFetchParam.url,curFetchParam.option).then(res=>{
+                        curNum--;
+                        console.log('success');
+                        console.log('curNum：'+curNum);
+                        console.log(curFetchParam);
+                        if(res.ok){
+                            curFetchParam.status='finish';
+                        }else{
+                            curFetchParam.status='error';
+                        }
 
+                        curFetchParam.res=res;
 
-            })
+                    },res=>{
+                        console.log('error');
+                        console.log('curNum：'+curNum);
+                        curFetchParam.status='error';
+                        curFetchParam.res=res;
+                    })
+                })(curFetchParam,curNum)
+
+            }
+
         }
     }
 }

@@ -11,6 +11,7 @@ typescript联合类型和交叉类型
     mode:cors(跨域，需要服务端配合设置origin），no-cors不需要服务端配合，但是不能从response中取值（或许websocket可以解决）
 2.fetch返回值
     fetch返回的resposne.body是readstream类型，可以根据返回头参数做转化，取res.text()；res.json()；具体实现参照react-native中whatwg-fetch
+    fetch发请求，连接不上不会执行reject,而是resolve（即，404执行resolve)
 3.fetch的onload执行中会调用resolve()
 
 ####关于promise对象及使用

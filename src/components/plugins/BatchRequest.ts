@@ -7,7 +7,6 @@ export default class BatchRequest{
     batchNum:number;
     constructor(fetchParams:Array<any>,batchNum?:number){
         this.fetchParams=fetchParams.map((o,oi)=>{
-
             o=Object.assign(o,{
                 status:'init'
             })
@@ -19,22 +18,18 @@ export default class BatchRequest{
     }
     execute(){
         let curNum=0,exeNum=0;
-        let requestHandle=function(){
+        let taskHandler=function(resolve){
             this.fetchParams.filter(o=>o.status=='init').find(curFetchParam=>{
-                debugger;
+                // debugger;
                 if(curNum<this.batchNum){
                     curNum++;
+                    console.log('curNum:'+curNum+',exeNum:'+exeNum);
                     let curFetchParam=this.fetchParams.filter(o=>o.status=='init')[0];
                     curFetchParam.status='sending';
-                    console.log('sendIndex:'+curNum+',send url:'+curFetchParam.url);
-                    (function(curFetchParam){
+                    (function(curFetchParam,resolve){
                         fetch(curFetchParam.url,curFetchParam.option).then(res=>{
-                            console.log(this);
                             curNum--;
                             exeNum++;
-                            console.log('success');
-                            console.log('curNum：'+curNum);
-                            console.log(curFetchParam);
                             if(res.ok){
                                 curFetchParam.status='finish';
                             }else{
@@ -45,21 +40,19 @@ export default class BatchRequest{
 
                         },res=>{
                             curNum--;
-                            console.log('error');
-                            console.log('curNum：'+curNum);
                             exeNum++;
                             curFetchParam.status='error';
                             curFetchParam.res=res;
                             return exeNum;
                         }).then(exeNum=>{
-
+                            if(exeNum<this.fetchParams.length) taskHandler.bind(this)(resolve)
                         })
-                    }).bind(this)(curFetchParam)
-
+                    }).bind(this)(curFetchParam,resolve)
                 }
             })
         }
-        let timerTask=setInterval(requestHandle.bind(this),500)
-
+        return new Promise((resolve,reject)=>{
+            taskHandler.bind(this)(resolve);
+        })
     }
 }

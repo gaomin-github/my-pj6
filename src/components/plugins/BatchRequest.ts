@@ -18,38 +18,48 @@ export default class BatchRequest{
         this.execute();
     }
     execute(){
-        let curNum=0
-        while(this.fetchParams.filter(o=>o.status=='init').length>0){
-            debugger;
-            if(curNum<this.batchNum){
-                curNum++;
-                let curFetchParam=this.fetchParams.filter(o=>o.status=='init')[0];
-                curFetchParam.status='sending';
-                console.log('sendIndex:'+curNum+',send url:'+curFetchParam.url);
-                (function(curFetchParam,curNum){
-                    fetch(curFetchParam.url,curFetchParam.option).then(res=>{
-                        curNum--;
-                        console.log('success');
-                        console.log('curNum：'+curNum);
-                        console.log(curFetchParam);
-                        if(res.ok){
-                            curFetchParam.status='finish';
-                        }else{
+        let curNum=0,exeNum=0;
+        let requestHandle=function(){
+            this.fetchParams.filter(o=>o.status=='init').find(curFetchParam=>{
+                debugger;
+                if(curNum<this.batchNum){
+                    curNum++;
+                    let curFetchParam=this.fetchParams.filter(o=>o.status=='init')[0];
+                    curFetchParam.status='sending';
+                    console.log('sendIndex:'+curNum+',send url:'+curFetchParam.url);
+                    (function(curFetchParam){
+                        fetch(curFetchParam.url,curFetchParam.option).then(res=>{
+                            console.log(this);
+                            curNum--;
+                            exeNum++;
+                            console.log('success');
+                            console.log('curNum：'+curNum);
+                            console.log(curFetchParam);
+                            if(res.ok){
+                                curFetchParam.status='finish';
+                            }else{
+                                curFetchParam.status='error';
+                            }
+                            curFetchParam.res=res;
+                            return exeNum;
+
+                        },res=>{
+                            curNum--;
+                            console.log('error');
+                            console.log('curNum：'+curNum);
+                            exeNum++;
                             curFetchParam.status='error';
-                        }
+                            curFetchParam.res=res;
+                            return exeNum;
+                        }).then(exeNum=>{
 
-                        curFetchParam.res=res;
+                        })
+                    }).bind(this)(curFetchParam)
 
-                    },res=>{
-                        console.log('error');
-                        console.log('curNum：'+curNum);
-                        curFetchParam.status='error';
-                        curFetchParam.res=res;
-                    })
-                })(curFetchParam,curNum)
-
-            }
-
+                }
+            })
         }
+        let timerTask=setInterval(requestHandle.bind(this),500)
+
     }
 }

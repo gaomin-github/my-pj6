@@ -1,3 +1,4 @@
+// 存在问题：例如，间隔设置为3000,从页面加载到触发间隔小于3000，函数不会执行
 // 节流：在规定的事件只触发一次
 export const Throttle=(function(){
     let lastTime:number=(new Date()).getTime();
@@ -22,3 +23,34 @@ export const Debounce=(function(){
         }
     }
 })()
+
+export const ThrottleVS=function(fun:Function,interval:number){
+    let timer:any=null;
+    return function(this:any){
+        let self:any=this;
+        let argu=arguments;
+        if(timer){
+            return;
+        }else{
+            timer=setTimeout(()=>{
+                timer=null;
+                fun.apply(self,argu);
+            },interval);
+        }
+    }
+}
+
+export const DebounceVS=function(fun:Function,interval:number){
+    let timer:any=null;
+    return function(this:any){
+        let self=this;
+        let argu=arguments;
+        if(timer){
+            clearTimeout(timer);
+        }
+        timer=setTimeout(()=>{
+            timer=null;
+            fun.apply(self,argu);
+        },interval);
+    }
+}

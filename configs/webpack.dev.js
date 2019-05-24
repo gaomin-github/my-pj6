@@ -26,7 +26,7 @@ module.exports={
     devServer:{
         historyApiFallback:true,
         clientLogLevel:'info',
-        host:'localhost',
+        host:'0.0.0.0',
         port:8086,
         open:false,
         contentBase:path.resolve(__dirname,'../'),
@@ -120,6 +120,9 @@ module.exports={
         }),
         new webpack.HotModuleReplacementPlugin(),
         new VueLoaderPlugin(),
+        new webpack.ProvidePlugin({
+            Vue:['vue/dist/vue.esm.js','default']
+        })
         // new MinCssExtractPlugin({
         //     filename:'[name].[hash].css'
         // })

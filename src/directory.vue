@@ -6,6 +6,9 @@
         <section class="demo_title" @click="enterCon('httpDemo')">请求组件</section>
         <section class="demo_title" @click="enterCon('toolDemo')">工具组件</section>
         <section class="demo_title" @click="enterCon('navDemo')">导航组件</section>
+        <section class="demo_title" @click="enterCon('directDemo')">指令测试</section>
+        <!--<section class="demo_title" @click="enterCon('directDemo2')">指令测试2</section>-->
+        <section class="demo_title" @click="enterCon('vuePluginDemo')">vue插件测试</section>
         <section class="demo_title" @click="aesTest">aes测试</section>
     </section>
 </template>

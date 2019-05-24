@@ -6,6 +6,9 @@ import dataDemo from './components/datas/demo';
 import httpDemo from './components/reqs/MyAjax.vue';
 import toolDemo from './components/tools/demo.vue';
 import navDemo from './components/nav/demo.vue';
+import directDemo from './components/direct/demo.vue';
+// import directDemo2 from './components/direct/demo2.vue';
+import vuePluginDemo from './components/vuePlugins/demo.vue';
 let routes=new VueRouter({
     mode:'history',
     routes:[
@@ -30,6 +33,17 @@ let routes=new VueRouter({
         },{
             path:'/navDemo',
             component:navDemo
+        },{
+            path:'/directDemo',
+            component:directDemo
+        },
+        // {
+        //     path:'/directDemo2',
+        //     component:directDemo2
+        // },
+        {
+            path:'/vuePluginDemo',
+            component:vuePluginDemo
         }
     ]
 

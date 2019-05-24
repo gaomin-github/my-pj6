@@ -7,7 +7,9 @@ import App from './app.vue';
 // 注册是为了能在vue实例中使用route实例
 // import image1 from '../static/1.jpg';
 // console.log(__dirname);
+// Vue.use(tip);
 Vue.use(VueRouter)
+
 var vm=new Vue({
     el:'#app',
     components:{

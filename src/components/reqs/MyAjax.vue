@@ -7,7 +7,7 @@
 </template>
 <script lang="ts"}>
     import SingleRequest from '../plugins/SingleRequest.ts';
-    import BatchRequest from '../plugins/BatchRequest.ts';
+    // import BatchRequest from '../plugins/BatchRequest.ts';
     import {Vue,Component,Prop} from 'vue-property-decorator';
     @Component({
         components:{
@@ -80,7 +80,7 @@
                     }
                 }
             ];
-            let o=new BatchRequest(reqStrs,2);
+            // let o=new BatchRequest(reqStrs,2);
         }
 
 

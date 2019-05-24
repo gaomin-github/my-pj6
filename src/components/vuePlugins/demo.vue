@@ -7,16 +7,16 @@
                 plugins page additions {{item}}
             </li>
         </ul>
-        <!--<div class="layer" ref="layer" v-show="showModal" v-vue-plugin-tip="showModal">-->
-            <!--<div class="modal">-->
-                <!--<ul @keydown="scrollHandler"  @wheel="scrollHandler">-->
-                    <!--<li v-for="item in 15">-->
-                        <!--{{item}}prevent scroll test item!!-->
-                    <!--</li>-->
-                <!--</ul>-->
-                <!--<div class="modal_close" @click="switchModal">CLOSE</div>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="layer" ref="layer" v-show="showModal" v-vue-plugin-tip="showModal">
+            <div class="modal">
+                <ul @keydown="scrollHandler"  @wheel="scrollHandler">
+                    <li v-for="item in 15">
+                        {{item}}prevent scroll test item!!
+                    </li>
+                </ul>
+                <div class="modal_close" @click="switchModal">CLOSE</div>
+            </div>
+        </div>
         <tip></tip>
     </section>
 </template>
@@ -26,21 +26,12 @@
     Vue.use(preventScroll);
     import tip from './tip.js';
     Vue.use(tip);
-    // import tip from './tip.vue';
 export default Vue.extend({
     data:function(){
         return{
             showModal:false,
             pageScrollNum:0,
         }
-    },
-    mounted:function(){
-        this.$on('test',function(){
-            console.log('hello---------');
-        })
-    },
-    updated:function(){
-
     },
     methods:{
         switchModal(){
@@ -83,12 +74,7 @@ export default Vue.extend({
         showTip(){
             console.log('touch tip btn');
             this.$children[0].$emit('vuetip',`tip show ${(new Date()).getSeconds()}`);
-            // this.$emit('test');
-            // this.$children[0].$emit('dd');
         }
-    },
-    components:{
-        // tip
     }
 })
 </script>

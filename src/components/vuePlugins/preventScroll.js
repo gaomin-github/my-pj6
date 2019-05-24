@@ -1,6 +1,6 @@
+// 模态窗口展示时 ，阻止背景滑动
 export default{
     install:function(Vue,options){
-        console.log('global plugin preventScroll');
         Vue.directive('vuePluginTip',{
             update:function(el,binding,vnode){
                 // console.log(binding.expression);

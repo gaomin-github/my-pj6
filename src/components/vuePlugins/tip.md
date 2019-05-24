@@ -1,0 +1,2 @@
+1.webkitTransitionEnd事件：transition动画执行结束后触发的事件
+2.

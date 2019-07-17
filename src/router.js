@@ -45,6 +45,14 @@ let routes=new VueRouter({
             path:'/vuePluginDemo',
             component:vuePluginDemo
         }
+        // ,
+        // {
+        //     path:'/errorPopDemo',
+        //     component:()=>import('./errorInPractice/pop-demo.vue')
+        // },{
+        //     path:'/vueFor',
+        //     component:()=>import('./errorInPractice/vueFor.vue')
+        // }
     ]
 
 })

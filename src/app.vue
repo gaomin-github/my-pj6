@@ -6,31 +6,8 @@
         <router-view></router-view>
     </section>
 </template>
-<script>
-import test from './test.vue';
-import {aesRequestPost,aesRequestGet} from './test/aesRequest.js';
-export default({
-    components:{
-        test
-    },
-    methods:{
-        aesGetTest(){
-            console.log('aes get test');
-            aesRequestGet().then((result)=>{
-                console.log(result);
-                console.log('aes gettest end');
-            });
-        },
-        aesPostTest(){
-            console.log('aes post test');
-            aesRequestPost().then(result=>{
-                console.log(result);
-                console.log('aes posttest end');
-            });
-        }
-    }
-})
-</script>
+<script src="./test.js"></script>
+
 <style lang="scss">
 ul,li,ol{
     list-style: none;

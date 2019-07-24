@@ -154,7 +154,6 @@ module.exports = function(input, map) {
     var webpack = this;
     console.log('webpack resourcepath');
     console.log(webpack.resourcePath);
-
     var userOptions = assign(
         // user defaults
         (webpack.options && webpack.options.eslint) || webpack.query || {},

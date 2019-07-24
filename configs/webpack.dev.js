@@ -40,16 +40,7 @@ module.exports={
     },
     module:{
       rules:[
-          // {
-          //   test:/\.(vue|js)/,
-          //   use:{
-          //       loader:path.resolve(__dirname,'../src/webpackLoaders/loaderTest.js'),
-          //       options:{
-          //           name:'alice A'
-          //       }
-          //   },
-          //   include:[path.resolve(__dirname,'../src')]
-          // },
+
           // {
           //   test:/\.(vue|js)$/,
           //   loader:'eslint-loader',
@@ -65,6 +56,7 @@ module.exports={
             loader:'babel-loader',
             exclude:/(node_modules|bower_components)/
           },
+
           {
               test:/\.(ts|tsx)?$/,
               loader:'ts-loader',
@@ -80,6 +72,16 @@ module.exports={
               include:[
                   path.resolve(__dirname,'../src')
               ]
+          },
+          {
+              test:/\.(vue|js)/,
+              use:{
+                  loader:path.resolve(__dirname,'../src/webpackLoaders/loaderTest.js'),
+                  options:{
+                      name:'alice A'
+                  }
+              },
+              include:[path.resolve(__dirname,'../src')]
           },
           {
               test:/\.(css|scss)$/,

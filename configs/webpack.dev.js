@@ -40,6 +40,26 @@ module.exports={
     },
     module:{
       rules:[
+          // {
+          //   test:/\.(vue|js)/,
+          //   use:{
+          //       loader:path.resolve(__dirname,'../src/webpackLoaders/loaderTest.js'),
+          //       options:{
+          //           name:'alice A'
+          //       }
+          //   },
+          //   include:[path.resolve(__dirname,'../src')]
+          // },
+          // {
+          //   test:/\.(vue|js)$/,
+          //   loader:'eslint-loader',
+          //   enforce:'pre',
+          //   include:[path.resolve(__dirname,'../src')],
+          //   options:{
+          //       formatter:require('eslint-friendly-formatter'),
+          //       emitWarning:true
+          //   }
+          // },
           {
             test:/\.(ts|js)?$/,
             loader:'babel-loader',

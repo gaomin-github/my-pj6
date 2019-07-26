@@ -7,6 +7,7 @@ const OptimizeCSSAssetsPlugin=require('optimize-css-assets-webpack-plugin');
 const MinCssExtractPlugin=require('mini-css-extract-plugin');
 const UglifyJsPlugin=require('uglifyjs-webpack-plugin')
 
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
 const packageConfig=require('../package.json');
 module.exports={
@@ -146,7 +147,10 @@ module.exports={
         new VueLoaderPlugin(),
         new webpack.ProvidePlugin({
             Vue:['vue/dist/vue.esm.js','default']
-        })
+        }),
+        // new FriendlyErrorsPlugin({
+        //     onErrors:createNotifierCallback()
+        // })
         // new MinCssExtractPlugin({
         //     filename:'[name].[hash].css'
         // })

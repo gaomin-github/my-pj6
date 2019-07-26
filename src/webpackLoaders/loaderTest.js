@@ -289,10 +289,10 @@ module.exports = function(input, map) {
 
 function lint(engine, input, resourcePath, emitter) {
     if(resourcePath.indexOf('loaderDemo')>0){
-        console.log('input-----------');
-        console.log(input);
-        console.log('engine.executeOnText');
-        console.log(engine.executeOnText(input, resourcePath, true))
+        // console.log('input-----------');
+        // console.log(input);
+        // console.log('engine.executeOnText');
+        // console.log(engine.executeOnText(input, resourcePath, true))
     }
     try {
 

@@ -6,6 +6,9 @@ const VueLoaderPlugin=require('vue-loader/lib/plugin');
 const OptimizeCSSAssetsPlugin=require('optimize-css-assets-webpack-plugin');
 const MinCssExtractPlugin=require('mini-css-extract-plugin');
 const UglifyJsPlugin=require('uglifyjs-webpack-plugin')
+
+
+const packageConfig=require('../package.json');
 module.exports={
     mode:'development',
     // mode:'production',
@@ -40,16 +43,7 @@ module.exports={
     },
     module:{
       rules:[
-          // {
-          //   test:/\.(vue|js)/,
-          //   use:{
-          //       loader:path.resolve(__dirname,'../src/webpackLoaders/loaderTest.js'),
-          //       options:{
-          //           name:'alice A'
-          //       }
-          //   },
-          //   include:[path.resolve(__dirname,'../src')]
-          // },
+
           // {
           //   test:/\.(vue|js)$/,
           //   loader:'eslint-loader',
@@ -80,6 +74,16 @@ module.exports={
               include:[
                   path.resolve(__dirname,'../src')
               ]
+          },
+          {
+              test:/\.(vue|js)/,
+              use:{
+                  loader:path.resolve(__dirname,'../src/webpackLoaders/loaderTest.js'),
+                  options:{
+                      name:'alice A'
+                  }
+              },
+              include:[path.resolve(__dirname,'../src')]
           },
           {
               test:/\.(css|scss)$/,
@@ -148,4 +152,21 @@ module.exports={
         // })
     ],
     stats:'none'
+}
+
+function createNotifierCallback(){
+    const notifier = require('node-notifier');
+
+    return (severity, errors) => {
+        if (severity !== 'error') return
+
+        const error = errors[0]
+        const filename = error.file && error.file.split('!').pop()
+
+        notifier.notify({
+            title: packageConfig.name,
+            message: severity + ': ' + error.name,
+            subtitle: filename || ''
+        })
+    }
 }

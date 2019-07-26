@@ -44,6 +44,10 @@ let routes=new VueRouter({
         {
             path:'/vuePluginDemo',
             component:vuePluginDemo
+        },
+        {
+            path:'/loaderDemo',
+            component:()=>import('./components/demos/loaderDemo.vue')
         }
         // ,
         // {

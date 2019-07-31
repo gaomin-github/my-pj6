@@ -2,10 +2,11 @@ module.exports = {
     "env": {
         "es6": true
     },
-    "extends": "eslint:recommended",
-    "parserOptions": {
-        "sourceType": "module"
-    },
+    // "extends": "eslint:recommended",
+    // "parserOptions": {
+    //     "sourceType": "module"
+    // },
+    'parser':'@typescript-eslint/parser',
     "rules": {
         "no-await-in-loop": "error",
         'no-compare-neg-zero': 'error',

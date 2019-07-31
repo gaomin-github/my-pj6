@@ -44,17 +44,6 @@ module.exports={
     },
     module:{
       rules:[
-
-          // {
-          //   test:/\.(vue|js)$/,
-          //   loader:'eslint-loader',
-          //   enforce:'pre',
-          //   include:[path.resolve(__dirname,'../src')],
-          //   options:{
-          //       formatter:require('eslint-friendly-formatter'),
-          //       emitWarning:true
-          //   }
-          // },
           {
             test:/\.(ts|js)?$/,
             loader:'babel-loader',
@@ -76,16 +65,17 @@ module.exports={
                   path.resolve(__dirname,'../src')
               ]
           },
-          {
-              test:/\.(vue|js)/,
-              use:{
-                  loader:path.resolve(__dirname,'../src/webpackLoaders/loaderTest.js'),
-                  options:{
-                      name:'alice A'
-                  }
-              },
-              include:[path.resolve(__dirname,'../src')]
-          },
+          // {
+          //     test:/\.(vue|js)/,
+          //     use:{
+          //         loader:path.resolve(__dirname,'../src/webpackLoaders/loaderTest.js'),
+          //         options:{
+          //             formatter:require('eslint-friendly-formatter'),
+          //             name:'alice A'
+          //         }
+          //     },
+          //     include:[path.resolve(__dirname,'../src')]
+          // },
           {
               test:/\.(css|scss)$/,
               use:[
@@ -148,9 +138,9 @@ module.exports={
         new webpack.ProvidePlugin({
             Vue:['vue/dist/vue.esm.js','default']
         }),
-        // new FriendlyErrorsPlugin({
-        //     onErrors:createNotifierCallback()
-        // })
+        new FriendlyErrorsPlugin({
+            onErrors:createNotifierCallback()
+        })
         // new MinCssExtractPlugin({
         //     filename:'[name].[hash].css'
         // })

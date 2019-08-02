@@ -1,104 +1,115 @@
-const path=require('path');
-const webpack=require('webpack');
-const CleanWebpackPlugin=require('clean-webpack-plugin');
-const HtmlWebpackPlugin=require('html-webpack-plugin');
-const VueLoaderPlugin=require('vue-loader/lib/plugin');
-const OptimizeCSSAssetsPlugin=require('optimize-css-assets-webpack-plugin');
-const MinCssExtractPlugin=require('mini-css-extract-plugin');
-const UglifyJsPlugin=require('uglifyjs-webpack-plugin')
+const path = require('path');
+const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const MinCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
-const packageConfig=require('../package.json');
-module.exports={
-    mode:'development',
+const packageConfig = require('../package.json');
+module.exports = {
+    mode: 'development',
     // mode:'production',
-    entry:{
-        main:["./src/main.js"],
-        main1:["./src/main1.js"]
+    entry: {
+        main: ["./src/main.js"],
+        main1: ["./src/main1.js"]
     },
-    output:{
-        filename:'[name].[hash].js',
-        path:path.resolve(__dirname,'../built'),
+    output: {
+        filename: '[name].[hash].js',
+        path: path.resolve(__dirname, '../built'),
     },
     // 扩容
-    performance:{
-      hints:'warning',
-      maxEntrypointSize:5000000,
-      maxAssetSize:3000000
+    performance: {
+        hints: 'warning',
+        maxEntrypointSize: 5000000,
+        maxAssetSize: 3000000
     },
-    devServer:{
-        historyApiFallback:true,
-        clientLogLevel:'info',
-        host:'0.0.0.0',
-        port:8086,
-        open:false,
-        contentBase:path.resolve(__dirname,'../'),
-        publicPath:'/',
+    devServer: {
+        historyApiFallback: true,
+        clientLogLevel: 'info',
+        host: '0.0.0.0',
+        port: 8086,
+        open: false,
+        contentBase: path.resolve(__dirname, '../'),
+        publicPath: '/',
     },
-    resolve:{
-      extensions:['.js','.json','.tsx','.ts','.vue','.jpg'],
-      alias:{
-          'vue$':'vue/dist/vue.esm.js'
-      }
+    resolve: {
+        extensions: ['.js', '.json', '.tsx', '.ts', '.vue', '.jpg'],
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js'
+        }
     },
-    module:{
-      rules:[
-          {
-            test:/\.(ts|js)?$/,
-            loader:'babel-loader',
-            exclude:/(node_modules|bower_components)/
-          },
-          {
-              test:/\.(ts|tsx)?$/,
-              loader:'ts-loader',
-              exclude:/node_modules/,
-              options:{
-                  appendTsSuffixTo:[/\.vue$/]
-              }
-          },
-          {
-              test:/\.(vue)?$/,
-              loader:'vue-loader',
-              exclude:/node_modules/,
-              include:[
-                  path.resolve(__dirname,'../src')
-              ]
-          },
-          // {
-          //     test:/\.(vue|js)/,
-          //     use:{
-          //         loader:path.resolve(__dirname,'../src/webpackLoaders/loaderTest.js'),
-          //         options:{
-          //             formatter:require('eslint-friendly-formatter'),
-          //             name:'alice A'
-          //         }
-          //     },
-          //     include:[path.resolve(__dirname,'../src')]
-          // },
-          {
-              test:/\.(css|scss)$/,
-              use:[
-                  'style-loader',
-                  'css-loader',
-                  'sass-loader'
-              ],
-              exclude:/node_modules/,
-              include:[
-                  path.resolve(__dirname,'../src')
-              ]
-          },
-          {
-              test:/\.(jpg|png|jpeg)$/,
-              use:['url-loader'],
-              include:[
-                  path.resolve(__dirname,'../src'),
-                  path.resolve(__dirname,'../static')
-              ]
-          }
-      ]
+    module: {
+        rules: [
+            {
+                test: /\.(jpg|png|jpeg)$/,
+                use: {
+                    loader: path.resolve(__dirname, '../src/webpackLoaders/url-loader/loader.js'),
+                },
+                include: [
+                    path.resolve(__dirname, '../src'),
+                    path.resolve(__dirname, '../static')
+                ]
+            },
+            {
+                test: /\.(ts|js)?$/,
+                loader: 'babel-loader',
+                exclude: /(node_modules|bower_components)/
+            },
+            {
+                test: /\.(ts|tsx)?$/,
+                loader: 'ts-loader',
+                exclude: /node_modules/,
+                options: {
+                    appendTsSuffixTo: [/\.vue$/]
+                }
+            },
+            {
+                test: /\.(vue)?$/,
+                loader: 'vue-loader',
+                exclude: /node_modules/,
+                include: [
+                    path.resolve(__dirname, '../src')
+                ]
+            },
+            // {
+            //     test:/\.(vue|js)/,
+            //     use:{
+            //         loader:path.resolve(__dirname,'../src/webpackLoaders/loaderTest.js'),
+            //         options:{
+            //             formatter:require('eslint-friendly-formatter'),
+            //             name:'alice A'
+            //         }
+            //     },
+            //     include:[path.resolve(__dirname,'../src')]
+            // },
+            {
+                test: /\.(css|scss)$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ],
+                exclude: /node_modules/,
+                include: [
+                    path.resolve(__dirname, '../src')
+                ]
+            },
+            //   {
+            //       test:/\.(jpg|png|jpeg)$/,
+            //       use:['url-loader'],
+            //       include:[
+            //           path.resolve(__dirname,'../src'),
+            //           path.resolve(__dirname,'../static')
+            //       ]
+            //   },
+
+        ]
     },
-    devtool:'inline-source-map',
+    devtool: 'inline-source-map',
 
     // optimization:{
     //     // 抽取共用代码
@@ -124,31 +135,31 @@ module.exports={
     //       })
     //   ]
     // },
-    plugins:[
-        new CleanWebpackPlugin(['built'],{
-            root:path.resolve(__dirname,'..'),
-            dry:false
+    plugins: [
+        new CleanWebpackPlugin(['built'], {
+            root: path.resolve(__dirname, '..'),
+            dry: false
         }),
         new HtmlWebpackPlugin({
-            title:'mypj6 management',
-            template:'./template.html',
+            title: 'mypj6 management',
+            template: './template.html',
         }),
         new webpack.HotModuleReplacementPlugin(),
         new VueLoaderPlugin(),
         new webpack.ProvidePlugin({
-            Vue:['vue/dist/vue.esm.js','default']
+            Vue: ['vue/dist/vue.esm.js', 'default']
         }),
         new FriendlyErrorsPlugin({
-            onErrors:createNotifierCallback()
+            onErrors: createNotifierCallback()
         })
         // new MinCssExtractPlugin({
         //     filename:'[name].[hash].css'
         // })
     ],
-    stats:'none'
+    stats: 'none'
 }
 
-function createNotifierCallback(){
+function createNotifierCallback() {
     const notifier = require('node-notifier');
 
     return (severity, errors) => {

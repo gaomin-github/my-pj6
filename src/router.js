@@ -58,10 +58,10 @@ let routes = new VueRouter({
         //     component:()=>import('./errorInPractice/vueFor.vue')
         // }
         ,
-        {
-            path: '/fileDemo',
-            component: () => import('./page/fileDemo.vue')
-        },
+        // {
+        //     path: '/fileDemo',
+        //     component: () => import('./page/fileDemo.vue')
+        // },
         {
             path: '/imgPickDemo',
             component: () => import('./components/file-manage/file-demo.vue')

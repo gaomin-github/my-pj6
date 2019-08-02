@@ -1,10 +1,11 @@
 <template>
     <section>
-        <section
+        <!-- <section
             class="operate-container"
             ref="file_picker_container"
             :style="{background:`url(${upLoadIcon})  0 0 / contain no-repeat`}"
-        >
+        >-->
+        <section class="operate-container" ref="file_picker_container">
             <img :src="loadingIcon" v-show="loading" class="loading-icon" />
             <input
                 ref="file_picker"
@@ -34,6 +35,7 @@
                     <img :src="item.result" />
                     <section class="cancel-icon" @click="removeImg(item)">
                         <img :src="cancelIcon" />
+                        <!-- <img src="./imgs/cancel.jpg" /> -->
                     </section>
                 </section>
             </section>
@@ -80,7 +82,9 @@ export default {
         },
         cancelIcon: {
             type: String,
-            default: require("./imgs/cancel.jpg")
+            default: "./imgs/cancel.jpg"
+            // default: require("./imgs/cancel.jpg")
+            // default: () => import("./imgs/cancel.jpg")
         }
     },
     data() {
@@ -92,15 +96,14 @@ export default {
         };
     },
     mounted() {
-        // console.log("img picker init");
-        // let file_picker_container = this.$refs.file_picker_container;
-        // file_picker_container.style.backgroundImage =
-        // 'url("./imgs/add.jpg")';
+        console.log("img picker init");
+        let file_picker_container = this.$refs.file_picker_container;
+        file_picker_container.style.backgroundImage = 'url("./imgs/add.jpg")';
         // `url("` + this.upLoadIcon + `")`;
-        // file_picker_container.style.backgroundSize = "contain";
-        // file_picker_container.style.backgroundPositionX = "0px";
-        // file_picker_container.style.backgroundPositionY = "0";
-        // file_picker_container.style.backgroundRepeat = "no-repeat";
+        file_picker_container.style.backgroundSize = "contain";
+        file_picker_container.style.backgroundPositionX = "0px";
+        file_picker_container.style.backgroundPositionY = "0";
+        file_picker_container.style.backgroundRepeat = "no-repeat";
         // console.log(file_picker_container.style);
     },
     methods: {
@@ -277,7 +280,7 @@ img {
             width: 18px;
             height: 18px;
             margin-right: 20px;
-            background: url("./imgs/cancel.jpg") 0 0 / contain no-repeat;
+            // background: url("./imgs/cancel.jpg") 0 0 / contain no-repeat;
         }
     }
 }

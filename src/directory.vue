@@ -15,6 +15,7 @@
         <section class="demo_title" @click="enterCon('vueFor')">vue for 错误测试</section>
         <section class="demo_title" @click="enterCon('fileDemo')">文件上传测试</section>
         <section class="demo_title" @click="enterCon('imgPickDemo')">文件上传测试</section>
+        <section class="demo_title" @click="enterCon('fixedStyleDemo')">fixedStyle测试</section>
     </section>
 </template>
 <script lang="ts">

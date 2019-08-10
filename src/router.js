@@ -65,6 +65,10 @@ let routes = new VueRouter({
         {
             path: '/imgPickDemo',
             component: () => import('./components/file-manage/file-demo.vue')
+        },
+        {
+            path: '/fixedStyleDemo',
+            component: () => import('./demoInIOS/fixedStyleDemo.vue')
         }
     ]
 

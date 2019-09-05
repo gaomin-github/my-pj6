@@ -1,4 +1,5 @@
 import VueRouter from 'vue-router';
+// import VueRouter from './vue-router.common.js';
 import directory from './directory.vue';
 import dropDownDemo from './components/drop-down/demo';
 import panelDemo from './components/panel/demo';
@@ -18,37 +19,38 @@ let routes = new VueRouter({
         }, {
             path: '/drop-down-demo',
             component: dropDownDemo
-        }, {
-            path: '/panelDemo',
-            component: panelDemo
-        }, {
-            path: '/dataDemo',
-            component: dataDemo
-        }, {
-            path: '/httpDemo',
-            component: httpDemo
-        }, {
-            path: '/toolDemo',
-            component: toolDemo
-        }, {
-            path: '/navDemo',
-            component: navDemo
-        }, {
-            path: '/directDemo',
-            component: directDemo
         },
+        // {
+        //     path: '/panelDemo',
+        //     component: panelDemo
+        // }, {
+        //     path: '/dataDemo',
+        //     component: dataDemo
+        // }, {
+        //     path: '/httpDemo',
+        //     component: httpDemo
+        // }, {
+        //     path: '/toolDemo',
+        //     component: toolDemo
+        // }, {
+        //     path: '/navDemo',
+        //     component: navDemo
+        // }, {
+        //     path: '/directDemo',
+        //     component: directDemo
+        // },
         // {
         //     path:'/directDemo2',
         //     component:directDemo2
         // },
-        {
-            path: '/vuePluginDemo',
-            component: vuePluginDemo
-        },
-        {
-            path: '/loaderDemo',
-            component: () => import('./components/demos/loaderDemo.vue')
-        }
+        // {
+        //     path: '/vuePluginDemo',
+        //     component: vuePluginDemo
+        // },
+        // {
+        //     path: '/loaderDemo',
+        //     component: () => import('./components/demos/loaderDemo.vue')
+        // }
         // ,
         // {
         //     path:'/errorPopDemo',
@@ -62,13 +64,17 @@ let routes = new VueRouter({
         //     path: '/fileDemo',
         //     component: () => import('./page/fileDemo.vue')
         // },
-        {
-            path: '/imgPickDemo',
-            component: () => import('./components/file-manage/file-demo.vue')
-        },
+        // {
+        //     path: '/imgPickDemo',
+        //     component: () => import('./components/file-manage/file-demo.vue')
+        // },
         {
             path: '/fixedStyleDemo',
             component: () => import('./demoInIOS/fixedStyleDemo.vue')
+        },
+        {
+            path: '/cssStyleDemo',
+            component: () => import('./demoInIOS/cssStyleDemo.vue')
         }
     ]
 

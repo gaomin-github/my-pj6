@@ -41,7 +41,7 @@ exports.default = function loader(src) {
     // No limit or within the specified limit
     if (shouldTransform(options.limit, src.length)) {
         const file = this.resourcePath;
-        console.log('------------resourcePath');
+        // console.log('------------resourcePath');
         console.table(file);
         // Get MIME type
         const mimetype = options.mimetype || mime.getType(file);

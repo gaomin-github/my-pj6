@@ -1,9 +1,10 @@
 <template>
-    <section>
+    <section class="app">
         <!-- <section @click="aesGetTest">aes测试get</section>
         <section @click="aesPostTest">aes测试post</section>
         <test/>-->
-        <router-view></router-view>
+        <!-- <router-view></router-view> -->
+        <self-router-view></self-router-view>
     </section>
 </template>
 <script>
@@ -48,5 +49,17 @@ input {
     padding: 0px;
     font-size: inherit;
     box-sizing: border-box;
+}
+html,
+body {
+    // text-size-adjust: 100%;
+    font-size: 12px;
+    font-weight: 400;
+    height: 100%;
+    // border: 3px blue solid;
+    overflow-y: scroll;
+}
+.app {
+    height: 100%;
 }
 </style>

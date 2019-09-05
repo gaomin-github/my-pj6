@@ -63,7 +63,7 @@ function printLinterOutput(res, config, webpack) {
         if (res.warningCount && config.quiet) {
             res.warningCount = 0;
             res.results[0].warningCount = 0;
-            res.results[0].messages = res.results[0].messages.filter(function(
+            res.results[0].messages = res.results[0].messages.filter(function (
                 message
             ) {
                 return message.severity !== 1;
@@ -83,7 +83,7 @@ function printLinterOutput(res, config, webpack) {
 
         if (res.errorCount || res.warningCount) {
             // add filename for each results so formatter can have relevant filename
-            res.results.forEach(function(r) {
+            res.results.forEach(function (r) {
                 r.filePath = webpack.resourcePath;
             });
             var messages = config.formatter(res.results);
@@ -101,7 +101,7 @@ function printLinterOutput(res, config, webpack) {
                     config.outputReport.filePath,
                     {
                         content: res.results
-                            .map(function(r) {
+                            .map(function (r) {
                                 return r.source;
                             })
                             .join("\n")
@@ -150,10 +150,12 @@ function printLinterOutput(res, config, webpack) {
  * @param {Object} map input source map
  * @return {void}
  */
-module.exports = function(input, map) {
+module.exports = function (input, map) {
     var webpack = this;
-    console.log('webpack resourcepath');
-    console.log(webpack.resourcePath);
+    // console.log('webpack input');
+    // console.log(input);
+    // console.log('webpack resourcepath');
+    // console.log(webpack.resourcePath);
 
     var userOptions = assign(
         // user defaults
@@ -257,11 +259,11 @@ module.exports = function(input, map) {
                 identifier: cacheIdentifier,
                 options: config,
                 source: input,
-                transform: function() {
+                transform: function () {
                     return lint(engine, input, resourcePath, emitter);
                 }
             },
-            function(err, res) {
+            function (err, res) {
                 if (err) {
                     return callback(err);
                 }
@@ -288,7 +290,7 @@ module.exports = function(input, map) {
 };
 
 function lint(engine, input, resourcePath, emitter) {
-    if(resourcePath.indexOf('loaderDemo')>0){
+    if (resourcePath.indexOf('loaderDemo') > 0) {
         // console.log('input-----------');
         // console.log(input);
         // console.log('engine.executeOnText');

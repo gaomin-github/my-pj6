@@ -1,12 +1,17 @@
-let selfRouterView = {
+export default {
+    functional: true,
     props: {
-        type: String,
-        default: 'default'
+        name: {
+            type: String,
+            default: 'default'
+        }
     },
-    render(h, { props, children, data, parent }) {
+    render: function (h, { props, data, parent, children }) {
+        data.routerView = true;
         let viewDepth = 0;
-        const route = parent.$route;
-        parent.routerView = true;
+        const route = parent.$selfroute;
+        // let name = this.type;
+        // parent.routerView = true;
 
         while (parent && parent !== parent.$parent) {
             if (parent.routerView) {
@@ -14,7 +19,8 @@ let selfRouterView = {
             }
             parent = parent.$parent;
         }
-        return h(route.matched[viewDepth].components[name], data, children);
+        let component = route.matched[viewDepth].components[props.name];
+
+        return h(component, data, children);
     }
 }
-export default selfRouterView;

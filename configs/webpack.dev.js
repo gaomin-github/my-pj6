@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+// const VueLoaderPlugin = require('../src/webpackLoaders/vue-loader/plugin.js');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MinCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
@@ -15,7 +16,7 @@ module.exports = {
     // mode:'production',
     entry: {
         main: ["./src/main.js"],
-        main1: ["./src/main1.js"]
+        // main1: ["./src/main1.js"]
     },
     output: {
         filename: '[name].[hash].js',
@@ -47,7 +48,7 @@ module.exports = {
             {
                 test: /\.(jpg|png|jpeg)$/,
                 use: {
-                    loader: path.resolve(__dirname, '../src/webpackLoaders/url-loader/loader.js'),
+                    loader: 'url-loader'
                 },
                 include: [
                     path.resolve(__dirname, '../src'),
@@ -76,15 +77,15 @@ module.exports = {
                 ]
             },
             // {
-            //     test:/\.(vue|js)/,
-            //     use:{
-            //         loader:path.resolve(__dirname,'../src/webpackLoaders/loaderTest.js'),
-            //         options:{
-            //             formatter:require('eslint-friendly-formatter'),
-            //             name:'alice A'
+            //     test: /\.(vue|js)/,
+            //     use: {
+            //         loader: path.resolve(__dirname, '../src/webpackLoaders/loaderTest.js'),
+            //         options: {
+            //             formatter: require('eslint-friendly-formatter'),
+            //             name: 'alice A'
             //         }
             //     },
-            //     include:[path.resolve(__dirname,'../src')]
+            //     include: [path.resolve(__dirname, '../src')]
             // },
             {
                 test: /\.(css|scss)$/,

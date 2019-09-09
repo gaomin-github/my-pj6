@@ -18,7 +18,7 @@ export default class VueRouter {
 
     }
     init() {
-        this.history.transitionTo('');
+        this.history.transitionTo('/');
     }
 }
 

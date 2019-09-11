@@ -34,3 +34,6 @@ export default class VueRouter {
 }
 
 VueRouter.install = install;
+if (window !== 'undefined' && window.Vue) {
+    window.Vue.use(VueRouter);
+}

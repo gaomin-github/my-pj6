@@ -4,7 +4,15 @@ export default class HTML5History {
         this.current = START;
         this.router = router;
         this.cb = null;
+        window.addEventListener('popstate', e => {
+            console.log(`popstate:${document.location}`);
+            let newLocation = `/${document.location.search}${document.location.query}`;
+            if (current.path === newLocation) return;
+            transitionTo(newLocation)
+
+        })
     }
+
 
     transitionTo(path, onComplete, onAbort) {
         const route = this.router.matcher.match(path);

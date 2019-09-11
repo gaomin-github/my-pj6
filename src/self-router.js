@@ -3,13 +3,16 @@ let SelfRoutes = new SelfVueRouter({
     mode: 'history',
     routes: [{
         path: '/',
-        component: () => import('./components/panel/demo.vue')
-    }, {
+        component: () => import('./self-link-demo.vue')
+    },
+    {
         path: '/paneldemo',
         component: () => import('./components/panel/demo.vue')
-    }, {
-        path: '/dropdowndemo',
-        component: () => import('./components/drop-down/demo.vue')
-    }]
+    },
+        // {
+        // path: '/dropdowndemo',
+        // component: () => import('./components/drop-down/demo.vue')
+        // }
+    ]
 })
 export default SelfRoutes;

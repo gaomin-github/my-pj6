@@ -10,6 +10,7 @@ export default class VueRouter {
         this.routes = options.routes;
         this.history = null;
         this.matcher = createMatcher(this.routes);
+        this.apps = [];
         switch (this.mode) {
             case 'history':
                 this.history = new HTML5History(this)
@@ -17,9 +18,19 @@ export default class VueRouter {
         }
 
     }
-    init() {
+    init(app) {
+        this.apps.push(app);
+        this.history.listen((route) => {
+            this.apps.forEach(app => {
+                app._selfroute = route;
+            });
+        })
         this.history.transitionTo('/');
     }
+    push(path) {
+        this.history.pushState(path)
+    }
+
 }
 
 VueRouter.install = install;

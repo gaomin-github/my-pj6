@@ -2,16 +2,17 @@
 const screenWidth = document.documentElement.clientWidth;
 const screenHeight = ocument.documentElement.clientHeight;
 // import channel from './channel.js';
-export default barrage {
+let barrage = {
+
     name: 'barrage',
-        data: function() {
-            return {
-                barrageList: [],
-                barrageIndex: 0,     //针对queue的播放节点barrage的索引(barrage的index)
-                barrageQueue: [],
-                channelList: []
-            }
-        },
+    data: function () {
+        return {
+            barrageList: [],
+            barrageIndex: 0,     //针对queue的播放节点barrage的索引(barrage的index)
+            barrageQueue: [],
+            channelList: []
+        }
+    },
     mounted() {
         this.initChannels();
 
@@ -26,11 +27,11 @@ export default barrage {
             })
         }, 5000)
 
-        this.displayBarrage();
+        // this.displayBarrage();
     },
     methods: {
         // 初始化轨道
-        initChannels(){
+        initChannels() {
             let channelIndex = 0;
             this.channelList.flll({
                 index: channelIndex++,
@@ -40,7 +41,7 @@ export default barrage {
             }, 0, Math.floor(screenHeight - 60) / 12)
         },
         // 新增弹幕
-        addBarrage(barrageItem){
+        addBarrage(barrageItem) {
             barrageQueue[barrageItem.index] = barrageItem.assign(barrageItem, {
                 width: barrageItem.msg.length * barrageItem.fontSize,
                 height: barrageItem.fontSize,
@@ -48,7 +49,8 @@ export default barrage {
             })
         },
         // 寻找可用轨道
-        findChannels(barrage){
+        findChannels(barrage) {
+
             let currentTime = (new Date()).getTime();
             this.channelList.map(channel => {
                 let channelRight = channel.speed * (currentTime - channel.barrage.createTime) * channel.speed - channel.barrage.length;
@@ -63,8 +65,6 @@ export default barrage {
                 let channelCrashTime = channel.right / (barrage.speed - channel.speed)
                 if (channelFinishTime < channelCrashTime) return true;
             })
-
-            let resultChannels = [];
             let channelIndex = 0;
             let channelNum = barrage.height / 12;
             //    第一次匹配成功的连续轨道
@@ -78,15 +78,16 @@ export default barrage {
 
         },
         // 弹幕展示
-        displayBarrage(){
+        displayBarrage() {
             while (this.barrageIndex !== this.barrageQueue[barrageQueue.length - 1].index) {
                 let barrage = this.barrageQueue[this.barrageQueue.findIndex(o => o.index === this.barrageIndex) + 1];
                 let channels = this.findChannels(barrage);
                 if (channels) {
-                    barrage.createTime = new Date().getTime();
+
                     // 更新弹幕信息
+                    barrage.createTime = new Date().getTime();      //更新弹幕产生时间（展示时间）
                     this.barrageIndex = barrage.index;
-                    this.barrageList.push(barrage.index);
+
                     // 更新轨道信息
                     let minChannelRight = Math.min(this.channelList.flatMap(channel => { channel.right }))
                     channels.forEach((channel) => {
@@ -96,7 +97,7 @@ export default barrage {
                     })
                     // 增加dom
                     // 生成新dom
-                    barrageList.push(barrage.index);
+                    this.barrageList.push(barrage.index);
                     // 为新dom增加动画效果
                     this.$nextTick(() => {
                         // 选择dom元素需重新编码
@@ -112,3 +113,4 @@ export default barrage {
         }
     }
 }
+export default barrage;

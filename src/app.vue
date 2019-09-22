@@ -4,8 +4,8 @@
         <!-- <section @click="aesGetTest">aes测试get</section>
         <section @click="aesPostTest">aes测试post</section>
         <test/>-->
-        <!-- <router-view></router-view> -->
-        <self-router-view></self-router-view>
+        <router-view></router-view>
+        <!-- <self-router-view></self-router-view>  -->
     </section>
 </template>
 <script>

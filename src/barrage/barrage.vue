@@ -3,40 +3,19 @@
         <h3>弹幕测试</h3>
         <section class="player-container">
             <ul class="player-info">
-                <!--    <li
-                    v-for="item in barrageList"
-                    :ref="`barrage_${item}`"
-                    :key="item"
-                    :style="{
-                         fontSize:`${barrageQueue[item].fontSize}px`,
-                         color:`${barrageQueue[item].color}`,
-                         transition:`all ${barrageQueue[item].duration}s linear`
-                    }">
-                    item:{{item}},{{barrageQueue[item].msg}}
-                </li>-->
-
                 <li
                     v-for="item in barrageList"
                     :ref="`barrage_${item}`"
                     :key="item"
                     :style="{
-                        top:`${barrageQueue[item].channelIndex*12}px`,
+                         minWidth:`${barrageQueue[item].width}px`,
+                         top:`${barrageQueue[item].channelIndex*12}px`,
                          fontSize:`${barrageQueue[item].fontSize}px`,
                          color:`${barrageQueue[item].color}`,
+                         backgroundColor:'green',
                          animationDuration:`${barrageQueue[item].getDuration()}s`,
-                         backgroundColor:'green'
                     }"
-                >
-                    <!-- item:{{item}}, -->
-                    {{barrageQueue[item].msg}},
-                    {{barrageQueue[item].duration}}
-                </li>
-
-                <!--    <li v-for="item in barrageList">
-                <p>item:{{item}}</p>
-                <p>queue:{{barrageQueue[item].index}}</p>
-                <p></p>
-                </li>-->
+                >{{barrageQueue[item].msg}}</li>
             </ul>
 
             <!-- <section class="test3" ref="test3">动画测试3内容</section> -->
@@ -78,7 +57,7 @@
 <style lang="scss" scoped>
 section {
     width: 100%;
-    height: 100%;
+    // height: 100%;
     display: block;
 }
 button {
@@ -125,6 +104,21 @@ button {
     }
     &-info {
         li {
+            display: block;
+            position: absolute;
+            background: blue;
+            font-size: 16px;
+            word-wrap: none;
+            white-space: nowrap;
+            border: 1px white solid;
+            animation: test4 4s linear;
+            padding: 0;
+            // animation-name: test4;
+            // animation-timing-function: linear;
+            // animation-duration: 5s;
+        }
+        &-item {
+            display: block;
             position: absolute;
             background: blue;
             font-size: 16px;
@@ -143,8 +137,8 @@ button {
 .test3,
 .test4 {
     display: block;
-    // width: 100px;
-    // height: 100px;
+    width: 100px;
+    height: 100px;
     background-color: red;
     position: absolute;
     word-wrap: none;
@@ -153,7 +147,7 @@ button {
     animation: test3 8s linear;
 }
 .test4 {
-    animation: test4 8s linear;
+    animation: test4 4s linear;
 }
 </style>
 

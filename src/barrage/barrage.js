@@ -45,7 +45,7 @@ export default {
                 index: `danmu_${new Date().getTime()}`,
                 speed: Math.floor(myRandom * 100),
                 msg: "吐槽：" + myRandom,
-                fontSize: Math.floor(myRandom * 20),
+                fontSize: Math.ceil(myRandom * 20) < 12 ? 12 : Math.ceil(myRandom * 20),
                 color: myRandom * 10 < 5 ? "rgb(255,255,255)" : "rgb(255,0,0)"
             });
         },
@@ -107,7 +107,7 @@ export default {
         addBarrage(barrageItem) {
             this.barrageQueue[barrageItem.index] = (
                 Object.assign(barrageItem, {
-                    width: barrageItem.msg.length * barrageItem.fontSize + 50,
+                    width: barrageItem.msg.length * barrageItem.fontSize + 10,
                     height: barrageItem.fontSize,
                     getDuration: function () {
                         return (this.width + screenWidth) / barrageItem.speed;
@@ -196,7 +196,7 @@ export default {
                 ];
                 let channels = this.findChannels(barrage);
                 // console.table('channels');
-                console.table(channels);
+                // console.table(channels);
 
                 if (channels) {
 
@@ -220,10 +220,10 @@ export default {
                     // 为新dom增加动画效果
                     this.$nextTick(() => {
                         // 选择dom元素需重新编码
-                        setTimeout(() => {
+                        // setTimeout(() => {
 
-                            this.$refs['barrage_' + barrage.index][0].cssText += ` animation:test4 ${barrage.duration}s linear`;
-                        }, 2000)
+                        //     this.$refs['barrage_' + barrage.index][0].cssText += ` animation:test4 ${barrage.duration}s linear`;
+                        // }, 2000)
                         // this.$re30fs["barrage_"+barrage.index][0].cssText += `top:${channels[0].index *
                         // 12}px;left:0px;transition:all linear ${
                         //     barrage.duration
@@ -234,22 +234,16 @@ export default {
                         //         }s`;
                         // 销毁dom
 
-                        // setTimeout(() => {
-                        //     this.barrageList.splice(
-                        //         this.barrageList.findIndex(
-                        //             o => o === barrage.index
-                        //         ),
-                        //         1
-                        //     );
-
-                        //     // this.barrageQueue.splice(
-                        //     //     this.barrageQueue.findIndex(
-                        //     //         o => o.index === barrage.index
-                        //     //     ),
-                        //     //     1
-                        //     // );
-                        //     delete this.barrageQueue[barrage.index];
-                        // }, barrage.duration);
+                        setTimeout(() => {
+                            this.barrageList.splice(
+                                this.barrageList.findIndex(
+                                    o => o === barrage.index
+                                ),
+                                1
+                            );
+                            delete this.barrageQueue[barrage.index];
+                            this.barrageQueue.length--;
+                        }, barrage.getDuration() * 1000);
                     });
                 }
             }

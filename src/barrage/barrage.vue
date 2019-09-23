@@ -13,34 +13,39 @@
                          transition:`all ${barrageQueue[item].duration}s linear`
                     }">
                     item:{{item}},{{barrageQueue[item].msg}}
-                </li>   -->
+                </li>-->
 
                 <li
                     v-for="item in barrageList"
                     :ref="`barrage_${item}`"
                     :key="item"
                     :style="{
-                        display:'block',
+                        top:`${barrageQueue[item].channelIndex*12}px`,
                          fontSize:`${barrageQueue[item].fontSize}px`,
                          color:`${barrageQueue[item].color}`,
-                         animationDuration:'${barrageQueue[item].duration}}s',
-                    }">
-                    item:{{item}},{{barrageQueue[item].msg}}
+                         animationDuration:`${barrageQueue[item].getDuration()}s`,
+                         backgroundColor:'green'
+                    }"
+                >
+                    <!-- item:{{item}}, -->
+                    {{barrageQueue[item].msg}},
+                    {{barrageQueue[item].duration}}
                 </li>
 
                 <!--    <li v-for="item in barrageList">
                 <p>item:{{item}}</p>
                 <p>queue:{{barrageQueue[item].index}}</p>
                 <p></p>
-                </li>   -->
+                </li>-->
             </ul>
 
-            <section class="test3" ref="test3">动画测试3内容</section>
+            <!-- <section class="test3" ref="test3">动画测试3内容</section> -->
+            <!-- <section class="test4" ref="test3">动画测试4内容</section> -->
         </section>
         <button @click="addTestBarrage">新增弹幕</button>
         <button @click="displayBarrage">展示弹幕</button>
         <h3>动画测试1</h3>
-        <h3 @click="moveTest3">动画测试3</h3>
+        <!-- <h3 @click="moveTest3">动画测试3</h3> -->
         <section
             class="test"
             ref="test"
@@ -96,6 +101,17 @@ button {
         // transform: translateX(100%);
     }
 }
+@keyframes test4 {
+    from {
+        right: 0px;
+        left: 100%;
+    }
+    to {
+        left: 0px;
+        right: 100%;
+        transform: translateX(-100%);
+    }
+}
 .barrage-container {
     overflow-x: visible;
 }
@@ -107,27 +123,37 @@ button {
         margin: 0 10%;
         background: rgb(0, 0, 0);
     }
-    &-info{
-        li{
-            display:block;
-            position:absolute;
-            background:blue;
-            font-size:16px;
-            animation:test3 10s linear;
+    &-info {
+        li {
+            position: absolute;
+            background: blue;
+            font-size: 16px;
+            word-wrap: none;
+            white-space: nowrap;
+            border: 1px white solid;
+            animation: test4 4s linear;
+            // animation-name: test4;
+            // animation-timing-function: linear;
+            // animation-duration: 5s;
         }
     }
 }
 .test,
 .test2,
-.test3 {
+.test3,
+.test4 {
     display: block;
-    width: 100px;
-    height: 100px;
+    // width: 100px;
+    // height: 100px;
     background-color: red;
     position: absolute;
+    word-wrap: none;
 }
 .test3 {
     animation: test3 8s linear;
+}
+.test4 {
+    animation: test4 8s linear;
 }
 </style>
 

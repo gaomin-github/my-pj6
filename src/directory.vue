@@ -18,6 +18,7 @@
         <section class="demo_title" @click="enterCon('fixedStyleDemo')">fixedStyle测试</section>
         <!-- <section class="demo_title" @click="enterCon('cssStyleDemo')">css测试</section> -->
         <router-link class="demo_title" :to="{path:'/drop-down-demo'}">下拉组件</router-link>
+        <router-link class="demo_title" :to="{path:'/barrageDemo'}">弹幕测试</router-link>
     </section>
 </template>
 <script lang="ts">

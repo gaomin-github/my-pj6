@@ -79,7 +79,11 @@ let routes = new VueRouter({
         // {
         //     path: '/cssStyleDemo',
         //     component: () => import('./demoInIOS/cssStyleDemo.vue')
-        // }
+        // },
+        {
+            path: '/barrageDemo',
+            component: () => import('./barrage/barrage.vue')
+        },
     ]
 
 })

@@ -5,7 +5,11 @@
         <section @click="aesPostTest">aes测试post</section>
         <test/>-->
         <router-view></router-view>
+<<<<<<< HEAD
         <!-- <self-router-view></self-router-view> -->
+=======
+        <!-- <self-router-view></self-router-view>  -->
+>>>>>>> 3b1923fcfe3fcd705a6ea0cb7907ada61ee8ccda
     </section>
 </template>
 <script>

@@ -37,7 +37,7 @@
                 transition: all 5s;
                 position: absolute;"
         >donghua</section>
-        <h3>动画测试2</h3>
+        <!-- <h3>动画测试2</h3>
         <section
             class="test2"
             ref="test2"
@@ -48,7 +48,7 @@
                 backgroundColor:red;
                 transition: all 5s;
                 position: absolute;"
-        >donghua</section>
+        >donghua</section> -->
 
         <!-- <section class="test" ref="test" v-if="showTest" :style="{transition:`all ${10}s`}">donghua</section> -->
     </section>

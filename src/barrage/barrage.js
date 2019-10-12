@@ -173,24 +173,13 @@ export default {
         // 弹幕展示
         displayBarrage() {
             // console.table(this.barrageQueue);
-            let o = this.barrageList;
-            // if (
-            //     this.barrageIndex !==
-            //     this.barrageQueue[this.barrageQueue.length - 1].index
-            // ) {
-
+            let barrageQueueKeys = Object.keys(this.barrageQueue);
             if (
                 this.barrageIndex !==
-                this.barrageQueue[Object.keys(this.barrageQueue)[this.barrageQueue.length - 1]].index
+                this.barrageQueue[barrageQueueKeys[barrageQueueKeys - 1]].index
             ) {
-
-                // let barrage = this.barrageQueue[
-                // this.barrageQueue.findIndex(
-                //     o => o.index === this.barrageIndex
-                // ) + 1
-                //     ];
                 let barrage = this.barrageQueue[
-                    Object.keys(this.barrageQueue)[Object.keys(this.barrageQueue).findIndex(
+                    barrageQueueKeys[barrageQueueKeys.findIndex(
                         o => o === this.barrageIndex
                     ) + 1]
                 ];

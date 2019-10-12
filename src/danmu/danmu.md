@@ -1,0 +1,18 @@
+初始化属性
+index：key标识（乱序）
+startTime ：展示时间
+duration：展示时长  //公用参数
+fontSize：字体大小
+color:
+text：文本内容
+
+计算得到的属性
+width：宽度度
+height：高度
+remainTime:剩余时间
+top:到播放容器顶部距离
+left:到播放容器左端距离
+channelId:轨道ids
+poolId：弹幕池id
+
+

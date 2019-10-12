@@ -5,9 +5,11 @@ export default class HTML5History {
         this.router = router;
         this.cb = null;
         window.addEventListener('popstate', e => {
+            let that = this;
             console.log(`popstate:${document.location}`);
-            let newLocation = `/${document.location.search}${document.location.query}`;
-            if (current.path === newLocation) return;
+            let newLocation = `/${document.location.pathname}${document.location.search}`;
+            if (that.current.path === newLocation) return;
+            let o = this;
             transitionTo(newLocation)
 
         })

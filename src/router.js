@@ -84,6 +84,10 @@ let routes = new VueRouter({
             path: '/barrageDemo',
             component: () => import('./barrage/barrage.vue')
         },
+        {
+            path: '/danmuDemo',
+            component: () => import('./danmu/danmuDemo.vue')
+        },
     ]
 
 })

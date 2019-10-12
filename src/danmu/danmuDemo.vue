@@ -36,6 +36,7 @@ const SH = 260;
 const playerWidth = playerWidth; //playerWidth
 // const PH=SH*0.9*
 const Duration = 4000; //弹幕生命周期
+const channelNum = Math.floor(SH / 12);
 export default {
     data: function() {
         return {
@@ -142,6 +143,17 @@ export default {
                 }, 20);
             });
         },
+        // 轨道初始化
+        initChannels() {
+            let channelList = [];
+            for (let i = 0; i < channelNum; i++) {
+                this.channelList[i] = {
+                    index: i,
+                    barrage: null
+                };
+            }
+            return channelList;
+        },
         filterDanmu() {
             // 不漏掉数据关键在当前时间，统一用一个当前时间？分次获取？后续修改？
             this.danmuDisplayTimer = setInterval(() => {
@@ -182,20 +194,32 @@ export default {
         displayDanmu(danmu, poolIndex) {
             // 寻找适合面板层
             if (!this.pools || this.pools.length < poolIndex) {
-                this.pools.push([]);
+                this.pools.push(this.initChannels());
             }
             let pool = this.pools[poolIndex];
+            if (!pool || pool.length <= 0) {
+            }
             if (danmu.height > SH) {
                 console.log("error factor danmu");
                 return;
             }
-            if (pool.height + danmu.height > SH) {
+            // if (pool.height + danmu.height > SH) {
+            //     this.displayDanmu(danmu, ++poolIndex);
+            //     return;
+            // }
+            if (channelCheck(danmu, poolIndex)) {
+                pool.push(danmu);
+            } else {
                 this.displayDanmu(danmu, ++poolIndex);
-                return;
             }
-            pool.push(danmu);
 
             // 寻找适合轨道
+        },
+        // 寻找适合轨道
+        channelCheck(danmu, poolIndex) {
+            let channels = this.pools[poolIndex].filter(channel => {
+                // channel.barrage.startTime+Duration<=danmu.startTime+Duration*
+            });
         }
     }
 };

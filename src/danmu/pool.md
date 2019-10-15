@@ -1,9 +1,10 @@
+
+
 pool 属性：
 对于从右到左滚动弹幕
 
 <!-- bottom -->
 
-index:弹幕池 id（有序）
 channels:轨道列表
 danmus：弹幕实体列表
 

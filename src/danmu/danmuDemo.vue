@@ -12,21 +12,31 @@
 
             <!-- </section> -->
             <section class="animation" v-if="pools&&pools.length>0">
-                <section
-                    class="animation-layer"
-                    v-for="(pool,poolIndex) in pools"
-                    :key="poolIndex"
-                    :style="`{zIndex:${pool.index+10}}`"
-                >
-                    <section v-if="pool&&pool.danmus&&pool.danmus.length>0" class="danmu-content">
+                <section class="animation-layer" v-for="(pool,poolIndex) in pools" :key="poolIndex">
+                    <section
+                        v-show="pool&&pool.danmus&&pool.danmus.length>0&&poolIndex===0"
+                        class="danmu-content"
+                    >
                         <section
                             class="danmu-item"
                             v-for="danmu in pool.danmus"
                             :key="danmu.index"
                             :ref="`${danmu.index}`"
-                        >{{ danmu.text }}</section>
+                        >{{ danmu.text}},{{poolIndex}}</section>
                     </section>
                 </section>
+
+                <!-- <section
+                    v-if="pools[0]&&pools[0].danmus&&pools[0].danmus.length>0"
+                    class="danmu-content"
+                >
+                    <section
+                        class="danmu-item"
+                        v-for="danmu in pools[0].danmus"
+                        :key="danmu.index"
+                        :ref="`${danmu.index}`"
+                    >{{ danmu.text }}</section>
+                </section>-->
             </section>
         </section>
         poolNum:{{pools&&pools.length}}
@@ -55,10 +65,10 @@ section {
     // height: 100%;
 }
 .player-container {
-    width: 80%;
+    width: 60%;
     height: 260px;
     background: rgb(0, 0, 0);
-    margin: 10%;
+    margin: 20%;
     position: relative;
 }
 .control-bar,

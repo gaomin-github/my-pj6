@@ -1,6 +1,6 @@
 const SW = document.body.clientWidth || document.documentElement.clientWidth;
 const SH = 260;
-const playerWidth = SW * 0.8; //playerWidth
+const playerWidth = SW * 0.6; //playerWidth
 // const PH=SH*0.9*
 const Duration = 6000; //弹幕生命周期
 const channelNum = Math.floor(SH / 12);
@@ -59,7 +59,7 @@ export default {
                     1000
                 );
                 this.displayTimeMsg = `${displayHour} h::${displayMinute} m::${displaySecond} s`;
-            }, 50);
+            }, 200);
             // 数据和动画初始化
             this.filterDanmu();
         },
@@ -76,16 +76,17 @@ export default {
         },
         // 弹幕数据抓取
         sendDanmuTest() {
-            for (let i = 0; i < 10; i++) {
-                this.manualAddDanmu();
-                // this.filterDanmu();
-            }
+            // for (let i = 0; i < 5; i++) {
+            this.manualAddDanmu();
+            // this.filterDanmu();
+            // }
+            // console.table(this.danmuQueue);
         },
         manualAddDanmu() {
             let random = Math.random();
             let danmu = {
-                index: new Date().getTime(),
-                startTime: this.displayMills + Math.floor(random * 1000),
+                index: random,
+                startTime: this.displayMills + Math.floor(random * 100),
                 fontSize:
                     random * 10 < 3
                         ? 12
@@ -104,6 +105,7 @@ export default {
                 text: `测试弹幕信息${random}`
             };
             danmu = this.refactorDanmu(danmu);
+            // console.log(`danmu.index:${danmu.index}`);
             this.danmuQueue.push(danmu);
         },
         refactorDanmu(danmu) {
@@ -178,32 +180,34 @@ export default {
             // console.log('Duration:' + Duration / 4);
             // console.log("定期抓取弹幕信息");
             this.danmuDisplayTimer = setInterval(() => {
-                console.log(`danmuQueue.length:${this.danmuQueue.length}`);
-                console.table(this.pools[0] && this.pools[0].danmus);
+                // console.table(this.pools[0] && this.pools[0].danmus);
                 let i = 0;
                 while (i < this.danmuQueue.length) {
+                    // console.log(`danmuQueue.length:${this.danmuQueue.length}`);
                     if (
                         this.danmuQueue[i].startTime <
                         this.displayMills - Duration
                     ) {
-                        console.log('弹幕过期');
+                        console.log(`弹幕过期，删除：${this.danmuQueue[i].index}`);
                         this.danmuQueue.splice(i, 1);
-                        continue;
-                    }
-                    if (
+                        // console.log(`删除后${this.danmuQueue.length}`);
+                        // console.table(this.danmuQueue);
+                        // continue;
+                    } else if (
                         this.danmuQueue[i].startTime >
                         this.displayMills + Duration / 4
                     ) {
                         i++;
-                        console.log('没有到播放时间')
-                        continue;
+                        console.log(`没到播放时间:${this.danmuQueue[i].index}`);
+                        // continue;
+                    } else {
+                        // console.log(`展示弹幕:${this.danmuQueue[i].index}`);
+                        this.displayDanmu(this.danmuQueue[i], 0);
+                        this.danmuQueue.splice(i, 1);
+                        // i++;
                     }
-
-                    this.displayDanmu(this.danmuQueue[i], 0);
-
-                    i++;
                 }
-            }, Duration);
+            }, Duration / 4);
         },
         //   弹幕展示控制
         displayDanmu(danmu, poolIndex) {
@@ -224,33 +228,42 @@ export default {
             //     return;
             // }
             // 寻找适合轨道
+            console.log(`poolIndex:${poolIndex}`);
             let channelResult = this.channelCheck(danmu, pool);
             // console.log(`channelResult:${channelResult}`);
             if (channelResult) {
-                // console.log('找到合适轨道')
                 // console.log('find useful channel');
                 //   danmu.channelId = channelIndex;
                 pool.danmus.push(danmu);
-                this.danmuQueue = this.danmuQueue.splice(this.danmuQueue.findIndex(o => {
-                    if (o.index === danmu.index) {
-                        console.log(`delete index ${danmu.index}`)
-                        return true;
-                    } else {
-                        return false;
-                    }
-                    // return o.index === danmu.index
-                }), 1)
+                // let danmuIndex = this.danmuQueue.findIndex(o => {
+                //     if (o.index === danmu.index) {
+                //         console.log(`delete index ${danmu.index}`)
+                //         return true;
+                //     } else {
+                //         return false;
+                //     }
+                //     // return o.index === danmu.index
+                // })
+                // this.danmuQueue.splice(danmuIndex, 1);
+                // console.log(`删除后${this.danmuQueue.length}`);
+
                 // 动画展示
                 setTimeout(() => {
+                    console.log(`设置样式弹幕：${danmu.index}`)
                     let dmDom = this.$refs[danmu.index][0];
                     // console.log(dmDom);
+                    dmDom.style.position = `absolute`;
+
                     dmDom.style.top = `${danmu.channelId * 12}px`;
                     dmDom.style.left = `${playerWidth}px`;
-                    dmDom.style.color = danmu.color;
+                    // dmDom.style.color = danmu.color;
+                    dmDom.style.color = 'red';
                     dmDom.style.fontSize = `${danmu.fontSize}px`;
                     dmDom.style.transition = `transform ${Duration}ms linear 0s`;
+                    // dmDom.style.transform = `translateX(-${(playerWidth)}px`;
                     dmDom.style.transform = `translateX(-${(playerWidth + danmu.width)}px`;
                 }, 20);
+                // return true;
             } else {
                 this.displayDanmu(danmu, ++poolIndex);
             }
@@ -301,16 +314,26 @@ export default {
             let channelNum = Math.ceil(danmu.height / ChannelHeight);
             // console.log("channels：");
             // console.table(pool.channels);
-            let channels = pool.channels.filter((channel, channelIndex) => {
+            let channels = pool.channels.filter((channel) => {
+                let result = channel.danmu.startTime + Duration - (danmu.startTime +
+                    Duration * playerWidth / (danmu.width + playerWidth))
                 // console.log(`channelIndex:${channelIndex},S1endTime:${channel.danmu.startTime + Duration}，S2crashTime:${danmu.startTime + Duration * playerWidth / (danmu.width + playerWidth)}`);
-                return (
-                    channel.danmu.startTime + Duration <=
-                    danmu.startTime +
-                    Duration * playerWidth / (danmu.width + playerWidth)
-                );
+                // return (
+                //     channel.danmu.startTime + Duration <=
+                //     danmu.startTime +
+                //     Duration * playerWidth / (danmu.width + playerWidth)
+                // );
+                console.log(`result:${result}`);
+                if (result >= 0) {
+                    console.log(`轨道验证失败：${channel.index}`);
+                }
+                return result <= 0;
             });
             // console.log("i:" + i);
-            if (!channels || channels.length < channelNum) return false;
+            if (!channels || channels.length < channelNum) {
+                console.log('当前层没找到适合轨道');
+                return false;
+            }
             // let i = channels[0].index;
             // console.log('channelIndex:' + channels[0].index + 'channelNum:' + channelNum);
 
@@ -339,7 +362,10 @@ export default {
                 }
                 i++;
             }
+
+            console.log('当前层没找到适合轨道');
             return false;
+
         }
     }
 };

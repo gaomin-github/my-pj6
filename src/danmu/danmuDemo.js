@@ -2,7 +2,7 @@ const SW = document.body.clientWidth || document.documentElement.clientWidth;
 const SH = 260;
 const playerWidth = SW * 0.6; //playerWidth
 // const PH=SH*0.9*
-const Duration = 6000; //弹幕生命周期
+const Duration = 8000; //弹幕生命周期
 const channelNum = Math.floor(SH / 12);
 const ChannelHeight = 12;
 const HorizenMargin = 10;
@@ -27,7 +27,8 @@ export default {
             danmuDisplayTimer: null, //定时更新弹幕屏信息
             danmuFilterTimer: null, //定时销毁弹幕dom节点
 
-            pools: [] //弹幕池
+            pools: [], //弹幕池
+            danmuNum: 0,     //弹幕测试
         };
     },
     mounted() {
@@ -59,7 +60,7 @@ export default {
                     1000
                 );
                 this.displayTimeMsg = `${displayHour} h::${displayMinute} m::${displaySecond} s`;
-            }, 200);
+            }, 50);
             // 数据和动画初始化
             this.filterDanmu();
         },
@@ -85,7 +86,7 @@ export default {
         manualAddDanmu() {
             let random = Math.random();
             let danmu = {
-                index: random,
+                index: this.danmuNum++,
                 startTime: this.displayMills + Math.floor(random * 100),
                 fontSize:
                     random * 10 < 3
@@ -109,6 +110,12 @@ export default {
             this.danmuQueue.push(danmu);
         },
         refactorDanmu(danmu) {
+            let text = '';
+            let random = Math.random();
+            for (let i = 0; i < Math.floor(random * 10); i++) {
+                text += '测试';
+            }
+            danmu.text = `${text},${danmu.index}`;
             return Object.assign(
                 {
                     width: danmu.text.length * danmu.fontSize + HorizenMargin * 2,
@@ -130,7 +137,7 @@ export default {
             setTimeout(() => {
                 let animationDom = this.$refs.animationItem;
                 animationDom.style.left = `${playerWidth}px`;
-                animationDom.style.margin = `${HorizenMargin}px ${VerticalMargin}px`;
+                animationDom.style.margin = `${VerticalMargin}px ${HorizenMargin}px`;
                 animationDom.style.transition = `transform ${Duration}ms linear 0s`;
                 animationDom.style.transform = `translateX(-${playerWidth +
                     this.animationTestText.length * 16}px)`;
@@ -184,9 +191,13 @@ export default {
                 let i = 0;
                 while (i < this.danmuQueue.length) {
                     // console.log(`danmuQueue.length:${this.danmuQueue.length}`);
+                    // if (
+                    //     this.danmuQueue[i].startTime <
+                    //     this.displayMills - Duration / 4
+                    // ) {
                     if (
                         this.danmuQueue[i].startTime <
-                        this.displayMills - Duration
+                        this.displayMills - 100
                     ) {
                         console.log(`弹幕过期，删除：${this.danmuQueue[i].index}`);
                         this.danmuQueue.splice(i, 1);
@@ -195,7 +206,7 @@ export default {
                         // continue;
                     } else if (
                         this.danmuQueue[i].startTime >
-                        this.displayMills + Duration / 4
+                        this.displayMills + 100
                     ) {
                         i++;
                         console.log(`没到播放时间:${this.danmuQueue[i].index}`);
@@ -207,7 +218,7 @@ export default {
                         // i++;
                     }
                 }
-            }, Duration / 4);
+            }, Duration / 20);
         },
         //   弹幕展示控制
         displayDanmu(danmu, poolIndex) {
@@ -323,9 +334,9 @@ export default {
                 //     danmu.startTime +
                 //     Duration * playerWidth / (danmu.width + playerWidth)
                 // );
-                console.log(`result:${result}`);
+                console.log(`result:${result},channelIndex:${channel.index}`);
                 if (result >= 0) {
-                    console.log(`轨道验证失败：${channel.index}`);
+                    // console.log(`轨道验证失败：`);
                 }
                 return result <= 0;
             });
@@ -357,7 +368,7 @@ export default {
                         channel.danmu = danmu;
                     });
                     danmu.channelId = channels[i].index;
-                    // console.log(`i:${i},danmuHeight:${danmu.height}`);
+                    console.log(`channelIndex:${channels[i].index}`);
                     return true;
                 }
                 i++;

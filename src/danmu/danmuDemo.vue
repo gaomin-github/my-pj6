@@ -11,7 +11,7 @@
             </section>-->
 
             <!-- </section> -->
-            <section class="animation" v-if="pools&&pools.length>0">
+            <section class="animation" v-show="pools&&pools.length>0">
                 <section class="animation-layer" v-for="(pool,poolIndex) in pools" :key="poolIndex">
                     <section
                         v-show="pool&&pool.danmus&&pool.danmus.length>0&&poolIndex===0"
@@ -67,33 +67,10 @@ section {
 .player-container {
     width: 60%;
     height: 260px;
-    background: rgb(0, 0, 0);
-    margin: 20%;
+    // background: rgb(0, 0, 0);
+    margin: 10px 20%;
     position: relative;
-}
-.control-bar,
-.manual-bar {
-    height: 60px;
-    span {
-        font-size: 16px;
-        line-height: 30px;
-    }
-    button {
-        height: 30px;
-        line-height: 30px;
-        border-radius: 5px;
-        //   margin: 5px;
-        outline: none;
-    }
-}
-.time-container {
-    display: inline-block;
-    width: 100px;
-    height: 60px;
-    line-height: 60px;
-    font-size: 16px;
-    white-space: nowrap;
-    // border: 1px black solid;
+    border: 1px black solid;
 }
 .animation {
     position: relative;
@@ -128,6 +105,31 @@ section {
     display: inline;
     word-wrap: none;
     white-space: nowrap;
-    border: 1px rgb(255, 255, 255) solid;
+    border: 1px pink solid;
+    position: absolute;
+}
+.control-bar,
+.manual-bar {
+    height: 60px;
+    span {
+        font-size: 16px;
+        line-height: 30px;
+    }
+    button {
+        height: 30px;
+        line-height: 30px;
+        border-radius: 5px;
+        //   margin: 5px;
+        outline: none;
+    }
+}
+.time-container {
+    display: inline-block;
+    width: 100px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 16px;
+    white-space: nowrap;
+    // border: 1px black solid;
 }
 </style>

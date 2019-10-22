@@ -42,7 +42,7 @@
         poolNum:{{pools&&pools.length}}
         <section class="control-bar">
             <section class="time-container">{{ displayTimeMsg }}</section>
-            <button @click="startPlayer(0)">播放器开始</button>
+            <button @click="init">播放器开始</button>
             <button @click="pausePlayer">播放器暂停</button>
             <button @click="continuePlayer">播放器继续</button>
         </section>

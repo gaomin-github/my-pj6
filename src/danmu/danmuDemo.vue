@@ -2,13 +2,11 @@
     <section>
         <section class="player-container">
             <!-- <section class="animation"> -->
-            <!-- <section
-          class="animation-item"
-          ref="animationItem"
-          v-if="animationTestShow"
-        >
-          {{ animationTestText }}
-            </section>-->
+            <section
+                class="animation-item"
+                ref="animationItem"
+                v-if="animationTestShow"
+            >{{ animationTestText }}</section>
 
             <!-- </section> -->
             <section class="animation" v-show="pools&&pools.length>0">
@@ -59,6 +57,10 @@
 </template>
 <script src="./danmuDemo.js"></script>
 <style lang="scss" scoped>
+* {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -webkit-transform: translateZ(0) scale(1, 1);
+}
 section {
     display: block;
     // width: 100%;
@@ -77,16 +79,16 @@ section {
     width: 100%;
     height: 100%;
     display: block;
-    /* &-item {
-      display: inline;
-      color: rgb(255, 0, 255);
-      font-size: 16px;
-      position: absolute;
-      border: 1px rgb(255, 255, 255) solid;
-
-      word-wrap: none;
-      white-space: nowrap;
-    } */
+    &-item {
+        display: inline;
+        color: rgb(255, 0, 255);
+        font-size: 16px;
+        position: absolute;
+        border: 1px rgb(255, 255, 255) solid;
+        left: 100%;
+        word-wrap: none;
+        white-space: nowrap;
+    }
     &-layer {
         position: absolute;
         border: 1px red solid;
@@ -105,8 +107,10 @@ section {
     display: inline;
     word-wrap: none;
     white-space: nowrap;
-    border: 1px pink solid;
+    font-weight: 400;
+    // border: 1px pink solid;
     position: absolute;
+    // left: 100%;
 }
 .control-bar,
 .manual-bar {

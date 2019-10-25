@@ -45,7 +45,7 @@
             <button @click="continuePlayer">播放器继续</button>
         </section>
         <section class="manual-bar">
-            <button @click="sendDanmuTest">增加弹幕</button>
+            <button @click="sendDanmu">增加弹幕</button>
             <button @click="autoAddDanmu">自动添加弹幕</button>
         </section>
         <section class="test">

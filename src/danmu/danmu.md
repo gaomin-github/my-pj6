@@ -9,7 +9,6 @@ text：文本内容
 计算得到的属性
 width：宽度度
 height：高度
-remainTime:剩余时间
 top:到播放容器顶部距离
 left:到播放容器左端距离
 channelId:轨道ids

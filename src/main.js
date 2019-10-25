@@ -12,12 +12,12 @@ Vue.use(VueRouter)
 import router from './router.js';
 
 import App from './app.vue';
-// import eruda from 'eruda';
+import eruda from 'eruda';
 // 注册是为了能在vue实例中使用route实例
 // import image1 from '../static/1.jpg';
 console.log(__dirname);
 
-// eruda.init();
+eruda.init();
 // Vue.use(tip);
 
 let vm = new Vue({

@@ -14,6 +14,7 @@ export default {
             // startMills: 0,
             displayMills: 0,
             lastDisplayTime: null,
+            playerStatus: 'off',     //播放器状态，默认关闭
             startTimer: null, //定时更新控制条时间信息
             displayTimeMsg: "0:0:0",
             // 动画测试相关
@@ -26,7 +27,7 @@ export default {
             visiableDanmus: [], //正在展示弹幕
             danmuCollectTimer: null, //定时收集弹幕信息
             danmuDisplayTimer: null, //定时更新弹幕屏信息
-            danmuFilterTimer: null, //定时销毁弹幕dom节点
+            danmuCreateTimer: null, //不定时生成测试弹幕数据
 
             pools: [], //弹幕池
             danmuNum: 0,     //弹幕测试
@@ -66,20 +67,20 @@ export default {
         //     this.filterDanmu();
         // },
         init() {
+            this.playerStatus = 'on';
             this.startPlayer();
             this.filterDanmu();
+            this.autoAddDanmu();
+
         },
         startPlayer(lastTime) {
             // console.log(`startPlayer:${new Date().getTime()}`);
-
+            this.playerStatus = 'on';
             this.lastDisplayTime = new Date();  //记录本次定时器执行时间
             lastTime = lastTime || new Date().getTime();    //记录上次播放停止节点（用于暂停功能）
             this.updatePlayerInfo(lastTime);
             // console.log(`startPlayer updateTime:${new Date().getTime()},lastDisplayTime:${this.lastDisplayTime.getMilliseconds()}`);
 
-            // this.startTimer = setTimeout(() => {
-            //     this.startPlayer(this.lastDisplayTime);
-            // }, 1000 - this.lastDisplayTime.getMilliseconds());
             this.startTimer = setTimeout(() => {
                 this.startPlayer(this.lastDisplayTime);
             }, 1000 - (new Date().getTime() - this.lastDisplayTime.getTime()));
@@ -95,11 +96,9 @@ export default {
             // console.log(`displayTimeMsg:${this.displayTimeMsg}`);
 
         },
-        // pausePlayer() {
-        //     clearInterval(this.startTimer);
-        //     clearInterval(this.danmuDisplayTimer);
-        // },
         pausePlayer() {
+            this.playerStatus = 'off';
+
             // console.log('暂停播放器')
             // 暂停弹幕池动画
             this.pauseDanmu();
@@ -111,23 +110,34 @@ export default {
             // 暂停弹幕过滤任务
             clearTimeout(this.danmuDisplayTimer);
             this.danmuDisplayTimer = null;
+            // 暂停自动生成弹幕测试数据
+            clearTimeout(this.danmuCreateTimer);
+            this.danmuCreateTimer = null;
+            // 先停止自动生成弹幕测试数据，dom之后再停止动画？
         },
         continuePlayer() {
+            this.playerStatus = 'on';
+
             // 启动播放器时间线
             this.startPlayer(new Date().getTime());
             // 启动弹幕过滤任务
             this.filterDanmu();
             // 恢复弹幕池动画
             this.continueDanmu();
+            // bug：继续弹幕动画时，pool中的danmu获取不到dom，有延迟性
+            // 播放结束时定时延迟？重播时新添加的dom太快？
+            setTimeout(() => {
+
+                this.autoAddDanmu();
+            }, 20)
             // this.continueAnimation();
         },
-        // 弹幕数据抓取
-        sendDanmuTest() {
-            for (let i = 0; i < 1; i++) {
-                this.manualAddDanmu();
-                // this.filterDanmu();
-            }
-            // console.table(this.danmuQueue);
+        // 修改进度条
+        changePlayer(newDisplayMills) {
+            // 更新时间线
+            this.displayMills = newDisplayMills;
+            this.lastDisplayTime = new Date();
+
         },
         manualAddDanmu() {
             let random = Math.random();
@@ -157,8 +167,7 @@ export default {
 
             };
             danmu = this.refactorDanmu(danmu);
-            // console.log(`danmu.index:${danmu.index}`);
-            this.danmuQueue.push(danmu);
+            return danmu;
         },
         refactorDanmu(danmu) {
             let text = '';
@@ -180,12 +189,6 @@ export default {
                 danmu
             );
         },
-        // 定时生成测试弹幕数据
-        autoAddDanmu() {
-            setTimeout(() => {
-                this.manualAddDanmu();
-            }, Math.floor(Math.random() * 1000))
-        },
         // 动画效果测试
         displayAnimation() {
             this.animationTestStartTime = this.displayMills;
@@ -201,13 +204,8 @@ export default {
             }, 0);
         },
         pauseAnimation() {
-            // this.animationTestRemainTime -=
-            //   new Date().getTime() - this.animationTestStartTime;
             this.animationTestRemainTime =
                 Duration - (this.displayMills - this.animationTestStartTime);
-            console.log(
-                "animationTestRemainTime:" + this.animationTestRemainTime
-            );
             let animationDom = this.$refs.animationItem;
             animationDom.style.left = `${playerWidth -
                 ((playerWidth + this.animationTestText.length * 16) *
@@ -217,7 +215,6 @@ export default {
             animationDom.style.transition = ``;
         },
         continueAnimation() {
-            // this.animationTestStartTime = new Date().getTime();
             let animationDom = this.$refs.animationItem;
             animationDom.style.transform = `translateX(-${((playerWidth +
                 this.animationTestText.length * 16) *
@@ -225,9 +222,7 @@ export default {
                 Duration}px) translateZ(0)`;
             animationDom.style.transition = `transform ${this.animationTestRemainTime}ms linear 0s`;
         },
-        startDanmu() {
-            this.filterDanmu();
-        },
+
         // 轨道初始化
         initChannels() {
             let channelList = [];
@@ -242,8 +237,24 @@ export default {
             }
             return channelList;
         },
+        // 定时生成测试弹幕数据
+        autoAddDanmu() {
+            let danmu = this.manualAddDanmu();
+            console.log(`自动生成弹幕:${danmu.index}`);
+            this.danmuQueue.push(danmu);
+            this.danmuCreateTimer = setTimeout(() => {
+                this.autoAddDanmu();
+            }, Math.floor(Math.random() * 1000));
+        },
         // 实时弹幕
-
+        sendDanmu() {
+            let danmu = this.manualAddDanmu();
+            // 弹幕播放时间为当前时间线
+            danmu.startTime = this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime());
+            //   http请求
+            danmu.createTime = this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime());
+            this.displayDanmu(danmu, 0);
+        },
         // 历史弹幕展示
         filterDanmu() {
             let i = 0;
@@ -301,6 +312,8 @@ export default {
             if (channelResult) {
                 // console.log('find useful channel');
                 pool.danmus.push(danmu);
+                // 播放器状态
+                // if (this.playerStatus !== 'on') return;
                 // 动画展示
                 danmu.createTime = this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime());
 
@@ -342,8 +355,6 @@ export default {
             }
         },
         pauseDanmu() {
-            // clearInterval(this.danmuDisplayTimer);
-
             this.pools.map(pool => {
                 pool.danmus &&
                     pool.danmus.map(danmu => {
@@ -364,6 +375,11 @@ export default {
                 pool.danmus &&
                     pool.danmus.map(danmu => {
                         danmu.lastDisplayTime = new Date();
+                        if (!this.$refs[danmu.index]) {
+                            console.log(`danmu.index not exist:${danmu.index}`)
+                            // console.log();
+                            return;
+                        }
                         this.$refs[
                             danmu.index
                         ][0].style.transition = `transform ${danmu.duration - danmu.moveTime}ms linear 0s`;

@@ -70,7 +70,7 @@ export default {
             this.filterDanmu();
         },
         startPlayer(lastTime) {
-            console.log(`startPlayer:${new Date().getTime()}`);
+            // console.log(`startPlayer:${new Date().getTime()}`);
 
             this.lastDisplayTime = new Date();  //记录本次定时器执行时间
             lastTime = lastTime || new Date().getTime();    //记录上次播放停止节点（用于暂停功能）
@@ -82,7 +82,7 @@ export default {
             // }, 1000 - this.lastDisplayTime.getMilliseconds());
             this.startTimer = setTimeout(() => {
                 this.startPlayer(this.lastDisplayTime);
-            }, 1000 - (new Date.getTime() - this.lastDisplayTime.getTime()));
+            }, 1000 - (new Date().getTime() - this.lastDisplayTime.getTime()));
 
         },
         updatePlayerInfo(lastTime) {
@@ -92,7 +92,7 @@ export default {
             let displayMinute = Math.floor(displayMills / (1000 * 60) % 60);
             let displaySecond = Math.floor(displayMills / 1000 % 60);
             this.displayTimeMsg = `${displayHour}:${displayMinute}:${displaySecond}`;
-            console.log(`displayTimeMsg:${this.displayTimeMsg}`);
+            // console.log(`displayTimeMsg:${this.displayTimeMsg}`);
 
         },
         // pausePlayer() {
@@ -166,8 +166,8 @@ export default {
             for (let i = 0; i < Math.floor(random * 10); i++) {
                 text += '测试';
             }
-            // danmu.text = `${text},${danmu.index}`;
-            danmu.text = `${text}`;
+            danmu.text = `${text},${danmu.index}`;
+            // danmu.text = `${text}`;
 
             return Object.assign(
                 {
@@ -180,8 +180,11 @@ export default {
                 danmu
             );
         },
+        // 定时生成测试弹幕数据
         autoAddDanmu() {
-            // setInterval(this.manualAddDanmu, 2000);
+            setTimeout(() => {
+                this.manualAddDanmu();
+            }, Math.floor(Math.random() * 1000))
         },
         // 动画效果测试
         displayAnimation() {
@@ -239,94 +242,44 @@ export default {
             }
             return channelList;
         },
-        // filterDanmu() {
-        //     // 不漏掉数据关键在当前时间，统一用一个当前时间？分次获取？后续修改？
-        //     // 定期抓取弹幕信息
-        //     // console.log('Duration:' + Duration / 4);
-        //     // console.log("定期抓取弹幕信息");
-        //     this.danmuDisplayTimer = setInterval(() => {
-        //         // console.table(this.pools[0] && this.pools[0].danmus);
-        //         let i = 0;
-        //         while (i < this.danmuQueue.length) {
-        //             // console.log(`danmuQueue.length:${this.danmuQueue.length}`);
-        //             // if (
-        //             //     this.danmuQueue[i].startTime <
-        //             //     this.displayMills - Duration / 4
-        //             // ) {
-        //             if (
-        //                 this.danmuQueue[i].startTime <
-        //                 this.displayMills - 100
-        //             ) {
-        //                 console.log(`弹幕过期，删除：${this.danmuQueue[i].index}`);
-        //                 this.danmuQueue.splice(i, 1);
-        //                 // console.log(`删除后${this.danmuQueue.length}`);
-        //                 // console.table(this.danmuQueue);
-        //                 // continue;
-        //             } else if (
-        //                 this.danmuQueue[i].startTime >
-        //                 this.displayMills + 100
-        //             ) {
-        //                 i++;
-        //                 console.log(`没到播放时间:${this.danmuQueue[i].index}`);
-        //                 // continue;
-        //             } else {
-        //                 // console.log(`展示弹幕:${this.danmuQueue[i].index}`);
-        //                 this.displayDanmu(this.danmuQueue[i], 0);
-        //                 this.danmuQueue.splice(i, 1);
-        //                 // i++;
-        //             }
-        //         }
-        //     }, Duration / 20);
-        // },
+        // 实时弹幕
+
+        // 历史弹幕展示
         filterDanmu() {
             let i = 0;
+            let currentTime = new Date();   //纠正每次数据过滤偏差
             new Promise((resolve, reject) => {
-                // let lastDisplayTime = (new Date().getTime() - this.lastDisplayTime.getTime())();
-                let lastDisplayTime = (new Date().getTime() - this.lastDisplayTime.getTime())();
-
+                let lastDisplayTime = (new Date().getTime() - this.lastDisplayTime.getTime());
                 while (i < this.danmuQueue.length) {
                     if (
                         this.danmuQueue[i].startTime <
                         this.displayMills + lastDisplayTime
                     ) {
-                        console.log(`弹幕过期，删除：${this.danmuQueue[i].index},startTime:${this.danmuQueue[i].startTime}`);
+                        // console.log(`弹幕过期，删除：${this.danmuQueue[i].index},startTime:${this.danmuQueue[i].startTime}`);
                         this.danmuQueue.splice(i, 1);
                         continue;
                     }
-                    // if (
-                    //     this.danmuQueue[i].startTime >=
-                    //     this.displayMills + this.lastDisplayTime.getMilliseconds() + Duration / 10
-                    // ) {
                     if (
                         this.danmuQueue[i].startTime >=
-                        this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())() + Duration / 10
+                        this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()) + Duration / 10
                     ) {
-                        console.log(`没到播放时间:${this.danmuQueue[i].index}`);
+                        // console.log(`没到播放时间:${this.danmuQueue[i].index}`);
                         i++;
                         continue;
                     }
                     // 展示弹幕
-                    // this.danmuQueue[i].duration = Duration + (this.danmuQueue[i].startTime - this.displayMills - this.lastDisplayTime.getMilliseconds());
-                    this.danmuQueue[i].duration = Duration + (this.danmuQueue[i].startTime - this.displayMills - (new Date().getTime() - this.lastDisplayTime.getTime())());
+                    this.danmuQueue[i].duration = Duration + (this.danmuQueue[i].startTime - this.displayMills - (new Date().getTime() - this.lastDisplayTime.getTime()));
 
-                    // this.danmuQueue[i].createTime = this.displayMills + this.lastDisplayTime.getMilliseconds();
-                    this.danmuQueue[i].createTime = this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())();
-                    // console.log(`展示弹幕:${this.danmuQueue[i].index};duration:${this.danmuQueue[i].duration}`);
+                    this.danmuQueue[i].createTime = this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime());
                     this.displayDanmu(this.danmuQueue[i], 0);
-                    // console.log(`删除已展示item:${this.danmuQueue[i].index}`);
                     this.danmuQueue.splice(i, 1);
-
                 }
                 resolve();
             }).then(() => {
                 this.danmuDisplayTimer = setTimeout(() => {
                     this.filterDanmu();
-                }, Duration / 10);
+                }, Duration / 10 - (new Date().getTime() - currentTime.getTime()));
             })
-            // return;
-            // }).then(() => {
-
-            // })
         },
         //   弹幕展示控制
         displayDanmu(danmu, poolIndex) {
@@ -347,17 +300,15 @@ export default {
             let channelResult = this.channelCheck(danmu, pool);
             if (channelResult) {
                 // console.log('find useful channel');
-                //   danmu.channelId = channelIndex;
                 pool.danmus.push(danmu);
                 // 动画展示
-
-                // danmu.createTime = this.displayMills + this.lastDisplayTime.getMilliseconds();
-                danmu.createTime = this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())();
+                danmu.createTime = this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime());
 
                 danmu.duration = Duration + danmu.startTime - danmu.createTime;
                 // setTimeout(() => {
                 this.$nextTick(() => {
-                    danmu.displayTime = new Date();
+                    danmu.lastDisplayTime = new Date();
+
                     let dmDom = this.$refs[danmu.index][0];
                     dmDom.style.position = `absolute`;
 
@@ -367,7 +318,7 @@ export default {
                     dmDom.style.fontSize = `${danmu.fontSize}px`;
                     // dmDom.style.transform = `translateX(-${(playerWidth)}px`;
                     dmDom.style.transition = `transform ${danmu.duration}ms linear 0s`;
-                    let animateWidth = Math.ceil(playerWidth + danmu.width) % 2 == 0 ? Math.ceil(playerWidth + danmu.width) : Math.ceil(playWidth + danmu.width) + 1
+                    let animateWidth = Math.ceil(playerWidth + danmu.width) % 2 == 0 ? Math.ceil(playerWidth + danmu.width) : Math.ceil(playerWidth + danmu.width) + 1
                     setTimeout(() => {
 
                         dmDom.style.transform = `translate3d(-${(animateWidth)}px,0,0)`;
@@ -391,32 +342,18 @@ export default {
             }
         },
         pauseDanmu() {
-            clearInterval(this.danmuDisplayTimer);
-            // clearInterval(this.danmuFilterTimer);
-            // let timeline = this.displayMills + this.lastDisplayTime.getMilliseconds();
-            let timeline = this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())();
+            // clearInterval(this.danmuDisplayTimer);
 
             this.pools.map(pool => {
                 pool.danmus &&
                     pool.danmus.map(danmu => {
-
-                        // if (danmu.startTime + Duration < this.displayMills + this.lastDisplayTime.getMilliseconds()) {
-                        //     return;
-                        // }
-                        if (danmu.startTime + Duration < this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())()) {
+                        // 弹幕播放结束
+                        if (danmu.startTime + Duration < this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())) {
                             return;
                         }
-                        // let timeline = this.displayMills + this.lastDisplayTime.getMilliseconds();
-
-                        // danmu.remainTime = Duration - (this.displayMills - danmu.startTime);
                         this.$refs[danmu.index][0].style.transition = "";
                         this.$refs[danmu.index][0].style.transform = "";
-                        // this.$refs[danmu.index][0].style.left = `${playerWidth - (playerWidth + danmu.width) * (this.displayMills + this.lastDisplayTime.getMilliseconds() - danmu.createTime) /
-                        //     danmu.duration}px`;
-                        // let remainTime =
-                        danmu.moveTime += new Date().getTime() - danmu.displayTime.getTime();
-                        // console.table(`displayMills:${this.displayMills};lastDisplayTime:${this.lastDisplayTime.getMilliseconds()}`);
-                        // this.$refs[danmu.index][0].style.left = `${playerWidth - (playerWidth + danmu.width) * (timeline - danmu.createTime - 50) / danmu.duration}px`;
+                        danmu.moveTime += new Date().getTime() - danmu.lastDisplayTime.getTime();
                         this.$refs[danmu.index][0].style.left = `${playerWidth - (playerWidth + danmu.width) * danmu.moveTime / danmu.duration}px`;
 
                     });
@@ -426,32 +363,14 @@ export default {
             this.pools.map(pool => {
                 pool.danmus &&
                     pool.danmus.map(danmu => {
-                        danmu.displayTime = new Date();
-                        // let timeline = this.displayMills + this.lastDisplayTime.getMilliseconds();
-                        danmu.remainTime =
-                            Duration - (this.displayMills - danmu.startTime);
-                        // this.$refs[
-                        //     danmu.index
-                        // ][0].style.transition = `transform ${danmu.createTime + danmu.duration - timeline}ms linear 0s`;
+                        danmu.lastDisplayTime = new Date();
                         this.$refs[
                             danmu.index
                         ][0].style.transition = `transform ${danmu.duration - danmu.moveTime}ms linear 0s`;
-
-                        // this.$refs[
-                        //     danmu.index
-                        // ][0].style.transform = `translateX(-${(playerWidth + danmu.width) *
-                        // (danmu.startTime + Duration - (this.displayMills + this.lastDisplayTime.getMilliseconds())) /
-                        // danmu.duration}px)`;
-                        // this.$refs[
-                        //     danmu.index
-                        // ][0].style.transform = `translateX(-${(playerWidth + danmu.width) * (danmu.duration - danmu.moveTime) / danmu.duration}px)`;
                         let animateWidth = Math.ceil((playerWidth + danmu.width) * (danmu.duration - danmu.moveTime) / danmu.duration) % 2 == 0 ? Math.ceil((playerWidth + danmu.width) * (danmu.duration - danmu.moveTime) / danmu.duration) : (Math.ceil((playerWidth + danmu.width) * (danmu.duration - danmu.moveTime) / danmu.duration) + 1);
                         this.$refs[
                             danmu.index
                         ][0].style.transform = `translate3d(-${animateWidth}px,0,0)`;
-
-                        // this.$refs[danmu.index][0].style.left = `${playerWidth - (playerWidth + danmu.width) * (this.displayMills + this.lastDisplayTime.getMilliseconds() - danmu.createTime) /
-                        //     danmu.duration}px`;
                         this.$refs[danmu.index][0].style.left = `${playerWidth - (playerWidth + danmu.width) * danmu.moveTime / danmu.duration}px`;
                     });
             });
@@ -472,10 +391,10 @@ export default {
                 //     return true;
                 // }
                 // let channelRight = (channel.danmu.width + playerWidth) * (this.displayMills + this.lastDisplayTime.getMilliseconds() - channel.danmu.createTime) / channel.danmu.duration;
-                if (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())() - channel.danmu.createTime > channel.danmu.duration) {
+                if (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()) - channel.danmu.createTime > channel.danmu.duration) {
                     return true;
                 }
-                let channelRight = (channel.danmu.width + playerWidth) * (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())() - channel.danmu.createTime) / channel.danmu.duration;
+                let channelRight = (channel.danmu.width + playerWidth) * (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()) - channel.danmu.createTime) / channel.danmu.duration;
 
                 // 轨道被占满，右侧无空间
                 if (channel.danmu.duration && channelRight <= channel.danmu.width) {
@@ -483,22 +402,11 @@ export default {
                     return false;
                 }
 
-                // let result = channel.danmu.startTime + channel.danmu.duration - (danmu.startTime +
-                //     danmu.duration * playerWidth / (danmu.width + playerWidth))
-                // let result = channel.danmu.creatTime + channel.danmu.duration - (this.displayMills + this.lastDisplayTime.getMilliseconds() +
-                //     danmu.duration * playerWidth / (danmu.width + playerWidth))
-                // let result = channel.danmu.startTime + Duration - (this.displayMills + this.lastDisplayTime.getMilliseconds() +
-                //     danmu.duration * playerWidth / (danmu.width + playerWidth))
-                let result = channel.danmu.startTime + Duration - (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())() +
+                let result = channel.danmu.startTime + Duration - (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()) +
                     danmu.duration * playerWidth / (danmu.width + playerWidth))
                 // console.log(`channelIndex:${channelIndex},S1endTime:${channel.danmu.startTime + Duration}，S2crashTime:${danmu.startTime + Duration * playerWidth / (danmu.width + playerWidth)}`);
                 // console.log(`danmu startTime:${danmu.startTime},duration:${danmu.duration}`)
-                // return (
-                //     channel.danmu.startTime + Duration <=
-                //     danmu.startTime +
-                //     Duration * playerWidth / (danmu.width + playerWidth)
-                // );
-                console.log(`result:${result},channelIndex:${channel.index},createTime:${channel.danmu.creatTime}`);
+                // console.log(`result:${result},channelIndex:${channel.index},createTime:${channel.danmu.creatTime}`);
                 if (result >= 0) {
                     // console.log(`轨道验证失败：`);
                 }
@@ -506,23 +414,11 @@ export default {
             });
             // console.log("i:" + i);
             if (!channels || channels.length < channelNum) {
-                console.log('当前层没找到适合轨道');
+                // console.log('当前层没找到适合轨道');
                 return false;
             }
             // let p = channels[0].index;
-            console.log('channelIndex:' + channels[0].index + 'channelNum:' + channelNum);
-
-            // console.table(channels);
-            // while (i + channelNum - 1 <= channels[channels.length - 1].index) {
-            //     if (i + channelNum - 1 === channels[i + channelNum - 1].index) {
-            //         channels.slice(i, i + channelNum).map(channel => {
-            //             channel.danmu = danmu;
-            //         });
-            //         danmu.channelId = i;
-            //         return true;
-            //     }
-            //     i++;
-            // }
+            // console.log('channelIndex:' + channels[0].index + 'channelNum:' + channelNum);
             let i = 0;
             // console.table(channels);
             while (i + channelNum < channels.length) {
@@ -532,13 +428,13 @@ export default {
                         channel.danmu = danmu;
                     });
                     danmu.channelId = channels[i].index;
-                    console.log(`channelIndex:${channels[i].index}`);
+                    // console.log(`channelIndex:${channels[i].index}`);
                     return true;
                 }
                 i++;
             }
 
-            console.log('当前层没找到适合轨道');
+            // console.log('当前层没找到适合轨道');
             return false;
 
         }

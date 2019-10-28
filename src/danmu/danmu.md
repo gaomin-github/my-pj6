@@ -13,8 +13,8 @@ top:到播放容器顶部距离
 left:到播放容器左端距离
 channelId:轨道ids
 poolId：弹幕池id
+createTime:dom节点被创建时间（相对播放器时间轴）    //弹幕过滤通过时更新一次；作用：碰撞检测
 displayTime:上次动画播放时间    //创建，继续播放时更新
-createTime:dom节点被创建时间（相对播放器时间轴）    //弹幕过滤通过时更新一次
 moveTime:弹幕已运行时间     //弹幕创建，继续播放时更新
 
 

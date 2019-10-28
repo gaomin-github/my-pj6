@@ -43,6 +43,8 @@
             <button @click="init">播放器开始</button>
             <button @click="pausePlayer">播放器暂停</button>
             <button @click="continuePlayer">播放器继续</button>
+            <button @click="changePlayer(displayMills+20000)">快进</button>
+            <button @click="changePlayer(displayMills-20000)">回退</button>
         </section>
         <section class="manual-bar">
             <button @click="sendDanmu">增加弹幕</button>

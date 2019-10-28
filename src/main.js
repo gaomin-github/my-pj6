@@ -17,7 +17,7 @@ import eruda from 'eruda';
 // import image1 from '../static/1.jpg';
 console.log(__dirname);
 
-eruda.init();
+// eruda.init();
 // Vue.use(tip);
 
 let vm = new Vue({

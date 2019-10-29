@@ -1,6 +1,6 @@
 <template>
     <section class="app">
-        <h3>app page init test</h3>
+        <!-- <h3>app page init test</h3> -->
         <!-- <section @click="aesGetTest">aes测试get</section>
         <section @click="aesPostTest">aes测试post</section>
         <test/>-->

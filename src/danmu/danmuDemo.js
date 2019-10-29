@@ -1,9 +1,10 @@
 const SW = document.body.clientWidth || document.documentElement.clientWidth;
 const SH = 260;
-const playerWidth = SW * 0.6; //playerWidth
+const playerWidth = SW * 0.9; //playerWidth
 // const PH=SH*0.9*
 const Duration = 8000; //弹幕生命周期
-const channelNum = Math.floor(SH / 12);
+const channelNum = Math.floor(360 / 12);
+const MinChannelNum = Math.floor(200 / 12);
 const ChannelHeight = 12;
 const HorizenMargin = 10;
 const VerticalMargin = 5;
@@ -26,13 +27,20 @@ export default {
             danmuFetchTimer: null, //定时收集弹幕信息
             danmuDisplayTimer: null, //定时更新弹幕屏信息
             danmuCreateTimer: null, //不定时生成测试弹幕数据
-
+            danmuRecycleTimer: null, //定时回收已展示弹幕
             pools: [], //弹幕池
             danmuNum: 0,     //弹幕测试
+            isHorizen: false,    //是否横屏
         };
     },
     mounted() {
-        // this.init();
+        // 初始化弹幕容器样式
+        this.changeOrientation();
+        // 监听横竖屏切换
+        window.addEventListener('resize', () => {
+
+            this.changeOrientation();
+        })
     },
     methods: {
         init() {
@@ -40,7 +48,7 @@ export default {
             this.startPlayer();
             this.filterDanmu();
             this.autoAddDanmu();
-
+            this.recycleDanmu();
         },
         startPlayer(lastTime) {
             // console.log(`startPlayer:${new Date().getTime()}`);
@@ -112,6 +120,40 @@ export default {
             // this.filterDanmu();
             this.autoAddDanmu();
 
+        },
+        changeOrientation() {
+            let SW = document.body.clientWidth || document.documentElement.clientWidth;
+            let SH = document.body.clientHeight || document.documentElement.clientHeight;
+            let playerEle = this.$refs['danmuContainer'];
+            //   播放器宽高变化
+            // 竖屏模式
+            if (SW < SH) {
+                playerEle.style.width = `${SW * 0.9}px`;
+                playerEle.style.height = `200px`;
+            } else {
+                // 横屏模式
+                playerEle.style.width = `${SW * 0.9}px`;
+                playerEle.style.height = `${SH}px`;
+            }
+            // 轨道数量如果动态变化，弹幕显示位置也会动态变化
+            // 轨道数量如果固定，竖屏下有一部分弹幕被隐藏；竖屏下实时弹幕也会被隐藏
+            // 因为字体不一致，横屏下显示的文字切换到竖屏，出现文字显示不完整问题：
+            // 显示时监控可用轨道号，过滤弹幕
+            // 腾讯处理方式：竖屏下不显示弹幕
+            // 人人视频：只能横屏播放
+
+            // 轨道数量变化
+            // 现有弹幕池处理    
+        },
+        // 只有横屏模式下可以调整弹幕样式
+        // 修改弹幕容器样式
+        changeDanmuOpacity(param) {
+            let playerEle = this.$refs['danmuContainer'];
+            playerEle.style.opacity = `${param}`;
+        },
+        changeArea(param) {
+            let playerEle = this.$refs['danmuContainer'];
+            playerEle.style.height = `${SH * param}px`;
         },
         manualAddDanmu() {
             let random = Math.random();
@@ -218,6 +260,24 @@ export default {
                 this.autoAddDanmu();
             }, Math.floor(Math.random() * 1000));
         },
+        // 手动回收弹幕数据
+        recycleDanmu() {
+            this.pools.map((pool, poolIndex) => {
+                pool.danmus.map((danmu, danmuIndex) => {
+                    let result = danmu.startTime - (this.displayMills - Duration * 2);
+                    if (result < 0) {
+                        pool.danmus.splice(danmuIndex, 1);
+                    }
+                })
+
+                if (!pool || !pool.danmus || pool.danmus.length === 0) {
+                    this.pools.splice(poolIndex, 1);
+                }
+            })
+            this.danmuRecycleTimer = setTimeout(() => {
+                this.recycleDanmu();
+            }, Duration / 10)
+        },
         // 实时弹幕
         sendDanmu() {
             let danmu = this.manualAddDanmu();
@@ -274,29 +334,11 @@ export default {
                     this.displayDanmu(this.danmuQueue[i], 0);
                     this.danmuQueue.splice(i, 1);
                 }
+                // this.recycleDanmu();
                 resolve();
             }).then(() => {
                 this.danmuDisplayTimer = setTimeout(() => {
-
                     this.filterDanmu();
-                    // 弹幕池数据回收
-                    console.log(`-------------------------弹幕数据回收------------------------`);
-                    this.pools.map((pool, poolIndex) => {
-                        pool.danmus.map((danmu, danmuIndex) => {
-                            let result = danmu.startTime - (this.displayMills - Duration * 2);
-                            if (result < 0) {
-                                console.log(`回收弹幕数据：danmuIndex:${danmuIndex},danmu.index:${danmu.index},result:${result}`);
-                                // delete danmu
-                                pool.danmus.splice(danmuIndex, 1);
-                            }
-                        })
-
-                        // if (!pool || !pool.danmus || pool.danmus.length === 0) {
-                        //     this.pools.splice(poolIndex, 1);
-                        //     console.log(`回收弹幕层,poolIndex:${poolIndex}`)
-                        // }
-                    })
-
                 }, Duration / 10 - (new Date().getTime() - currentTime.getTime()));
             })
         },

@@ -1,40 +1,25 @@
 <template>
     <section>
-        <section class="player-container">
-            <!-- <section class="animation"> -->
-            <section
+        <section class="player-container" ref="playerContainer">
+            <!-- <section
                 class="animation-item"
                 ref="animationItem"
                 v-if="animationTestShow"
-            >{{ animationTestText }}</section>
-
-            <!-- </section> -->
-            <section class="animation" v-show="pools&&pools.length>0">
+            >{{ animationTestText }}</section>-->
+            <section class="animation" v-show="pools&&pools.length>0" ref="danmuContainer">
                 <section class="animation-layer" v-for="(pool,poolIndex) in pools" :key="poolIndex">
                     <section
                         v-show="pool&&pool.danmus&&pool.danmus.length>0&&poolIndex===0"
                         class="danmu-content"
                     >
-                        <section class="danmu-item" v-for="danmu in pool.danmus" :key="danmu.index">
-                            <section
-                                v-if="danmu.startTime>displayMills+8000*2"
-                                :ref="`${danmu.index}`"
-                            >{{ danmu.text}},{{poolIndex}}</section>
-                        </section>
+                        <section
+                            class="danmu-item"
+                            v-for="danmu in pool.danmus"
+                            :key="danmu.index"
+                            :ref="`${danmu.index}`"
+                        >{{ danmu.text}},{{poolIndex}}</section>
                     </section>
                 </section>
-
-                <!-- <section
-                    v-if="pools[0]&&pools[0].danmus&&pools[0].danmus.length>0"
-                    class="danmu-content"
-                >
-                    <section
-                        class="danmu-item"
-                        v-for="danmu in pools[0].danmus"
-                        :key="danmu.index"
-                        :ref="`${danmu.index}`"
-                    >{{ danmu.text }}</section>
-                </section>-->
             </section>
         </section>
         poolNum:{{pools&&pools.length}}
@@ -43,12 +28,27 @@
             <button @click="init">播放器开始</button>
             <button @click="pausePlayer">播放器暂停</button>
             <button @click="continuePlayer">播放器继续</button>
+            <!-- <br /> -->
             <button @click="changePlayer(displayMills+20000)">快进</button>
             <button @click="changePlayer(displayMills-20000)">回退</button>
+        </section>
+        <section class="danmu-bar">
+            <span>不透明度</span>
+            <button @click="changeDanmuOpacity(0.8)">+</button>
+            <button @click="changeDanmuOpacity(0.3)">-</button>
+        </section>
+        <section class="danmu-bar">
+            <span>显示区域</span>
+            <button>1/4</button>
+            <button>1/2</button>
+            <button>3/4</button>
+            <button>不重复</button>
+            <button>无限</button>
         </section>
         <section class="manual-bar">
             <button @click="sendDanmu">增加弹幕</button>
             <button @click="autoAddDanmu">自动添加弹幕</button>
+            <button @click="recycleDanmu">回收弹幕</button>
         </section>
         <section class="test">
             <button @click="displayAnimation">展示动画</button>
@@ -69,18 +69,27 @@ section {
     // height: 100%;
 }
 .player-container {
-    width: 60%;
-    height: 260px;
-    background: rgb(194, 176, 176);
-    margin: 10px 20%;
+    width: 100%;
+    height: 200px;
+    background: rgba(0, 0, 0, 1);
+    // margin: 0 5%;
     position: relative;
-    border: 1px black solid;
+    overflow-y: hidden;
 }
 .animation {
     position: relative;
-    width: 100%;
-    height: 100%;
-    display: block;
+    width: 90%;
+    height: 200px;
+    // display: block;
+    margin: 0 5%;
+    border: 1px black solid;
+    &-layer {
+        position: absolute;
+        border: 1px red solid;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
     &-item {
         display: inline;
         color: rgb(255, 0, 255);
@@ -90,13 +99,6 @@ section {
         left: 100%;
         word-wrap: none;
         white-space: nowrap;
-    }
-    &-layer {
-        position: absolute;
-        border: 1px red solid;
-        width: 100%;
-        height: 100%;
-        display: block;
     }
 }
 .danmu-content {
@@ -116,7 +118,8 @@ section {
 }
 .control-bar,
 .manual-bar {
-    height: 60px;
+    // height: 60px;
+    margin: 10px;
     span {
         font-size: 16px;
         line-height: 30px;

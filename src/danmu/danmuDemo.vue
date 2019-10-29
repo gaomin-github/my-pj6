@@ -15,12 +15,12 @@
                         v-show="pool&&pool.danmus&&pool.danmus.length>0&&poolIndex===0"
                         class="danmu-content"
                     >
-                        <section
-                            class="danmu-item"
-                            v-for="danmu in pool.danmus"
-                            :key="danmu.index"
-                            :ref="`${danmu.index}`"
-                        >{{ danmu.text}},{{poolIndex}}</section>
+                        <section class="danmu-item" v-for="danmu in pool.danmus" :key="danmu.index">
+                            <section
+                                v-if="danmu.startTime>displayMills+8000*2"
+                                :ref="`${danmu.index}`"
+                            >{{ danmu.text}},{{poolIndex}}</section>
+                        </section>
                     </section>
                 </section>
 
@@ -71,7 +71,7 @@ section {
 .player-container {
     width: 60%;
     height: 260px;
-    // background: rgb(0, 0, 0);
+    background: rgb(194, 176, 176);
     margin: 10px 20%;
     position: relative;
     border: 1px black solid;

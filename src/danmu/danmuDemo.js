@@ -109,7 +109,7 @@ export default {
             // 清空弹幕池
             this.pools = []
             // 重抓弹幕数据
-            this.filterDanmu();
+            // this.filterDanmu();
             this.autoAddDanmu();
 
         },
@@ -133,7 +133,7 @@ export default {
                     Math.floor(random * 10) % 2 === 0
                         ? "red"
                         : Math.floor(random * 10) % 3 === 0
-                            ? "white"
+                            ? "blue"
                             : "green",
                 // text: `danmu${random}`
                 // text: `测试弹幕信息${random}`
@@ -274,17 +274,29 @@ export default {
                     this.displayDanmu(this.danmuQueue[i], 0);
                     this.danmuQueue.splice(i, 1);
                 }
-                // 弹幕池数据回收
-                this.pools.map((pool, poolIndex) => {
-                    pool.danmu.map((danmu, danmuIndex) => {
-
-                    })
-                    if (!pool || !pool.danmus || pool.danmus.length <= 0) this.pools.splice(poolIndex, 1);
-                })
                 resolve();
             }).then(() => {
                 this.danmuDisplayTimer = setTimeout(() => {
+
                     this.filterDanmu();
+                    // 弹幕池数据回收
+                    console.log(`-------------------------弹幕数据回收------------------------`);
+                    this.pools.map((pool, poolIndex) => {
+                        pool.danmus.map((danmu, danmuIndex) => {
+                            let result = danmu.startTime - (this.displayMills - Duration * 2);
+                            if (result < 0) {
+                                console.log(`回收弹幕数据：danmuIndex:${danmuIndex},danmu.index:${danmu.index},result:${result}`);
+                                // delete danmu
+                                pool.danmus.splice(danmuIndex, 1);
+                            }
+                        })
+
+                        // if (!pool || !pool.danmus || pool.danmus.length === 0) {
+                        //     this.pools.splice(poolIndex, 1);
+                        //     console.log(`回收弹幕层,poolIndex:${poolIndex}`)
+                        // }
+                    })
+
                 }, Duration / 10 - (new Date().getTime() - currentTime.getTime()));
             })
         },
@@ -318,11 +330,13 @@ export default {
                     // 动画展示
                     let animateWidth = Math.ceil(playerWidth + danmu.width) % 2 == 0 ? Math.ceil(playerWidth + danmu.width) : Math.ceil(playerWidth + danmu.width) + 1
                     setTimeout(() => {
+
+                        danmuEle.style.transition = `transform ${danmu.duration}ms linear 0s`;
                         danmuEle.style.transform = `translate3d(-${(animateWidth)}px,0,0)`;
-                    }, 50)
+                    }, 100)
                 })
             } else {
-                this.displayDanmu(danmu, ++poolIndex);
+                // this.displayDanmu(danmu, ++poolIndex);
             }
         },
         // 弹幕样式设置

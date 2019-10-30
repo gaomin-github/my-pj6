@@ -1,15 +1,16 @@
 <template>
     <section>
         <section class="player-container" ref="playerContainer">
-            <!-- <section
-                class="animation-item"
-                ref="animationItem"
-                v-if="animationTestShow"
-            >{{ animationTestText }}</section>-->
             <section class="animation" v-show="pools&&pools.length>0" ref="danmuContainer">
-                <section class="animation-layer" v-for="(pool,poolIndex) in pools" :key="poolIndex">
+                <section
+                    class="animation-layer"
+                    v-for="(pool,poolIndex) in pools"
+                    :key="poolIndex"
+                    :style="{
+                    zIndex:`${poolIndex+20}`}"
+                >
                     <section
-                        v-show="pool&&pool.danmus&&pool.danmus.length>0&&poolIndex===0"
+                        v-show="pool&&pool.danmus&&pool.danmus.length>0&&(overlap||(!overlap&&poolIndex===0))"
                         class="danmu-content"
                     >
                         <section
@@ -17,7 +18,12 @@
                             v-for="danmu in pool.danmus"
                             :key="danmu.index"
                             :ref="`${danmu.index}`"
-                        >{{ danmu.text}},{{poolIndex}}</section>
+                        >
+                            <section
+                                v-if="isHorizontal||danmu.channelId+danmu.channelNum<=MinChannelNum"
+                            >{{ danmu.text}},{{poolIndex}}</section>
+                            <!-- <section>{{ danmu.text}},{{poolIndex}}</section> -->
+                        </section>
                     </section>
                 </section>
             </section>
@@ -39,21 +45,21 @@
         </section>
         <section class="danmu-bar">
             <span>显示区域</span>
-            <button>1/4</button>
-            <button>1/2</button>
-            <button>3/4</button>
-            <button>不重复</button>
-            <button>无限</button>
+            <button @click="changeArea(1/4)">1/4</button>
+            <button @click="changeArea(1/2)">1/2</button>
+            <button @click="changeArea(3/4)">3/4</button>
+            <button @click="changeArea(1)">不重复</button>
+            <button @click="changeArea(2)">无限</button>
+        </section>
+        <section class="danmu-bar">
+            <span>字体</span>
+            <button @click="changeFontSize(0.5)">50%</button>
+            <button @click="changeFontSize(2)">200%</button>
         </section>
         <section class="manual-bar">
             <button @click="sendDanmu">增加弹幕</button>
             <button @click="autoAddDanmu">自动添加弹幕</button>
             <button @click="recycleDanmu">回收弹幕</button>
-        </section>
-        <section class="test">
-            <button @click="displayAnimation">展示动画</button>
-            <button @click="pauseAnimation">暂停动画</button>
-            <button @click="continueAnimation">继续动画</button>
         </section>
     </section>
 </template>
@@ -71,21 +77,20 @@ section {
 .player-container {
     width: 100%;
     height: 200px;
-    background: rgba(0, 0, 0, 1);
+    // background: rgba(0, 0, 0, 1);
     // margin: 0 5%;
     position: relative;
-    overflow-y: hidden;
+    // overflow-y: hidden;
 }
 .animation {
     position: relative;
     width: 90%;
-    height: 200px;
+    height: 100%;
     // display: block;
     margin: 0 5%;
-    border: 1px black solid;
+    border: 1px blue solid;
     &-layer {
         position: absolute;
-        border: 1px red solid;
         width: 100%;
         height: 100%;
         display: block;

@@ -78,6 +78,8 @@ export default {
         },
         // 弹幕显示区域
         changeArea(param) {
+            // 未完成----
+            // 需要调整MinChannelNum
             if (param > 1) {
                 this.overlap = true;
                 return;
@@ -87,6 +89,7 @@ export default {
         },
         // 统一放大缩小字体
         changeFontSize(param) {
+            // 未完成-----
             let danmuContainerEle = this.$refs['danmuContainer'];
             // danmuContainerEle.style.transform = `scale(${2},${2})`;
             // danmuContainerEle.style.transform = `scale(2,2)`;
@@ -96,13 +99,40 @@ export default {
             // 弹幕剩余距离调整
             let fontSizeScale = param;
             if (this.playerStatus === 'on') {
+                this.pools.map(pool => {
+                    pool.danmus &&
+                        pool.danmus.map(danmu => {
+                            if (!this.$refs[danmu.index]) {
+                                console.log(`danmu.index not exist:${danmu.index}`)
+                                return;
+                            }
+                            // 已移动时间/已移动距离
+                            danmu.moveTime += new Date().getTime() - danmu.lastDisplayTime.getTime();
+                            danmu.moveDistance = (playerWidth + danmu.width) * danmu.moveTime / danmu.duration;
+                            // 更新长度
+                            danmu.width = danmu.fontSize * fontSizeScale + HorizenMargin * 2;
+
+                            let danmuEle = this.$refs[danmu.index][0];
+                            // 更新动画起点，运动时间距离
+                            danmuEle.style.transition = `transform ${danmu.duration - danmu.moveTime}ms linear 0s`;
+                            danmuEle.style.left = `${playerWidth - danmu.moveDistance}px`;
+                            danmuEle.style.transform = `translate3d(-${playerWidth + danmu.width - danmu.moveDistance}px,0,0)`;
+
+                            danmu.lastDisplayTime = new Date();
+
+                        })
+                })
 
             } else {
                 this.pools.map(pool => {
                     pool.danmus.map(danmu => {
-                        let danmuEle = this.$refs[danmu.index];
+                        if (!this.$refs[danmu.index]) {
+                            console.log(`danmu.index not exist:${danmu.index}`)
+                            return;
+                        }
+                        let danmuEle = this.$refs[danmu.index][0];
                         if (!danmuEle || !danmuEle[0]) return;
-                        danmu.width = danmu.fontSize
+                        danmu.width = danmu.fontSize * fontSizeScale + HorizenMargin * 2;
                     })
                 })
             }
@@ -355,7 +385,7 @@ export default {
 
                         danmuEle.style.transition = `transform ${danmu.duration}ms linear 0s`;
                         danmuEle.style.transform = `translate3d(-${(animateWidth)}px,0,0)`;
-                    }, 100)
+                    }, 20)
                 })
             } else {
                 this.displayDanmu(danmu, ++poolIndex);
@@ -381,7 +411,8 @@ export default {
                         this.$refs[danmu.index][0].style.transition = "";
                         this.$refs[danmu.index][0].style.transform = "";
                         danmu.moveTime += new Date().getTime() - danmu.lastDisplayTime.getTime();
-                        this.$refs[danmu.index][0].style.left = `${playerWidth - (playerWidth + danmu.width) * danmu.moveTime / danmu.duration}px`;
+                        danmu.moveDistance = (playerWidth + danmu.width) * danmu.moveTime / danmu.duration;
+                        this.$refs[danmu.index][0].style.left = `${playerWidth - danmu.moveDistance}px`;
 
                     });
             });
@@ -393,7 +424,6 @@ export default {
                         danmu.lastDisplayTime = new Date();
                         if (!this.$refs[danmu.index]) {
                             console.log(`danmu.index not exist:${danmu.index}`)
-                            // console.log();
                             return;
                         }
                         this.$refs[
@@ -402,8 +432,8 @@ export default {
                         let animateWidth = Math.ceil((playerWidth + danmu.width) * (danmu.duration - danmu.moveTime) / danmu.duration) % 2 == 0 ? Math.ceil((playerWidth + danmu.width) * (danmu.duration - danmu.moveTime) / danmu.duration) : (Math.ceil((playerWidth + danmu.width) * (danmu.duration - danmu.moveTime) / danmu.duration) + 1);
                         this.$refs[
                             danmu.index
-                        ][0].style.transform = `translate3d(-${animateWidth}px,0,0)`;
-                        this.$refs[danmu.index][0].style.left = `${playerWidth - (playerWidth + danmu.width) * danmu.moveTime / danmu.duration}px`;
+                        ][0].style.transform = `translate3d(-${playerWidth + danmu.width - danmu.moveDistance}px,0,0)`;
+                        this.$refs[danmu.index][0].style.left = `${playerWidth - danmu.moveDistance}px`;
                     });
             });
         },

@@ -88,6 +88,10 @@ let routes = new VueRouter({
             path: '/danmuDemo',
             component: () => import('./danmu/danmuDemo.vue')
         },
+        {
+            path: '/asyncDemo',
+            component: () => import('./async/asyncDemo.vue')
+        },
     ]
 
 })

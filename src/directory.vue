@@ -20,6 +20,7 @@
         <router-link class="demo_title" :to="{path:'/drop-down-demo'}">下拉组件</router-link>
         <router-link class="demo_title" :to="{path:'/barrageDemo'}">弹幕测试</router-link>
         <router-link class="demo_title" :to="{path:'/danmuDemo'}">弹幕测试第二版</router-link>
+        <router-link class="demo_title" :to="{path:'/asyncDemo'}">async测试</router-link>
     </section>
 </template>
 <script lang="ts">
@@ -28,6 +29,7 @@ import Vue from "vue";
 export default Vue.extend({
     methods: {
         enterCon: function(param: string) {
+            console.log(`param:${param}`);
             this.$router.push(param);
         },
         aesTest: function() {}

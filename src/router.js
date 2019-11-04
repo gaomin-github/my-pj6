@@ -89,6 +89,10 @@ let routes = new VueRouter({
             component: () => import('./danmu/danmuDemo.vue')
         },
         {
+            path: '/videoDanmuDemo',
+            component: () => import('./components/video-danmu/demo.vue')
+        },
+        {
             path: '/asyncDemo',
             component: () => import('./async/asyncDemo.vue')
         },

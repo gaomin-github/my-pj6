@@ -20,7 +20,7 @@ typescript联合类型和交叉类型
 2.promise状态变化和调用时机
     promise.then(resolve,reject)方法，promise是执行成功状态,则自动执行resolve方法
     promise是未定状态，then返回也是未定状态的promise
-    resolve/reject返回值时，默认返回成功状态的promise，携带参数为返回值
+    resolve/reject返回值或不返回时，默认返回成功状态的promise，携带参数为返回值；不返回时，携带参数为undefined
     resolve/reject返回异常时，默认返回不成功的promise
 3.promise的then函数
     then函数返回一个promise对象，then中注册的函数，返回值是返回给promise对象作为参数的

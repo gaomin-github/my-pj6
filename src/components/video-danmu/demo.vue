@@ -102,7 +102,7 @@ export default {
                         ? "blue"
                         : "green",
                 text: `测试弹幕信息`,
-                type: "top"
+                type: "bottom"
             };
             return danmu;
         }

@@ -36,6 +36,26 @@
                     </section>
                 </section>
             </section>
+            <!-- 底部弹幕 -->
+            <section v-if="bottomPools&&bottomPools.length>0" ref="danmuContainer">
+                <section v-for="(pool,poolIndex) in bottomPools" :key="poolIndex">
+                    <section v-show="pool&&pool.danmus&&pool.danmus.length>0">
+                        <p
+                            v-for="danmu in pool.danmus"
+                            :key="danmu.index"
+                            class="top-danmu-item"
+                            :ref="`bottom-${danmu.index}`"
+                        >
+                            <!-- <span
+                                class="top-danmu-item"
+                                :ref="`top-${danmu.index}`"
+                            >-->
+                            {{ danmu.text}},{{poolIndex}}
+                            <!-- </span> -->
+                        </p>
+                    </section>
+                </section>
+            </section>
         </section>
         <section class="control-bar">
             <section class="time-container">{{ displayTimeMsg }},{{pools.length}}</section>
@@ -47,7 +67,7 @@
 section {
     display: block;
     height: 100%;
-    overflow: hidden;
+    // overflow: hidden;
 }
 .player-container {
     border: 1px red solid;

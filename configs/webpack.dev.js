@@ -38,7 +38,7 @@ module.exports = {
         publicPath: '/',
     },
     resolve: {
-        extensions: ['.js', '.json', '.tsx', '.ts', '.vue', '.jpg'],
+        extensions: ['.js', '.json', '.tsx', '.ts', '.vue', '.jpg', 'mp3', 'mp4'],
         alias: {
             'vue$': 'vue/dist/vue.esm.js'
         }
@@ -53,6 +53,16 @@ module.exports = {
                 include: [
                     path.resolve(__dirname, '../src'),
                     path.resolve(__dirname, '../static')
+                ]
+            },
+            {
+                test: /\.(mp3|mp4)$/,
+                use: {
+                    loader: 'url-loader'
+                },
+                include: [
+                    path.resolve(__dirname, '../src'),
+                    // path.resolve(__dirname, '../static')
                 ]
             },
             {

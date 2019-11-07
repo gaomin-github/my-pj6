@@ -1,14 +1,20 @@
 <template>
     <section>
         <!-- <h3>this is videoDanmuDemo</h3> -->
-        <video-danmu ref="danmu" :videoMills="videoMills"></video-danmu>
+        <section class="player">
+            <!-- <video class="video" autoplay loop="true">
+                <source src="./videos/1.mp4" type="video/mp4" />
+            </video>-->
+            <video-danmu class="danmu" ref="danmu" :videoMills="videoMills" :duration="duration"></video-danmu>
+        </section>
         <section class="control">
             <button @click="start">播放</button>
             <button @click="pauseDanmu">暂停</button>
             <button @click="continueDanmu">继续</button>
             <button @click="sendData">增加实时弹幕</button>
             <button @click="addDanmu">追加弹幕</button>
-            <button @click="addVideoMills(videoMills+10000)">快进</button>
+            <button @click="changeVideoMills(videoMills+10000)">快进</button>
+            <button @click="changeSpeed(3000)">弹幕速度</button>
         </section>
     </section>
 </template>
@@ -17,7 +23,8 @@ import videoDanmu from "./videoDanmu.vue";
 export default {
     data: function() {
         return {
-            videoMills: 10000,
+            videoMills: 0,
+            duration: 8000,
             // 测试用例数据
             danmuNum: 0
         };
@@ -45,10 +52,12 @@ export default {
         sendData() {
             let danmu = this.manualAddDanmu();
             // 弹幕播放时间为当前时间线
-            danmu.startTime = this.timeline;
+            // danmu.startTime = this.videoMills;
             //   http请求
-            danmu.createTime = this.timeline;
-            console.log(`新增弹幕：${danmu.index}`);
+            // danmu.createTime = this.timeline;
+            console.log(
+                `新增弹幕：${danmu.index},startTime:${danmu.startTime}`
+            );
             this.$refs.danmu.sendDanmu(danmu);
         },
         // 历史弹幕展示
@@ -56,20 +65,28 @@ export default {
         // 定时生成测试弹幕数据
         addDanmu() {
             let danmuList = [];
-            for (let i; i < 10; i++) {
+            for (let i = 0; i < 10; i++) {
                 let danmu = this.manualAddDanmu();
-                console.log(`自动生成弹幕:${danmu.index}`);
+                // console.log(
+                //     `自动生成弹幕:${danmu.index},startTime:${danmu.startTime}`
+                // );
                 danmuList.push(danmu);
             }
+            this.$refs.danmu.addDanmu(danmuList);
+            this.videoMills += 8000;
             this.danmuCreateTimer = setTimeout(() => {
-                this.$refs.danmu.addDanmu(danmuList);
-            }, Math.floor(Math.random() * 5000));
+                this.addDanmu(danmuList);
+            }, 8000);
+        },
+        changeSpeed(newSpeed) {
+            // this.duration=newSpeed;
+            this.$refs.danmu.changeSpeed(newSpeed);
         },
         manualAddDanmu() {
             let random = Math.random();
             let danmu = {
                 index: this.danmuNum++,
-                startTime: this.videoMills + Math.floor(random * 10000),
+                startTime: this.videoMills + Math.floor(random * 8000),
                 fontSize:
                     random * 10 < 3
                         ? 12
@@ -92,7 +109,26 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.demo_title {
-    cursor: pointer;
+.player {
+    display: block;
+    width: 100%;
+    height: 260px;
+    position: relative;
+    border: 1px black solid;
+    // background: rgb(0, 0, 0);
+}
+.video {
+    position: absolute;
+    left: 5%;
+    width: 90%;
+    top: 20px;
+}
+.danmu {
+    height: 200px;
+    position: absolute;
+    left: 5%;
+    top: 20px;
+    border: 1px blue solid;
+    // margin: 20px 5%;
 }
 </style>7

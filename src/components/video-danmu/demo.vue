@@ -73,10 +73,10 @@ export default {
                 danmuList.push(danmu);
             }
             this.$refs.danmu.addDanmu(danmuList);
-            this.videoMills += 8000;
+            this.videoMills += 2200;
             this.danmuCreateTimer = setTimeout(() => {
                 this.addDanmu(danmuList);
-            }, 8000);
+            }, 2000);
         },
         changeSpeed(newSpeed) {
             // this.duration=newSpeed;
@@ -101,7 +101,8 @@ export default {
                         : Math.floor(random * 10) % 3 === 0
                         ? "blue"
                         : "green",
-                text: `测试弹幕信息`
+                text: `测试弹幕信息`,
+                type: "top"
             };
             return danmu;
         }
@@ -112,7 +113,7 @@ export default {
 .player {
     display: block;
     width: 100%;
-    height: 260px;
+    height: 400px;
     position: relative;
     border: 1px black solid;
     // background: rgb(0, 0, 0);
@@ -124,7 +125,7 @@ export default {
     top: 20px;
 }
 .danmu {
-    height: 200px;
+    height: 360px;
     position: absolute;
     left: 5%;
     top: 20px;

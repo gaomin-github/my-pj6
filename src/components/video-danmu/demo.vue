@@ -73,10 +73,10 @@ export default {
                 danmuList.push(danmu);
             }
             this.$refs.danmu.addDanmu(danmuList);
-            this.videoMills += 2200;
+            this.videoMills += 8200;
             this.danmuCreateTimer = setTimeout(() => {
                 this.addDanmu(danmuList);
-            }, 2000);
+            }, 8000);
         },
         changeSpeed(newSpeed) {
             // this.duration=newSpeed;

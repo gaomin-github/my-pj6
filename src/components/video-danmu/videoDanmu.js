@@ -12,6 +12,9 @@ const MinHeight = 360;
 // 2.修改弹幕播放速度
 // 2.修改弹幕播放时间进度（初始化，快进，后退）
 // 3.修改弹幕样式（初始化宽高，横竖屏切换设置，透明度，显示区域，是否重叠，容器宽高）
+
+// 页面卡顿优化：及时回收不需要资源
+// pool层超过1层引起卡顿
 export default {
     props: {
         // 视频初始化进度
@@ -263,6 +266,8 @@ export default {
             // 暂停播放器
             clearTimeout(this.startTimer);
             this.startTimer = null;
+            clearTimeout(this.danmuRecycleTimer);
+            this.danmuRecycleTimer = null;
         },
         continuePlayer() {
             // 顺序不能变更
@@ -318,11 +323,13 @@ export default {
             }
             danmu.text = `${text},${danmu.index}`;
             danmu.width = danmu.text.length * danmu.fontSize + HorizenMargin * 2;
-            danmu.danmuChannelNum = Math.ceil(danmu.width / this.containerWidth());
-
+            // danmu.danmuChannelNum = Math.ceil(danmu.width / this.containerWidth());
+            console.log(`danmu.index:${danmu.index},danmuHeight:${(Math.ceil(danmu.width / this.containerWidth())) * danmu.fontSize}`)
             return Object.assign(
                 {
-                    height: danmu.type === 'scroll' ? danmu.fontSize : 'top' || 'bottom' ? danmu.danmuChannelNum * (danmu.fontSize + AdditionLineHeight) : 0 + VerticalMargin * 2,
+                    // height: danmu.type === 'scroll' ? danmu.fontSize : 'top' || 'bottom' ? danmu.danmuChannelNum * (danmu.fontSize + AdditionLineHeight) : 0 + VerticalMargin * 2,
+                    height: danmu.type === 'scroll' ? danmu.fontSize : 'top' || 'bottom' ? (Math.ceil(danmu.width / this.containerWidth())) * danmu.fontSize : 0 + VerticalMargin * 2,
+
                     duration: this.duration,
                     remainTime: this.duration,
                     moveTime: 0
@@ -375,6 +382,7 @@ export default {
                 pool.danmus.map((danmu, danmuIndex) => {
                     let result = danmu.createTime + danmu.duration - this.displayMills - (new Date().getTime() - this.lastDisplayTime);
                     if (result <= 0) {
+                        console.log(`回收：${danmu.index}`)
                         pool.danmus.splice(danmuIndex, 1);
                     }
                 })
@@ -594,7 +602,7 @@ export default {
                             danmu.createTime = (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()));
                             danmu.duration = this.duration + danmu.startTime - danmu.createTime;
                             let danmuEle = this.$refs[`bottom-${danmu.index}`][0];
-                            danmuEle.style.cssText += `top:${danmu.channelId * 12}px;` + `fontSize:${danmu.fontSize}px;` + `lineHeight:${danmu.fontSize + AdditionLineHeight}px;`;
+                            danmuEle.style.cssText += `top:${danmu.channelId * 12}px;` + `font-size:${danmu.fontSize}px;` + `line-height:${danmu.fontSize + AdditionLineHeight}px;`;
 
                             // danmuEle.style.position = `absolute`;
                             // danmuEle.style.top = `${danmu.channelId * 12}px`;
@@ -773,8 +781,9 @@ export default {
                 return false;
             }
             let i = channels.length;
-
+            console.log(`bottom channel 0:${channels[0].index},channels.length:${i},danmuChannelNum:${danmuChannelNum}`);
             while (i - danmuChannelNum >= 0) {
+                console.log(`i:${i}`);
                 if (channels[i - 1].index - danmuChannelNum + 1 === channels[i - danmuChannelNum].index) {
                     // pool.danmus.splice(danmu,)
                     channels.slice(i - danmuChannelNum, i).map(channel => {
@@ -786,7 +795,7 @@ export default {
                     let danmuIndex = pool.danmus.findIndex(danmu1 => {
                         return danmu1.channelId === channels[i - danmuChannelNum].index;
                     })
-                    console.log(`findbottomchannel,danmuIndex:${danmuIndex},danmuFontSize:${danmu.fontSize},danmuHeight:${danmu.height},danmuChannelNum:${danmuChannelNum},channelId:${channels[i - danmuChannelNum].index}`);
+                    console.log(`findbottomchannel,danmuIndex:${danmuIndex},danmuFontSize:${danmu.fontSize},danmuWidth:${danmu.width},danmuHeight:${danmu.height},danmuChannelNum:${danmuChannelNum},channelId:${channels[i - danmuChannelNum].index}`);
                     if (danmuIndex >= 0) {
 
                         pool.danmus.splice(danmuIndex, 1, danmu)
@@ -795,7 +804,7 @@ export default {
                     }
                     return true;
                 }
-                i++;
+                i--;
             }
 
         }

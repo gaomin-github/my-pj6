@@ -35,18 +35,20 @@
             <section v-if="bottomPools&&bottomPools.length>0" ref="danmuContainer">
                 <section v-for="(pool,poolIndex) in bottomPools" :key="poolIndex">
                     <section v-if="pool&&pool.danmus&&pool.danmus.length>0">
-                        <p
+                        <!-- <p
                             v-for="danmu in pool.danmus"
                             :key="danmu.index"
-                            class="top-danmu-item"
+                            class="bottom-danmu-item"
                             :ref="`bottom-${danmu.index}`"
-                        >{{ danmu.text}},{{poolIndex}}</p>
+                        >{{ danmu.text}},{{poolIndex}}</p>-->
                     </section>
                 </section>
             </section>
         </section>
         <section class="control-bar">
-            <section class="time-container">{{ displayTimeMsg }},{{pools.length}}</section>
+            <section
+                class="time-container"
+            >{{ displayTimeMsg }},{{pools.length}},pools：{{pools.length}},bottomPools:{{bottomPools.length}}</section>
         </section>
     </section>
 </template>
@@ -67,6 +69,7 @@ section {
     z-index: 1000;
     bottom: 0px;
     left: 0;
+    background: #cecece;
 }
 .danmu-content {
     border: 1px red solid;
@@ -79,7 +82,8 @@ section {
     font-weight: 400;
     // position: absolute;
 }
-.top-danmu-item {
+.top-danmu-item,
+.bottom-danmu-item {
     position: absolute;
     display: block;
 }

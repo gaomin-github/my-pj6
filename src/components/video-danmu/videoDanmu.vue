@@ -35,12 +35,12 @@
             <section v-if="bottomPools&&bottomPools.length>0" ref="danmuContainer">
                 <section v-for="(pool,poolIndex) in bottomPools" :key="poolIndex">
                     <section v-if="pool&&pool.danmus&&pool.danmus.length>0">
-                        <!-- <p
+                        <p
                             v-for="danmu in pool.danmus"
                             :key="danmu.index"
                             class="bottom-danmu-item"
                             :ref="`bottom-${danmu.index}`"
-                        >{{ danmu.text}},{{poolIndex}}</p>-->
+                        >{{ danmu.text}},{{poolIndex}}</p>
                     </section>
                 </section>
             </section>
@@ -56,7 +56,7 @@
 <style lang="scss" scoped>
 section {
     display: block;
-    height: 100%;
+    // height: 100%;
     // overflow: hidden;
 }
 .player-container {

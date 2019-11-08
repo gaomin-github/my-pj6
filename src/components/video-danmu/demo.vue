@@ -102,7 +102,13 @@ export default {
                         ? "blue"
                         : "green",
                 text: `测试弹幕信息`,
-                type: "bottom"
+                type: `bottom`
+                // type:
+                //     Math.floor(random * 10) % 4 === 0
+                //         ? "bottom"
+                //         : // : Math.floor(random * 10) % 5 === 0
+                //           // ? "top"
+                //           "scroll"
             };
             return danmu;
         }

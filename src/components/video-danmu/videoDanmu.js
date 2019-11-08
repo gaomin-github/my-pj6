@@ -1,7 +1,8 @@
 const ChannelNum = Math.floor(360 / 12);
 const ChannelHeight = 12;
 const HorizenMargin = 10;
-const VerticalMargin = 5;
+const VerticalMargin = 0;   //弹幕之间的垂直间距
+const AdditionLineHeight = 0;   //弹幕行间距
 const MinHeight = 360;
 // 弹幕区宽
 // 弹幕区高
@@ -41,8 +42,11 @@ export default {
             danmuCreateTimer: null, //不定时生成测试弹幕数据
             danmuRecycleTimer: null, //定时回收已展示弹幕
             pools: [], //弹幕池
+            ifShowScroll: true,
             topPools: [],    //顶部弹幕池
+            ifShowTop: true,
             bottomPools: [],     //底部弹幕池
+            ifShowBottom: true,
             danmuNum: 0,     //弹幕测试
             // 弹幕容器相关
             isHorizontal: false,    //是否横屏
@@ -144,15 +148,21 @@ export default {
                     danmu.lastDisplayTime = new Date();
                     // danmuEle.style.transform = '';
                     danmu.moveDistance = (this.containerWidth() + danmu.width) * danmu.moveTime / danmu.duration;
-                    danmuEle.style.transition = '';
-                    danmuEle.style.transform = '';
-                    danmuEle.style.left = `${this.containerWidth() - danmu.moveDistance}px`;
+                    danmu.style.cssText += `transition:'';transform:'';left:${this.containerWidth() - danmu.moveDistance}px`;
+                    // danmuEle.style.transition = '';
+                    // danmuEle.style.transform = '';
+                    // danmuEle.style.left = `${this.containerWidth() - danmu.moveDistance}px`;
                     danmu.duration = this.duration - (oldDuration - danmu.duration);
                     setTimeout(() => {
                         if (danmu.duration > danmu.moveTime + 20) {
-                            danmuEle.style.transition = `transform ${danmu.duration - danmu.moveTime - 20}ms linear 0s`;
+                            // danmuEle.style.transition = `transform ${danmu.duration - danmu.moveTime - 20}ms linear 0s`;
+                            danmu.style.cssText += `transition:transform ${danmu.duration - danmu.moveTime - 20}ms linear 0s;transform:translateX(-${this.containerWidth() + danmu.width - danmu.moveDistance}px)`;
+
+                        } else {
+                            danmu.style.cssText += `transform:translateX(-${this.containerWidth() + danmu.width - danmu.moveDistance}px)`;
+
+                            // danmuEle.style.transform = `translateX(-${this.containerWidth() + danmu.width - danmu.moveDistance}px)`;
                         }
-                        danmuEle.style.transform = `translateX(-${this.containerWidth() + danmu.width - danmu.moveDistance}px)`;
 
                     }, 20);
 
@@ -283,6 +293,23 @@ export default {
             this.filterDanmu();
             // this.autoAddDanmu();
         },
+        // 隐藏/展示 底/顶/滚动弹幕
+        controlDanmuShow(type, ifShow) {
+            switch (type) {
+                case 'scroll': {
+                    this.ifShowScroll = ifShow
+                    break;
+                }
+                case 'top': {
+                    this.ifShowTop = ifShow
+                    break;
+                }
+                case 'bottom': {
+                    this.ifShowBottom = ifShow
+                    break;
+                }
+            }
+        },
         refactorDanmu(danmu) {
             let text = '';
             let random = Math.random();
@@ -291,10 +318,11 @@ export default {
             }
             danmu.text = `${text},${danmu.index}`;
             danmu.width = danmu.text.length * danmu.fontSize + HorizenMargin * 2;
+            danmu.danmuChannelNum = Math.ceil(danmu.width / this.containerWidth());
+
             return Object.assign(
                 {
-                    // width: danmu.text.length * danmu.fontSize + HorizenMargin * 2,
-                    height: danmu.type === 'scroll' ? danmu.fontSize : 'top' || 'bottom' ? Math.ceil(danmu.width / this.containerWidth()) * danmu.fontSize : 0 + VerticalMargin * 2,
+                    height: danmu.type === 'scroll' ? danmu.fontSize : 'top' || 'bottom' ? danmu.danmuChannelNum * (danmu.fontSize + AdditionLineHeight) : 0 + VerticalMargin * 2,
                     duration: this.duration,
                     remainTime: this.duration,
                     moveTime: 0
@@ -332,6 +360,18 @@ export default {
                 }
             })
             this.topPools.map((pool, poolIndex) => {
+                pool.danmus.map((danmu, danmuIndex) => {
+                    let result = danmu.createTime + danmu.duration - this.displayMills - (new Date().getTime() - this.lastDisplayTime);
+                    if (result <= 0) {
+                        pool.danmus.splice(danmuIndex, 1);
+                    }
+                })
+
+                if (!pool || !pool.danmus || pool.danmus.length === 0) {
+                    this.pools.splice(poolIndex, 1);
+                }
+            })
+            this.bottomPools.map((pool, poolIndex) => {
                 pool.danmus.map((danmu, danmuIndex) => {
                     let result = danmu.createTime + danmu.duration - this.displayMills - (new Date().getTime() - this.lastDisplayTime);
                     if (result <= 0) {
@@ -465,7 +505,16 @@ export default {
                             danmu.duration = this.duration + danmu.startTime - danmu.createTime;
                             let danmuEle = this.$refs[danmu.index][0];
                             //弹幕样式初始化
-                            this.danmuStyleInit(danmuEle, danmu);
+                            // this.danmuStyleInit(danmuEle, danmu);
+
+                            danmuEle.style.cssText += `top:${danmu.channelId * 12}px;` + `left:${this.containerWidth()}px;color:${danmu.color};font-size:${danmu.fontSize}px;`;
+                            console.log(`css text`);
+                            console.log(danmuEle.style.cssText);
+                            // danmuEle.style.top = `${danmu.channelId * 12}px`;
+                            // danmuEle.style.left = `${this.containerWidth()}px`;
+                            // danmuEle.style.color = danmu.color;
+                            // danmuEle.style.fontSize = `${danmu.fontSize}px`;
+
                             if (this.playerStatus !== 'on') return;
                             // 动画展示
                             setTimeout(() => {
@@ -477,9 +526,9 @@ export default {
                                 danmu.lastDisplayTime = new Date();
 
                                 let animateWidth = Math.ceil(this.containerWidth() + danmu.width) % 2 == 0 ? Math.ceil(this.containerWidth() + danmu.width) : Math.ceil(this.containerWidth() + danmu.width) + 1
-
-                                danmuEle.style.transition = `transform ${danmu.duration}ms linear 0s`;
-                                danmuEle.style.transform = `translate3d(-${(animateWidth)}px,0,0)`;
+                                danmuEle.style.cssText += `transition:transform ${danmu.duration}ms linear 0s;transform:translate3d(-${(animateWidth)}px,0,0);`;
+                                // danmuEle.style.transition = `transform ${danmu.duration}ms linear 0s`;
+                                // danmuEle.style.transform = `translate3d(-${(animateWidth)}px,0,0)`;
                             }, 20)
                         })
                     }
@@ -508,13 +557,13 @@ export default {
                             danmu.createTime = (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()));
                             danmu.duration = this.duration + danmu.startTime - danmu.createTime;
                             let danmuEle = this.$refs[`top-${danmu.index}`][0];
+                            danmuEle.style.cssText += `top:${danmu.channelId * 12}px;` + `fontSize:${danmu.fontSize}px;` + `lineHeight:${danmu.fontSize + AdditionLineHeight}px;`;
+                            // danmuEle.style.position = `absolute`;
+                            // danmuEle.style.top = `${danmu.channelId * 12}px`;
+                            // danmuEle.style.color = danmu.color;
+                            // danmuEle.style.fontSize = `${danmu.fontSize}px`;
+                            // danmuEle.style.lineHeight = `${danmu.fontSize + AdditionLineHeight}px`;
 
-                            danmuEle.style.position = `absolute`;
-                            danmuEle.style.top = `${danmu.channelId * 12}px`;
-                            danmuEle.style.color = danmu.color;
-                            danmuEle.style.fontSize = `${danmu.fontSize}px`;
-                            // danmuEle.style.height = `${danmu.height}px`;
-                            danmuEle.style.lineHeight = `${danmu.fontSize + 5}px`;
 
                             if (this.playerStatus !== 'on') return;
                         })
@@ -545,13 +594,13 @@ export default {
                             danmu.createTime = (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()));
                             danmu.duration = this.duration + danmu.startTime - danmu.createTime;
                             let danmuEle = this.$refs[`bottom-${danmu.index}`][0];
+                            danmuEle.style.cssText += `top:${danmu.channelId * 12}px;` + `fontSize:${danmu.fontSize}px;` + `lineHeight:${danmu.fontSize + AdditionLineHeight}px;`;
 
-                            danmuEle.style.position = `absolute`;
-                            danmuEle.style.top = `${danmu.channelId * 12}px`;
-                            danmuEle.style.color = danmu.color;
-                            danmuEle.style.fontSize = `${danmu.fontSize}px`;
-                            // danmuEle.style.height = `${danmu.height}px`;
-                            danmuEle.style.lineHeight = `${danmu.fontSize + 5}px`;
+                            // danmuEle.style.position = `absolute`;
+                            // danmuEle.style.top = `${danmu.channelId * 12}px`;
+                            // danmuEle.style.color = danmu.color;
+                            // danmuEle.style.fontSize = `${danmu.fontSize}px`;
+                            // danmuEle.style.lineHeight = `${danmu.fontSize + AdditionLineHeight}px`;
 
                             if (this.playerStatus !== 'on') return;
                         })
@@ -724,6 +773,7 @@ export default {
                 return false;
             }
             let i = channels.length;
+
             while (i - danmuChannelNum >= 0) {
                 if (channels[i - 1].index - danmuChannelNum + 1 === channels[i - danmuChannelNum].index) {
                     // pool.danmus.splice(danmu,)
@@ -736,7 +786,7 @@ export default {
                     let danmuIndex = pool.danmus.findIndex(danmu1 => {
                         return danmu1.channelId === channels[i - danmuChannelNum].index;
                     })
-                    console.log(`danmuIndex:${danmuIndex}`);
+                    console.log(`findbottomchannel,danmuIndex:${danmuIndex},danmuFontSize:${danmu.fontSize},danmuHeight:${danmu.height},danmuChannelNum:${danmuChannelNum},channelId:${channels[i - danmuChannelNum].index}`);
                     if (danmuIndex >= 0) {
 
                         pool.danmus.splice(danmuIndex, 1, danmu)

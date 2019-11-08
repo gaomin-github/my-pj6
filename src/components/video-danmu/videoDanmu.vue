@@ -5,7 +5,7 @@
             <section v-if="pools&&pools.length>0" ref="danmuContainer">
                 <section v-for="(pool,poolIndex) in pools" :key="poolIndex">
                     <section
-                        v-show="pool&&pool.danmus&&pool.danmus.length>0&&(overlap||(!overlap&&poolIndex===0))"
+                        v-if="pool&&pool.danmus&&pool.danmus.length>0&&(overlap||(!overlap&&poolIndex===0))"
                     >
                         <p v-for="danmu in pool.danmus" :key="danmu.index">
                             <span
@@ -19,40 +19,28 @@
             <!-- 顶部弹幕 -->
             <section v-if="topPools&&topPools.length>0" ref="danmuContainer">
                 <section v-for="(pool,poolIndex) in topPools" :key="poolIndex">
-                    <section v-show="pool&&pool.danmus&&pool.danmus.length>0">
+                    <section
+                        v-if="pool&&pool.danmus&&pool.danmus.length>0&&(overlap||(!overlap&&poolIndex===0))"
+                    >
                         <p
                             v-for="danmu in pool.danmus"
                             :key="danmu.index"
                             class="top-danmu-item"
                             :ref="`top-${danmu.index}`"
-                        >
-                            <!-- <span
-                                class="top-danmu-item"
-                                :ref="`top-${danmu.index}`"
-                            >-->
-                            {{ danmu.text}},{{poolIndex}}
-                            <!-- </span> -->
-                        </p>
+                        >{{ danmu.text}},{{poolIndex}}</p>
                     </section>
                 </section>
             </section>
             <!-- 底部弹幕 -->
             <section v-if="bottomPools&&bottomPools.length>0" ref="danmuContainer">
                 <section v-for="(pool,poolIndex) in bottomPools" :key="poolIndex">
-                    <section v-show="pool&&pool.danmus&&pool.danmus.length>0">
+                    <section v-if="pool&&pool.danmus&&pool.danmus.length>0">
                         <p
                             v-for="danmu in pool.danmus"
                             :key="danmu.index"
                             class="top-danmu-item"
                             :ref="`bottom-${danmu.index}`"
-                        >
-                            <!-- <span
-                                class="top-danmu-item"
-                                :ref="`top-${danmu.index}`"
-                            >-->
-                            {{ danmu.text}},{{poolIndex}}
-                            <!-- </span> -->
-                        </p>
+                        >{{ danmu.text}},{{poolIndex}}</p>
                     </section>
                 </section>
             </section>

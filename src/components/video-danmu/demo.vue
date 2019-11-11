@@ -5,7 +5,13 @@
             <!-- <video class="video" autoplay loop="true">
                 <source src="./videos/1.mp4" type="video/mp4" />
             </video>-->
-            <video-danmu class="danmu" ref="danmu" :videoMills="videoMills" :duration="duration"></video-danmu>
+            <video-danmu
+                class="danmu"
+                ref="danmu"
+                :videoMills="videoMills"
+                :duration="duration"
+                :overlap="overlap"
+            ></video-danmu>
         </section>
         <section class="control">
             <button @click="start">播放</button>
@@ -15,6 +21,9 @@
             <button @click="addDanmu">追加弹幕</button>
             <button @click="changeVideoMills(videoMills+10000)">快进</button>
             <button @click="changeSpeed(3000)">弹幕速度</button>
+            <button @click="controlOverlap">重叠控制</button>
+            <button @click="changeOpacity">透明度控制</button>
+            <button @click="changeArea">显示区控制</button>
         </section>
     </section>
 </template>
@@ -26,7 +35,8 @@ export default {
             videoMills: 0,
             duration: 8000,
             // 测试用例数据
-            danmuNum: 0
+            danmuNum: 0,
+            overlap: false //弹幕重叠控制
         };
     },
     components: {
@@ -73,14 +83,17 @@ export default {
                 danmuList.push(danmu);
             }
             this.$refs.danmu.addDanmu(danmuList);
-            this.videoMills += 8200;
+            this.videoMills += 9000;
             this.danmuCreateTimer = setTimeout(() => {
                 this.addDanmu(danmuList);
             }, 8000);
         },
         changeSpeed(newSpeed) {
-            // this.duration=newSpeed;
-            this.$refs.danmu.changeSpeed(newSpeed);
+            this.duration = newSpeed;
+            // this.$refs.danmu.changeSpeed(newSpeed);
+        },
+        controlOverlap() {
+            this.overlap = !this.overlap;
         },
         manualAddDanmu() {
             let random = Math.random();
@@ -102,15 +115,21 @@ export default {
                         ? "blue"
                         : "green",
                 text: `测试弹幕信息`,
-                type: `bottom`
-                // type:
-                //     Math.floor(random * 10) % 4 === 0
-                //         ? "bottom"
-                //         : // : Math.floor(random * 10) % 5 === 0
-                //           // ? "top"
-                //           "scroll"
+                // type: `scroll`
+                type:
+                    Math.floor(random * 10) % 4 === 0
+                        ? "bottom"
+                        : Math.floor(random * 10) % 5 === 0
+                        ? "top"
+                        : "scroll"
             };
             return danmu;
+        },
+        changeOpacity() {
+            this.$refs.danmu.changeDanmuOpacity(0.5);
+        },
+        changeArea() {
+            this.$refs.danmu.changeArea(0.5);
         }
     }
 };

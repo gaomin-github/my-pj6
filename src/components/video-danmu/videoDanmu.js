@@ -29,10 +29,19 @@ export default {
         height: {
             type: Number,
         },
+        //弹幕是否重叠
+        overlap: {
+            type: Boolean,
+            default: false
+        },
+        duration: {
+            type: Number,
+            default: 8000
+        }
     },
     data: function () {
         return {
-            duration: 12000,
+            // duration: 12000,
             // 播放器相关
             displayMills: this.videoMills,
             lastDisplayTime: null,
@@ -44,6 +53,8 @@ export default {
             danmuDisplayTimer: null, //定时更新弹幕屏信息
             danmuCreateTimer: null, //不定时生成测试弹幕数据
             danmuRecycleTimer: null, //定时回收已展示弹幕
+
+            animationDelay: null,
             pools: [], //弹幕池
             ifShowScroll: true,
             topPools: [],    //顶部弹幕池
@@ -54,18 +65,61 @@ export default {
             // 弹幕容器相关
             isHorizontal: false,    //是否横屏
             MinChannelNum: Math.floor(MinHeight / 12),    //竖屏下轨道数量
-            overlap: false,  //弹幕是否重叠
         };
     },
     mounted() {
         // 初始化弹幕容器样式
         // this.initDanmuContainer();
-        this.changeOrientation();
+        this._changeOrientation();
         // 监听横竖屏切换
         window.addEventListener('resize', () => {
 
-            this.changeOrientation();
+            this._changeOrientation();
         })
+    },
+    // 弹幕速度调整
+    watch: {
+        duration(newDuration, oldDuration) {
+            console.log(`watch,newDuration:${newDuration},oldDuration:${oldDuration}`);
+            // 修改弹幕列表运行时间
+            this.danmuQueue = this.danmuQueue.map(danmu => {
+                danmu.duration = this.duration;
+                return danmu;
+            })
+            // 修改弹幕池运行时间
+
+            this.pools.map((pool, poolIndex) => {
+                // console.log(`pool.danmus.length :${pool.danmus.length}`);
+
+                pool.danmus.map(danmu => {
+                    if (!this.$refs[danmu.index]) {
+                        console.log(`danmu.index not exist:${danmu.index}`);
+                        danmu.duration = this.duration;
+                        return danmu;
+                    }
+                    let danmuEle = this.$refs[danmu.index][0];
+                    danmu.moveTime += (new Date().getTime() - danmu.lastDisplayTime.getTime());
+                    danmu.lastDisplayTime = new Date();
+                    danmu.moveDistance = (this.containerWidth() + danmu.width) * danmu.moveTime / danmu.duration;
+                    // danmuEle.style.transition = '';
+                    // danmuEle.style.transform = '';
+                    danmuEle.style.cssText += `;transition:transform 0s;transform:translateX(0);` + `left:${this.containerWidth() - danmu.moveDistance}px;color:'red';`;
+
+                    danmu.duration = this.duration - (oldDuration - danmu.duration);
+                    setTimeout(() => {
+                        if (danmu.duration > danmu.moveTime + 20) {
+                            danmuEle.style.cssText += `transition:transform ${danmu.duration - danmu.moveTime - 20}ms linear 0s;transform:translateX(-${this.containerWidth() + danmu.width - danmu.moveDistance}px)`;
+
+                        } else {
+                            danmuEle.style.cssText += `transform:translateX(-${this.containerWidth() + danmu.width - danmu.moveDistance}px)`;
+                        }
+
+                    }, 20);
+
+                    return danmu;
+                })
+            })
+        }
     },
     methods: {
         // 对外接口
@@ -73,13 +127,13 @@ export default {
         init() {
             this.playerStatus = 'on';
             this.startPlayer();
-            this.filterDanmu();
+            this._filterDanmu();
             // this.autoDanmu();
             // this.autoAddDanmu();
-            this.recycleDanmu();
+            this._recycleDanmu();
         },
         // 横竖屏切换
-        changeOrientation() {
+        _changeOrientation() {
             let SW = document.body.clientWidth || document.documentElement.clientWidth;
             let SH = document.body.clientHeight || document.documentElement.clientHeight;
             this.isHorizontal = SW > SH ? true : false;
@@ -103,7 +157,7 @@ export default {
         // 只有横屏模式下可以调整弹幕样式
         // 弹幕透明度
         changeDanmuOpacity(param) {
-            let danmuContainerEle = this.$refs['danmuContainer'];
+            let danmuContainerEle = this.$refs['playerContainer'];
             danmuContainerEle.style.opacity = `${param}`;
         },
         // 弹幕显示区域
@@ -114,65 +168,8 @@ export default {
                 this.overlap = true;
                 return;
             }
-            let danmuContainerEle = this.$refs['danmuContainer'];
+            let danmuContainerEle = this.$refs['playerContainer'];
             danmuContainerEle.style.height = `${param * 100}%`;
-        },
-        // 弹幕速度
-        changeSpeed(newDuration) {
-            let oldDuration = this.duration;
-            this.duration = newDuration;
-            // 修改弹幕列表运行时间
-            this.danmuQueue = this.danmuQueue.map(danmu => {
-                danmu.duration = this.duration;
-                return danmu;
-            })
-            // 修改弹幕池运行时间
-
-            this.pools.map((pool, poolIndex) => {
-                // console.log(`pool.danmus.length :${pool.danmus.length}`);
-
-                pool.danmus.map(danmu => {
-                    if (!this.$refs[danmu.index]) {
-                        console.log(`danmu.index not exist:${danmu.index}`);
-                        danmu.duration = this.duration;
-                        return danmu;
-                        // return;
-                    }
-                    // console.log(`before change danmu speed ${danmu.index}`);
-                    // console.table(danmu);
-
-                    let danmuEle = this.$refs[danmu.index][0];
-                    // if (!danmuEle) {
-
-                    //     console.log(`danmu.index element not exist :${danmu.index}`);
-                    //     return;
-                    // }
-                    danmu.moveTime += (new Date().getTime() - danmu.lastDisplayTime.getTime());
-                    danmu.lastDisplayTime = new Date();
-                    // danmuEle.style.transform = '';
-                    danmu.moveDistance = (this.containerWidth() + danmu.width) * danmu.moveTime / danmu.duration;
-                    danmu.style.cssText += `transition:'';transform:'';left:${this.containerWidth() - danmu.moveDistance}px`;
-                    // danmuEle.style.transition = '';
-                    // danmuEle.style.transform = '';
-                    // danmuEle.style.left = `${this.containerWidth() - danmu.moveDistance}px`;
-                    danmu.duration = this.duration - (oldDuration - danmu.duration);
-                    setTimeout(() => {
-                        if (danmu.duration > danmu.moveTime + 20) {
-                            // danmuEle.style.transition = `transform ${danmu.duration - danmu.moveTime - 20}ms linear 0s`;
-                            danmu.style.cssText += `transition:transform ${danmu.duration - danmu.moveTime - 20}ms linear 0s;transform:translateX(-${this.containerWidth() + danmu.width - danmu.moveDistance}px)`;
-
-                        } else {
-                            danmu.style.cssText += `transform:translateX(-${this.containerWidth() + danmu.width - danmu.moveDistance}px)`;
-
-                            // danmuEle.style.transform = `translateX(-${this.containerWidth() + danmu.width - danmu.moveDistance}px)`;
-                        }
-
-                    }, 20);
-
-                    return danmu;
-                })
-            })
-
         },
         // 统一放大缩小字体
         changeFontSize(param) {
@@ -247,11 +244,6 @@ export default {
             }, 1000 - (new Date().getTime() - this.lastDisplayTime.getTime()));
 
         },
-        // printPlayerMills() {
-        //     console.log(`videoMills:${this.videoMills}`);
-
-        //     console.log(`displayMills1:${this.displayMills}`);
-        // },
         pausePlayer() {
             // 会有个别动画效果不停？
             this.playerStatus = 'off';
@@ -262,27 +254,29 @@ export default {
             clearTimeout(this.danmuCreateTimer);
             this.danmuCreateTimer = null;
             // 暂停弹幕池动画
-            this.pauseDanmu();
+            this._pauseDanmu();
             // 暂停播放器
             clearTimeout(this.startTimer);
             this.startTimer = null;
+            // 暂停弹幕回收
             clearTimeout(this.danmuRecycleTimer);
             this.danmuRecycleTimer = null;
+            // 清理延迟处理
+            clearTimeout(this.animationDelay);
+            this.animationDelay = null;
+
         },
         continuePlayer() {
             // 顺序不能变更
             this.playerStatus = 'on';
-
             // 启动播放器时间线
             this.startPlayer(new Date().getTime());
             // 恢复弹幕池动画
-            this.continueDanmu();
-
+            this._continueDanmu();
             // 启动弹幕过滤任务
-            this.filterDanmu();
-
-            // this.autoAddDanmu();
-
+            this._filterDanmu();
+            // 启动弹幕回收
+            this._recycleDanmu();
         },
         // 修改进度条
         changePlayer(newDisplayMills) {
@@ -293,10 +287,11 @@ export default {
             clearTimeout(this.danmuDisplayTimer);
             this.danmuQueue = [];
             // 清空弹幕池
-            this.pools = []
+            this.pools = [];
+            this.topPools = [];
+            this.bottomPools = [];
             // 重抓弹幕数据
-            this.filterDanmu();
-            // this.autoAddDanmu();
+            this._filterDanmu();
         },
         // 隐藏/展示 底/顶/滚动弹幕
         controlDanmuShow(type, ifShow) {
@@ -315,7 +310,7 @@ export default {
                 }
             }
         },
-        refactorDanmu(danmu) {
+        _refactorDanmu(danmu) {
             let text = '';
             let random = Math.random();
             for (let i = 0; i < Math.floor(random * 10); i++) {
@@ -323,8 +318,6 @@ export default {
             }
             danmu.text = `${text},${danmu.index}`;
             danmu.width = danmu.text.length * danmu.fontSize + HorizenMargin * 2;
-            // danmu.danmuChannelNum = Math.ceil(danmu.width / this.containerWidth());
-            console.log(`danmu.index:${danmu.index},danmuHeight:${(Math.ceil(danmu.width / this.containerWidth())) * danmu.fontSize}`)
             return Object.assign(
                 {
                     // height: danmu.type === 'scroll' ? danmu.fontSize : 'top' || 'bottom' ? danmu.danmuChannelNum * (danmu.fontSize + AdditionLineHeight) : 0 + VerticalMargin * 2,
@@ -338,7 +331,7 @@ export default {
             );
         },
         // 弹幕层轨道初始化
-        initChannels() {
+        _initChannels() {
             let channelList = [];
             for (let i = 0; i < ChannelNum; i++) {
                 channelList[i] = {
@@ -351,9 +344,8 @@ export default {
             }
             return channelList;
         },
-
-        // 手动回收弹幕数据
-        recycleDanmu() {
+        // 回收弹幕数据
+        _recycleDanmu() {
             this.pools.map((pool, poolIndex) => {
                 pool.danmus.map((danmu, danmuIndex) => {
                     let result = danmu.startTime - (this.displayMills - this.duration * 2);
@@ -375,7 +367,7 @@ export default {
                 })
 
                 if (!pool || !pool.danmus || pool.danmus.length === 0) {
-                    this.pools.splice(poolIndex, 1);
+                    this.topPools.splice(poolIndex, 1);
                 }
             })
             this.bottomPools.map((pool, poolIndex) => {
@@ -388,23 +380,21 @@ export default {
                 })
 
                 if (!pool || !pool.danmus || pool.danmus.length === 0) {
-                    this.pools.splice(poolIndex, 1);
+                    this.bottomPools.splice(poolIndex, 1);
                 }
             })
 
             this.danmuRecycleTimer = setTimeout(() => {
-                this.recycleDanmu();
+                this._recycleDanmu();
             }, this.duration / 10)
         },
+        // 弹幕追加
         addDanmu(danmuList) {
             let danmus = danmuList.sort((a, b) => {
                 return a.startTime - b.startTime
             })
             danmus = danmus.map(danmu => {
-                // let neweDanmu = this.refactorDanmu(danmu);
-                // console.log(`newDanmu:${neweDanmu.height}`)
-
-                return this.refactorDanmu(danmu);
+                return this._refactorDanmu(danmu);
             })
 
             // console.log(`弹幕addDanmu:${danmus[0].height}`)
@@ -434,15 +424,16 @@ export default {
             let danmu = item;
             danmu.startTime = (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()));
             danmu.createTime = (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()));
-            danmu = this.refactorDanmu(danmu);
-            this.displayDanmu(danmu, 0);
+            danmu = this._refactorDanmu(danmu);
+            this._displayDanmu(danmu, 0);
         },
         // 定期更新+回收弹幕池数据 Duration/10
-        filterDanmu() {
+        _filterDanmu() {
             // console.log(`filterDanmu:${this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())}`);
             let lastDisplayTime = this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime());
             let i = 0;
             while (i < this.danmuQueue.length) {
+                console.log(`filterDanmu:${this.danmuQueue[i].index}`);
                 if (
                     this.danmuQueue[i].startTime < lastDisplayTime
                 ) {
@@ -464,30 +455,24 @@ export default {
                 this.danmuQueue[i].duration = this.duration + (this.danmuQueue[i].startTime - this.displayMills - (new Date().getTime() - this.lastDisplayTime.getTime()));
 
                 this.danmuQueue[i].createTime = (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()));
-                this.displayDanmu(this.danmuQueue[i], 0);
+                this._displayDanmu(this.danmuQueue[i], 0);
                 this.danmuQueue.splice(i, 1);
             }
             this.danmuDisplayTimer = setTimeout(() => {
-                this.filterDanmu();
+                this._filterDanmu();
             }, this.duration / 10 - ((this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())) - lastDisplayTime));
         },
         //   弹幕展示控制（滚动弹幕）
-        displayDanmu(danmu, poolIndex) {
-            // console.log(`展示弹幕1:${danmu.index}`);
-            // if (!this.channelCheck(danmu, pool)) {
-            //     this.displayDanmu(danmu, ++poolIndex);
-            //     return;
-            // }
+        _displayDanmu(danmu, poolIndex) {
+            console.log(`displayDanmu:${danmu.index}`);
             let SH = document.body.clientHeight || document.documentElement.clientHeight;
-
             let result;
-
             switch (danmu.type) {
                 case 'scroll': {
                     // 寻找适合面板层
                     if (this.pools.length === poolIndex) {
                         this.pools.push({
-                            channels: this.initChannels(),
+                            channels: this._initChannels(),
                             danmus: []
                         });
                     }
@@ -498,7 +483,7 @@ export default {
                         return;
                     }
                     // 寻找适合轨道
-                    result = this.channelCheck(danmu, pool);
+                    result = this._channelCheck(danmu, pool);
                     if (result) {
                         // console.log(`展示弹幕2:${danmu.index},duration:${danmu.duration},timeline:${(this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()))},startTime:${danmu.startTime}`);
                         // console.log(danmu.duration);
@@ -506,37 +491,27 @@ export default {
                         pool.danmus.push(danmu);
                         // let SH = document.body.clientHeight || document.documentElement.clientHeight;
 
-                        console.log(`展示弹幕：${danmu.index}`);
+                        // console.log(`展示弹幕：${danmu.index}`);
                         this.$nextTick(() => {
                             danmu.lastDisplayTime = new Date();
                             danmu.createTime = (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()));
                             danmu.duration = this.duration + danmu.startTime - danmu.createTime;
                             let danmuEle = this.$refs[danmu.index][0];
                             //弹幕样式初始化
-                            // this.danmuStyleInit(danmuEle, danmu);
 
                             danmuEle.style.cssText += `top:${danmu.channelId * 12}px;` + `left:${this.containerWidth()}px;color:${danmu.color};font-size:${danmu.fontSize}px;`;
-                            console.log(`css text`);
-                            console.log(danmuEle.style.cssText);
-                            // danmuEle.style.top = `${danmu.channelId * 12}px`;
-                            // danmuEle.style.left = `${this.containerWidth()}px`;
-                            // danmuEle.style.color = danmu.color;
-                            // danmuEle.style.fontSize = `${danmu.fontSize}px`;
-
+                            // console.log(`css text`);
+                            // console.log(danmuEle.style.cssText);
                             if (this.playerStatus !== 'on') return;
                             // 动画展示
-                            setTimeout(() => {
-                                console.log(`展示弹幕动画：${danmu.index}`);
-
+                            this.animationDelay = setTimeout(() => {
+                                // console.log(`展示弹幕动画：${danmu.index}`);
                                 danmu.createTime = (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()));
-
                                 danmu.duration = this.duration + danmu.startTime - danmu.createTime;
                                 danmu.lastDisplayTime = new Date();
 
                                 let animateWidth = Math.ceil(this.containerWidth() + danmu.width) % 2 == 0 ? Math.ceil(this.containerWidth() + danmu.width) : Math.ceil(this.containerWidth() + danmu.width) + 1
                                 danmuEle.style.cssText += `transition:transform ${danmu.duration}ms linear 0s;transform:translate3d(-${(animateWidth)}px,0,0);`;
-                                // danmuEle.style.transition = `transform ${danmu.duration}ms linear 0s`;
-                                // danmuEle.style.transform = `translate3d(-${(animateWidth)}px,0,0)`;
                             }, 20)
                         })
                     }
@@ -546,7 +521,7 @@ export default {
                     // 寻找适合面板层
                     if (this.topPools.length === poolIndex) {
                         this.topPools.push({
-                            channels: this.initChannels(),
+                            channels: this._initChannels(),
                             danmus: []
                         });
                     }
@@ -555,7 +530,7 @@ export default {
                         console.log("error factor danmu");
                         return;
                     }
-                    result = this.topChannelCheck(danmu, pool);
+                    result = this._topChannelCheck(danmu, pool);
                     if (result) {
                         console.log(`展示top弹幕:${danmu.index}`);
 
@@ -564,16 +539,11 @@ export default {
                             danmu.lastDisplayTime = new Date();
                             danmu.createTime = (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()));
                             danmu.duration = this.duration + danmu.startTime - danmu.createTime;
-                            let danmuEle = this.$refs[`top-${danmu.index}`][0];
-                            danmuEle.style.cssText += `top:${danmu.channelId * 12}px;` + `fontSize:${danmu.fontSize}px;` + `lineHeight:${danmu.fontSize + AdditionLineHeight}px;`;
-                            // danmuEle.style.position = `absolute`;
-                            // danmuEle.style.top = `${danmu.channelId * 12}px`;
-                            // danmuEle.style.color = danmu.color;
-                            // danmuEle.style.fontSize = `${danmu.fontSize}px`;
-                            // danmuEle.style.lineHeight = `${danmu.fontSize + AdditionLineHeight}px`;
-
-
                             if (this.playerStatus !== 'on') return;
+                            let danmuEle = this.$refs[`top-${danmu.index}`];
+                            if (danmuEle) {
+                                danmuEle[0].style.cssText += `top:${danmu.channelId * 12}px;` + `font-size:${danmu.fontSize}px;` + `line-height:${danmu.fontSize + AdditionLineHeight}px;`;
+                            }
                         })
 
                     }
@@ -583,7 +553,7 @@ export default {
                     // 寻找适合面板层
                     if (this.bottomPools.length === poolIndex) {
                         this.bottomPools.push({
-                            channels: this.initChannels(),
+                            channels: this._initChannels(),
                             danmus: []
                         });
                     }
@@ -592,46 +562,28 @@ export default {
                         console.log("error factor danmu");
                         return;
                     }
-                    result = this.bottomChannelCheck(danmu, pool);
+                    result = this._bottomChannelCheck(danmu, pool);
                     if (result) {
                         console.log(`展示bottom弹幕:${danmu.index}`);
-
-                        // pool.danmus.push(danmu);
                         this.$nextTick(() => {
                             danmu.lastDisplayTime = new Date();
                             danmu.createTime = (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()));
                             danmu.duration = this.duration + danmu.startTime - danmu.createTime;
-                            let danmuEle = this.$refs[`bottom-${danmu.index}`][0];
-                            danmuEle.style.cssText += `top:${danmu.channelId * 12}px;` + `font-size:${danmu.fontSize}px;` + `line-height:${danmu.fontSize + AdditionLineHeight}px;`;
-
-                            // danmuEle.style.position = `absolute`;
-                            // danmuEle.style.top = `${danmu.channelId * 12}px`;
-                            // danmuEle.style.color = danmu.color;
-                            // danmuEle.style.fontSize = `${danmu.fontSize}px`;
-                            // danmuEle.style.lineHeight = `${danmu.fontSize + AdditionLineHeight}px`;
-
                             if (this.playerStatus !== 'on') return;
+                            let danmuEle = this.$refs[`bottom-${danmu.index}`];
+                            if (this.$refs[`bottom-${danmu.index}`]) {
+                                danmuEle[0].style.cssText += `top:${danmu.channelId * 12}px;` + `font-size:${danmu.fontSize}px;` + `line-height:${danmu.fontSize + AdditionLineHeight}px;`;
+                            }
                         })
-
                     }
                     break;
                 }
             }
             if (!result) {
-                this.displayDanmu(danmu, ++poolIndex);
+                this._displayDanmu(danmu, ++poolIndex);
             }
-
         },
-        // 弹幕样式设置
-        danmuStyleInit(danmuEle, danmu) {
-            danmuEle.style.position = `absolute`;
-            danmuEle.style.top = `${danmu.channelId * 12}px`;
-            danmuEle.style.left = `${this.containerWidth()}px`;
-            danmuEle.style.color = danmu.color;
-            danmuEle.style.fontSize = `${danmu.fontSize}px`;
-            // danmuEle.style.transition = `transform ${danmu.duration}ms linear 0s`;
-        },
-        pauseDanmu() {
+        _pauseDanmu() {
             this.pools.map(pool => {
                 pool.danmus &&
                     pool.danmus.map(danmu => {
@@ -648,7 +600,7 @@ export default {
                     });
             });
         },
-        continueDanmu() {
+        _continueDanmu() {
             this.pools.map(pool => {
                 pool.danmus &&
                     pool.danmus.map(danmu => {
@@ -669,7 +621,7 @@ export default {
             });
         },
         // 寻找适合轨道
-        channelCheck(danmu, pool) {
+        _channelCheck(danmu, pool) {
             // console.log(`channelCheck:danmu.height:${danmu.height}`);
             let danmuChannelNum = Math.ceil(danmu.height / ChannelHeight);
             let channels = pool.channels.filter((channel) => {
@@ -722,7 +674,7 @@ export default {
             return false;
 
         },
-        topChannelCheck(danmu, pool) {
+        _topChannelCheck(danmu, pool) {
             let danmuChannelNum = Math.ceil(danmu.height / ChannelHeight);
             let channels = pool.channels.filter((channel) => {
                 // 当前轨道为空
@@ -738,6 +690,7 @@ export default {
                 // console.log(`当前层没找到适合轨道,channels.length:${channels.length}`);
                 return false;
             }
+            console.log(`TOP channel 0:${channels[0].index},channels.length:${channels.length},danmuChannelNum:${danmuChannelNum}`);
             let i = 0;
             while (i + danmuChannelNum < channels.length) {
                 if (channels[i].index + danmuChannelNum === channels[i + danmuChannelNum].index) {
@@ -752,6 +705,8 @@ export default {
                         return danmu1.channelId === channels[i].index;
                     })
                     console.log(`danmuIndex:${danmuIndex}`);
+                    console.log(`findbottomchannel,danmuIndex:${danmuIndex},danmuFontSize:${danmu.fontSize},danmuWidth:${danmu.width},danmuHeight:${danmu.height},danmuChannelNum:${danmuChannelNum},channelId:${channels[i].index}`);
+
                     if (danmuIndex >= 0) {
 
                         pool.danmus.splice(danmuIndex, 1, danmu)
@@ -764,7 +719,7 @@ export default {
             }
 
         },
-        bottomChannelCheck(danmu, pool) {
+        _bottomChannelCheck(danmu, pool) {
             let danmuChannelNum = Math.ceil(danmu.height / ChannelHeight);
             let channels = pool.channels.filter((channel) => {
                 // 当前轨道为空
@@ -781,9 +736,9 @@ export default {
                 return false;
             }
             let i = channels.length;
-            console.log(`bottom channel 0:${channels[0].index},channels.length:${i},danmuChannelNum:${danmuChannelNum}`);
+            // console.log(`bottom channel 0:${channels[0].index},channels.length:${i},danmuChannelNum:${danmuChannelNum}`);
             while (i - danmuChannelNum >= 0) {
-                console.log(`i:${i}`);
+                // console.log(`i:${i}`);
                 if (channels[i - 1].index - danmuChannelNum + 1 === channels[i - danmuChannelNum].index) {
                     // pool.danmus.splice(danmu,)
                     channels.slice(i - danmuChannelNum, i).map(channel => {
@@ -795,7 +750,7 @@ export default {
                     let danmuIndex = pool.danmus.findIndex(danmu1 => {
                         return danmu1.channelId === channels[i - danmuChannelNum].index;
                     })
-                    console.log(`findbottomchannel,danmuIndex:${danmuIndex},danmuFontSize:${danmu.fontSize},danmuWidth:${danmu.width},danmuHeight:${danmu.height},danmuChannelNum:${danmuChannelNum},channelId:${channels[i - danmuChannelNum].index}`);
+                    // console.log(`findbottomchannel,danmuIndex:${danmuIndex},danmuFontSize:${danmu.fontSize},danmuWidth:${danmu.width},danmuHeight:${danmu.height},danmuChannelNum:${danmuChannelNum},channelId:${channels[i - danmuChannelNum].index}`);
                     if (danmuIndex >= 0) {
 
                         pool.danmus.splice(danmuIndex, 1, danmu)

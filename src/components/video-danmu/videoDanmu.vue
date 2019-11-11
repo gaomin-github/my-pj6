@@ -2,7 +2,7 @@
     <section>
         <section class="player-container" ref="playerContainer">
             <!-- 滚动弹幕 -->
-            <section v-if="pools&&pools.length>0" ref="danmuContainer">
+            <section v-if="pools&&pools.length>0" ref="danmuContainer" class="danmu-container">
                 <section v-for="(pool,poolIndex) in pools" :key="poolIndex">
                     <section
                         v-if="pool&&pool.danmus&&pool.danmus.length>0&&(overlap||(!overlap&&poolIndex===0))"
@@ -17,7 +17,11 @@
                 </section>
             </section>
             <!-- 顶部弹幕 -->
-            <section v-if="topPools&&topPools.length>0" ref="danmuContainer">
+            <section
+                v-if="topPools&&topPools.length>0"
+                ref="danmuContainer"
+                class="danmu-container"
+            >
                 <section v-for="(pool,poolIndex) in topPools" :key="poolIndex">
                     <section
                         v-if="pool&&pool.danmus&&pool.danmus.length>0&&(overlap||(!overlap&&poolIndex===0))"
@@ -32,9 +36,15 @@
                 </section>
             </section>
             <!-- 底部弹幕 -->
-            <section v-if="bottomPools&&bottomPools.length>0" ref="danmuContainer">
+            <section
+                v-if="bottomPools&&bottomPools.length>0"
+                ref="danmuContainer"
+                class="danmu-container"
+            >
                 <section v-for="(pool,poolIndex) in bottomPools" :key="poolIndex">
-                    <section v-if="pool&&pool.danmus&&pool.danmus.length>0">
+                    <section
+                        v-if="pool&&pool.danmus&&pool.danmus.length>0&&(overlap||(!overlap&&poolIndex===0))"
+                    >
                         <p
                             v-for="danmu in pool.danmus"
                             :key="danmu.index"
@@ -62,6 +72,10 @@ section {
 .player-container {
     border: 1px red solid;
     position: relative;
+    height: 100%;
+    width: 100%;
+    // border: 1px green solid;
+    overflow: hidden;
 }
 .control-bar {
     height: 26px;
@@ -70,9 +84,6 @@ section {
     bottom: 0px;
     left: 0;
     background: #cecece;
-}
-.danmu-content {
-    border: 1px red solid;
 }
 .danmu-item {
     position: absolute;

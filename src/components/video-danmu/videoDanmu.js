@@ -1,3 +1,5 @@
+import { SIGUSR2 } from "constants";
+
 const ChannelNum = Math.floor(360 / 12);
 const ChannelHeight = 12;
 const HorizenMargin = 10;
@@ -360,7 +362,7 @@ export default {
             })
             this.topPools.map((pool, poolIndex) => {
                 pool.danmus.map((danmu, danmuIndex) => {
-                    let result = danmu.createTime + danmu.duration - this.displayMills - (new Date().getTime() - this.lastDisplayTime);
+                    let result = danmu.startTime + this.duration - (this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()));
                     if (result <= 0) {
                         pool.danmus.splice(danmuIndex, 1);
                     }
@@ -372,7 +374,7 @@ export default {
             })
             this.bottomPools.map((pool, poolIndex) => {
                 pool.danmus.map((danmu, danmuIndex) => {
-                    let result = danmu.createTime + danmu.duration - this.displayMills - (new Date().getTime() - this.lastDisplayTime);
+                    let result = danmu.createTime + danmu.duration - this.displayMills - (new Date().getTime() - this.lastDisplayTime.getTime());
                     if (result <= 0) {
                         console.log(`回收：${danmu.index}`)
                         pool.danmus.splice(danmuIndex, 1);
@@ -630,9 +632,10 @@ export default {
                     return true;
                 }
                 // 轨道弹幕已出框
-                if ((this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())) - channel.danmu.createTime > channel.danmu.duration) {
+                if (channel.danmu.startTime + this.duration <= this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())) {
                     return true;
                 }
+
                 let channelRight = (channel.danmu.width + this.containerWidth()) * ((this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())) - channel.danmu.createTime) / channel.danmu.duration;
 
                 // 轨道被占满，右侧无空间
@@ -640,12 +643,12 @@ export default {
                     // console.log(`轨道被占满：channelIndex：${channel.index};channelRight:${channelRight}`)
                     return false;
                 }
-
+                // 碰撞检测：danmu1.startTime+duration<=danmu2.startTime+duration
                 let result = channel.danmu.startTime + this.duration - ((this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())) +
                     danmu.duration * this.containerWidth() / (danmu.width + this.containerWidth()))
-                if (result >= 0) {
-                    // console.log(`轨道验证失败：`);
-                }
+                // if (result >= 0) {
+                //     console.log(`轨道验证失败：`);
+                // }
                 return result <= 0;
             });
             // console.log("i:" + i);
@@ -681,16 +684,21 @@ export default {
                 if (!channel.danmu.duration) {
                     return true;
                 }
-                // 轨道不为空
-                if (channel.danmu.startTime + this.duration <= this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())) {
+                // 轨道不为空(上条弹幕展示结束且已被回收：避免弹幕短暂覆盖)
+                // if (channel.danmu.startTime + this.duration + this.duration / 10 <= this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())) {
+                //     return true;
+                // }
+                if (channel.danmu.startTime + this.duration + this.duration / 5 < this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())) {
                     return true;
                 }
+
             })
             if (!channels || channels.length < danmuChannelNum) {
                 // console.log(`当前层没找到适合轨道,channels.length:${channels.length}`);
                 return false;
             }
-            console.log(`TOP channel 0:${channels[0].index},channels.length:${channels.length},danmuChannelNum:${danmuChannelNum}`);
+
+            // console.log(`TOP channel 0:${channels[0].index},channels.length:${channels.length},danmuChannelNum:${danmuChannelNum}`);
             let i = 0;
             while (i + danmuChannelNum < channels.length) {
                 if (channels[i].index + danmuChannelNum === channels[i + danmuChannelNum].index) {
@@ -705,10 +713,9 @@ export default {
                         return danmu1.channelId === channels[i].index;
                     })
                     console.log(`danmuIndex:${danmuIndex}`);
-                    console.log(`findbottomchannel,danmuIndex:${danmuIndex},danmuFontSize:${danmu.fontSize},danmuWidth:${danmu.width},danmuHeight:${danmu.height},danmuChannelNum:${danmuChannelNum},channelId:${channels[i].index}`);
-
+                    // console.log(`findbottomchannel,danmuIndex:${danmuIndex},danmuFontSize:${danmu.fontSize},danmuWidth:${danmu.width},danmuHeight:${danmu.height},danmuChannelNum:${danmuChannelNum},channelId:${channels[i].index}`);
+                    // pool.danmus.push(danmu);
                     if (danmuIndex >= 0) {
-
                         pool.danmus.splice(danmuIndex, 1, danmu)
                     } else {
                         pool.danmus.push(danmu);
@@ -727,7 +734,7 @@ export default {
                     return true;
                 }
                 // 轨道不为空
-                if (channel.danmu.startTime + this.duration <= this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())) {
+                if (channel.danmu.startTime + this.duration + this.duration / 5 <= this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime())) {
                     return true;
                 }
             })

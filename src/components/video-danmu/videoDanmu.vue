@@ -2,8 +2,12 @@
     <section>
         <section class="player-container" ref="playerContainer">
             <!-- 滚动弹幕 -->
-            <section v-if="pools&&pools.length>0" ref="danmuContainer" class="danmu-container">
-                <section v-for="(pool,poolIndex) in pools" :key="poolIndex">
+            <section
+                v-if="pools.scroll&&pools.scroll.length>0"
+                ref="danmuContainer"
+                class="danmu-container"
+            >
+                <section v-for="(pool,poolIndex) in pools.scroll" :key="poolIndex">
                     <section
                         v-if="pool&&pool.danmus&&pool.danmus.length>0&&(overlap||(!overlap&&poolIndex===0))"
                     >
@@ -18,11 +22,11 @@
             </section>
             <!-- 顶部弹幕 -->
             <section
-                v-if="topPools&&topPools.length>0"
+                v-if="pools['top']&&pools['top'].length>0"
                 ref="danmuContainer"
                 class="danmu-container"
             >
-                <section v-for="(pool,poolIndex) in topPools" :key="poolIndex">
+                <section v-for="(pool,poolIndex) in pools['top']" :key="poolIndex">
                     <section
                         v-if="pool&&pool.danmus&&pool.danmus.length>0&&(overlap||(!overlap&&poolIndex===0))"
                     >
@@ -37,11 +41,11 @@
             </section>
             <!-- 底部弹幕 -->
             <section
-                v-if="bottomPools&&bottomPools.length>0"
+                v-if="pools['bottom']&&pools['bottom'].length>0"
                 ref="danmuContainer"
                 class="danmu-container"
             >
-                <section v-for="(pool,poolIndex) in bottomPools" :key="poolIndex">
+                <section v-for="(pool,poolIndex) in pools['bottom']" :key="poolIndex">
                     <section
                         v-if="pool&&pool.danmus&&pool.danmus.length>0&&(overlap||(!overlap&&poolIndex===0))"
                     >
@@ -58,7 +62,7 @@
         <section class="control-bar">
             <section
                 class="time-container"
-            >{{ displayTimeMsg }},{{pools.length}},pools：{{pools.length}},bottomPools:{{bottomPools.length}}</section>
+            >{{ displayTimeMsg }},{{pools.length}},pools：{{pools.length}},pools['bottom']:{{pools['bottom'].length}}</section>
         </section>
     </section>
 </template>

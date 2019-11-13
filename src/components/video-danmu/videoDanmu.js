@@ -460,7 +460,7 @@ export default {
                 scroll: (danmu, pool) => {
                     // 寻找适合面板层
                     // 寻找适合轨道
-                    let result = this._scrollChannelCheck(danmu, pool);
+                    let result = this._hasScrollChannel(danmu, pool);
                     if (result) {
                         // console.log(`展示弹幕2:${danmu.index},duration:${danmu.duration},timeline:${(this.displayMills + (new Date().getTime() - this.lastDisplayTime.getTime()))},startTime:${danmu.startTime}`);
                         // console.log(danmu.duration);
@@ -491,7 +491,7 @@ export default {
                     return result;
                 },
                 top: (danmu, pool) => {
-                    let result = this._topChannelCheck(danmu, pool);
+                    let result = this._hasTopChannel(danmu, pool);
                     if (result) {
                         // console.log(`展示top弹幕:${danmu.index}`);
                         // pool.danmus.push(danmu);
@@ -509,7 +509,7 @@ export default {
                     return result;
                 },
                 bottom: (danmu, pool) => {
-                    let result = this._bottomChannelCheck(danmu, pool);
+                    let result = this._hasBottomChannel(danmu, pool);
                     if (result) {
                         // console.log(`展示bottom弹幕:${danmu.index}`);
                         this.$nextTick(() => {
@@ -570,7 +570,7 @@ export default {
             });
         },
         // 寻找适合轨道
-        _scrollChannelCheck(danmu, pool) {
+        _hasScrollChannel(danmu, pool) {
             // console.log(`channelCheck:danmu.height:${danmu.height}`);
             let channels = pool.channels.filter((channel) => {
                 // 当前轨道为空
@@ -622,7 +622,7 @@ export default {
             // console.log('当前层没找到适合轨道');
             return false;
         },
-        _topChannelCheck(danmu, pool) {
+        _hasTopChannel(danmu, pool) {
             let channels = pool.channels.filter((channel) => {
                 // 当前轨道为空
                 if (!channel.danmu.duration) {
@@ -666,7 +666,7 @@ export default {
             }
 
         },
-        _bottomChannelCheck(danmu, pool) {
+        _hasBottomChannel(danmu, pool) {
             let danmuChannelNum = Math.ceil(danmu.height / ChannelHeight);
             let channels = pool.channels.filter((channel) => {
                 // 当前轨道为空

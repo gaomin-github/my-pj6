@@ -22,6 +22,7 @@
         <router-link class="demo_title" :to="{path:'/danmuDemo'}">弹幕测试第二版</router-link>
         <router-link class="demo_title" :to="{path:'/videoDanmuDemo'}">视频弹幕</router-link>
         <router-link class="demo_title" :to="{path:'/asyncDemo'}">async测试</router-link>
+        <!-- <router-link class="demo_title" :to="{path:'/elevatorDemo'}">电梯demo</router-link> -->
     </section>
 </template>
 <script lang="ts">

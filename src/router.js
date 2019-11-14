@@ -96,6 +96,11 @@ let routes = new VueRouter({
             path: '/asyncDemo',
             component: () => import('./async/asyncDemo.vue')
         },
+        // {
+        //     path: '/elevatorDemo',
+        //     component: () => import('./elevator/elevator.vue')
+        // },
+
     ]
 
 })

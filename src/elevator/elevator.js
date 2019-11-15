@@ -13,37 +13,56 @@ export default {
     mounted() {
         this.init();
     },
+    computed: {
+        getFloors() {
+            // return this.floors.sort((a, b) => {
+            //     return b.index - a.index;
+            // })
+        }
+    },
     methods: {
         init() {
             this.initFloor();
-            console.table(this.floors);
+            // console.table(this.floors);
         },
         initFloor() {
-            let i = 1;
-            while (i <= FLOORNUM) {
+            let i = FLOORNUM;
+            while (i > 0) {
                 this.floors.push({
+                    index: i,
                     up: false,
                     down: false
                 })
-                i++;
+                i--;
             }
         },
         chooseFloor(floorNum, dir) {
-            this.floors[floorNmu - 1][dir] = true;
+            this.floors[FLOORNUM - floorNum][dir] = true;
+            // console.table(this.floors);
+            // console.log('getFloors');
+            // console.table(this.getFloors);
+            console.log(`floorNum:${floorNum},dir:${dir}`);
+            this.floorMove();
         },
         floorMove() {
+            console.log(`direction:${this.direction},currentFloor:${this.currentFloor}`);
             if (!this.direction) {
                 // 初始化静止状态
                 this.direction = 'down';
+                if (this.floors[FLOORNUM - this.currentFloor].down) this.floors[FLOORNUM - this.currentFloor] = false;
                 this.floorTimer = setTimeout(() => {
-                    this.currentFloor--;
+                    // this.currentFloor--;
                     this.floorMove();
                 }, 1000)
             } else if (this.direction === 'up') {
-                let downIndex = this.floors.slice(0, this.currentFloor).findIndex(floor => {
+                this.currentFloor++;
+                // 当前层有上指示
+                if (this.floors[FLOORNUM - this.currentFloor].up) this.floors[FLOORNUM - this.currentFloor].up = false;
+
+                let downIndex = this.floors.slice(FLOORNUM - this.currentFloor, FLOORNUM).findIndex(floor => {
                     return floor.up || floor.down;
                 })
-                let upIndex = this.floors.slice(this.currentFloor, FLOORNUM).findIndex(floor => {
+                let upIndex = this.floors.slice(0, FLOORNUM - this.currentFloor).findIndex(floor => {
                     return floor.down || floor.up;
                 })
                 if (upIndex >= 0 || downIndex < 0) {
@@ -54,21 +73,27 @@ export default {
                     } else {
                         // 上行
                         this.floorTimer = setTimeout(() => {
-                            this.currentFloor++;
+                            // this.currentFloor++;
                             this.floorMove();
                         }, 1000)
                     }
                 } else {
                     // 上层无指令，下层有等待，下行
                     this.direction = 'down';
+                    if (this.floors[FLOORNUM - this.currentFloor].down) this.floors[FLOORNUM - this.currentFloor].down = false;
+
                     this.floorTimer = setTimeout(() => {
-                        this.currentFloor--;
+                        // this.currentFloor--;
                         this.floorMove();
                     }, 1000)
 
                 }
             } else if (this.direction === 'down') {
-                let downIndex = this.floors.slice(0, this.currentFloor).findIndex(floor => {
+                this.currentFloor--;
+                // 当前层有下指示
+                if (this.floors[FLOORNUM - this.currentFloor].down) this.floors[FLOORNUM - this.currentFloor].down = false;
+
+                let downIndex = this.floors.slice(FLOORNUM - this.currentFloor, FLOORNUM).findIndex(floor => {
                     return floor.down || floor.up;
                 })
 
@@ -76,13 +101,14 @@ export default {
                     // 下层有等待，下行
                     // this.direction === 'up';
                     this.floorTimer = setTimeout(() => {
-                        this.currentFloor--;
                         this.floorMove();
                     }, 1000)
                 } else {
                     this.direction = 'up';
+                    if (this.floors[FLOORNUM - this.currentFloor].up) this.floors[FLOORNUM - this.currentFloor].up = false;
+
                     this.floorTimer = setTimeout(() => {
-                        this.currentFloor++;
+                        // this.currentFloor++;
                         this.floorMove();
                     }, 1000)
 

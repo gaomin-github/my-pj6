@@ -47,6 +47,7 @@
     "url-loader": "^1.1.2",
     "vue-class-component": "^7.0.1",
     "vue-loader": "^15.6.2",
+    "vue-lottie": "^0.2.1",
     "vue-property-decorator": "^7.3.0",
     "vue-router": "^3.0.6",
     "vue-template-compiler": "^2.5.17",

@@ -1,0 +1,19 @@
+
+
+pool 属性：
+对于从右到左滚动弹幕
+
+<!-- bottom -->
+
+channels:轨道列表
+danmus：弹幕实体列表
+
+channel 属性：
+初始化属性
+index：key 标识（有序）
+top：（可复用 index）
+danmu
+
+计算得到属性
+right
+remainTime（轨道内最右侧弹幕剩余动画时间）

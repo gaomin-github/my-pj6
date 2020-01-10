@@ -1,26 +1,27 @@
-import myTotail from './Totail.vue';
+// import myTotail from './Totail.vue';
 import Vue from 'vue';
-export default class Tot extends myTotail{
-    id:number;
-    vmIns:Vue;
-    node:Node;
-    constructor(message:string){
-        super();
-        this.message=message;
+// export default class Tot extends myTotail {
+export default class Tot {
+    id: number;
+    vmIns: Vue;
+    node: Node;
+    constructor(message: string) {
+        // super();
+        // this.message=message;
         this.init();
     }
-    init(){
-        this.vmIns=this.$mount()
-        this.node=this.vmIns.$el;
-        this.show();
+    init() {
+        // this.vmIns=this.$mount()
+        this.node = this.vmIns.$el;
+        // this.show();
     }
-    public show(){
+    public show() {
         document.body.appendChild(this.node);
     }
-    public hide(){
+    public hide() {
         document.body.removeChild(this.node);
     }
-    handleClose(){
+    handleClose() {
         console.log('ts');
     }
 }

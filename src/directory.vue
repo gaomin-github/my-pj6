@@ -16,6 +16,7 @@
     <!--<section class="demo_title" @click="enterCon('directDemo2')">指令测试2</section>-->
     <!-- <section class="demo_title" @click="enterCon('vuePluginDemo')">vue插件测试</section>
         <section class="demo_title" @click="aesTest">aes测试</section>
+        <section class="demo_title" @click="enterCon('elevatorDemo')">elevator测试</section>
         <h3>错误集合</h3>
         <section class="demo_title" @click="enterCon('errorPopDemo')">v-if和v-show测试</section>
         <section class="demo_title" @click="enterCon('vueFor')">vue for 错误测试</section>
@@ -59,6 +60,14 @@
 import Vue from "vue";
 //    import
 export default Vue.extend({
+<<<<<<< HEAD
+    methods: {
+        enterCon: function(param: string) {
+            this.$router.push(param);
+        },
+        aesTest: function() {}
+    }
+=======
   methods: {
     enterCon: function(param: string) {
       console.log(`param:${param}`);
@@ -66,6 +75,7 @@ export default Vue.extend({
     },
     aesTest: function() {}
   }
+>>>>>>> 3f327b9fed00b6a98a368da9bae7486ebf136364
 });
 </script>
 <style lang="scss" scoped>
@@ -77,6 +87,7 @@ export default Vue.extend({
   /* border: 6px red solid; */
 }
 .demo_title {
+<<<<<<< HEAD
   /* flex-shrink: 1; */
   display: block;
   cursor: pointer;
@@ -97,5 +108,12 @@ export default Vue.extend({
     text-decoration: none;
     color: rgb(233, 233, 233);
   }
+=======
+<<<<<<< HEAD
+    cursor: pointer;
+=======
+  cursor: pointer;
+>>>>>>> 3f327b9fed00b6a98a368da9bae7486ebf136364
+>>>>>>> c0bc8562d6f85fcf46f500e72e31de68a84d7a3d
 }
 </style>

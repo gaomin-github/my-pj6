@@ -2,6 +2,8 @@ import Vue from 'vue'
 Vue.directive('lottie', {
     bind: function (el, binding, vnode) {
         let method = binding.value.bind(this)
+        // console.log(this.hasImg);
+        // let in=new IntersectionObserver();
         let ISIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) //ios
         if (!ISIOS) {
             let intersectionObserver = new IntersectionObserver(function (entries) {

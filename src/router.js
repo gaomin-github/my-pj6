@@ -9,6 +9,62 @@ import toolDemo from "./components/tools/demo.vue";
 // import navDemo from './components/nav/demo.vue';
 // import directDemo from './components/direct/demo.vue';
 // import directDemo2 from './components/direct/demo2.vue';
+<<<<<<< HEAD
+import vuePluginDemo from './components/vuePlugins/demo.vue';
+let routes = new VueRouter({
+    mode: 'history',
+    routes: [
+        {
+            path: '',
+            component: directory,
+        }, {
+            path: '/drop-down-demo',
+            component: dropDownDemo
+        }, {
+            path: '/panelDemo',
+            component: panelDemo
+        }, {
+            path: '/dataDemo',
+            component: dataDemo
+        }, {
+            path: '/httpDemo',
+            component: httpDemo
+        }, {
+            path: '/toolDemo',
+            component: toolDemo
+        }, {
+            path: '/navDemo',
+            component: navDemo
+        }, {
+            path: '/directDemo',
+            component: directDemo
+        },
+        // {
+        //     path:'/directDemo2',
+        //     component:directDemo2
+        // },
+        {
+            path: '/vuePluginDemo',
+            component: vuePluginDemo
+        }
+        // ,
+        // {
+        //     path:'/errorPopDemo',
+        //     component:()=>import('./errorInPractice/pop-demo.vue')
+        // },{
+        //     path:'/vueFor',
+        //     component:()=>import('./errorInPractice/vueFor.vue')
+        // }
+        , {
+            path: '/elevatorDemo',
+            component: () => import('./elevator/elevator.vue')
+        }
+
+    ]
+
+})
+export default routes;
+=======
 // import vuePluginDemo from './components/vuePlugins/demo.vue';
 let routes = new VueRouter({
   mode: "history",
@@ -107,3 +163,4 @@ let routes = new VueRouter({
   ]
 });
 export default routes;
+>>>>>>> 3f327b9fed00b6a98a368da9bae7486ebf136364

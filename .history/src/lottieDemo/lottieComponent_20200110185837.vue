@@ -10,7 +10,7 @@
     </section>
 </template>
 <script>
-import lottie from 'vue-lottie'
+import "../v-lottie.js";
 
 export default {
   props: {

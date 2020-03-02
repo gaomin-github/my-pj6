@@ -1,25 +1,16 @@
 <template>
-    <section
-        class="lottie-wrapper"
-        ref="lottie"
-        :class="hasImg?'':'lottie-nonimg'"
-        v-lottie:loadLottieData="loadLottieData"
-    >
-        <!-- {{this.lottieUrl}} -->
-        <lottie class="pic-img" :options="lottieOption" v-if="lottieOption" />
-    </section>
+  <section class="lottie-wrapper" v-lottie:loadImg="loadImg">
+    lottie wrapper
+  </section>
 </template>
 <script>
-import lottie from 'vue-lottie'
+import "../v-lottie.js";
 
 export default {
   props: {
-    lottieUrl: {
-            required: true
-        },
-        id: {
-            required: true
-        }
+    id: {
+      required: true
+    }
   },
   data() {
     return {
@@ -54,12 +45,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 section {
-    display: block;
-    box-sizing: border-box;
+  display: block;
+  box-sizing: border-box;
 }
 .lottie-wrapper {
-    width: 100%;
-    height: 100%;
-    background: #3e3e3e;
+  width: 100%;
+  height: 100%;
+  background: #3e3e3e;
 }
 </style>

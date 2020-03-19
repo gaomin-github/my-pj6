@@ -13,24 +13,24 @@
         <h3>错误集合</h3>
         <section class="demo_title" @click="enterCon('errorPopDemo')">v-if和v-show测试</section>
         <section class="demo_title" @click="enterCon('vueFor')">vue for 错误测试</section>
+        <section class="demo_title" @click="enterCon('fallRoate')">fallRoate测试</section>
+        <section class="demo_title" @click="enterCon('axiosTimeout')">axiosTimeout测试</section>
     </section>
 </template>
 <script lang="ts">
-    import Vue from 'vue';
+import Vue from "vue";
 //    import
-    export default Vue.extend({
-        methods:{
-            enterCon:function(param:string){
-                this.$router.push(param)
-            },
-            aesTest:function(){
-
-            }
-        }
-    })
+export default Vue.extend({
+    methods: {
+        enterCon: function(param: string) {
+            this.$router.push(param);
+        },
+        aesTest: function() {}
+    }
+});
 </script>
 <style lang="scss" scoped>
-.demo_title{
+.demo_title {
     cursor: pointer;
 }
 </style>

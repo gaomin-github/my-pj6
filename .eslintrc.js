@@ -14,6 +14,7 @@ module.exports = {
         'no-dupe-keys': 'error',
         'no-empty': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'no-unreachable': 'error',
+        "no-console": 'off',
         eqeqeq: 'error',
         // 'no-var': 'error',
         'no-unused-vars': process.env.NODE_ENV === 'production' ? 'error' : 'off'

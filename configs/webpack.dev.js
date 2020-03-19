@@ -31,6 +31,13 @@ module.exports = {
         open: false,
         contentBase: path.resolve(__dirname, '../'),
         publicPath: '/',
+        proxy: {
+            '/axios-time-out': {
+                target: 'http://localhost:5000',
+                changeOrigin: true,
+                // pathRewrite: { "^/axios-time-out": "" }
+            }
+        }
     },
     resolve: {
         extensions: ['.js', '.json', '.tsx', '.ts', '.vue', '.jpg'],
